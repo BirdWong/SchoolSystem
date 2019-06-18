@@ -1,0 +1,61 @@
+server:
+  port: 4795
+spring:
+  application:
+    name: noob-zuul-gateway
+  datasource:
+      type: com.alibaba.druid.pool.DruidDataSource #当前数据库操作类型
+      driver-class-name: com.mysql.jdbc.Driver  # MySQL驱动包
+      url: jdbc:mysql://119.29.56.187:3306/schoolsystem?characterEncoding=utf8&useSSL=false #数据库url设置
+      username: root
+      password: 912719483
+      dbcp2:
+        min-idle: 2 #数据库连接池最小维持连接数
+        initial-size: 5 #初始化连接数
+        max-total: 10 #最大连接数
+        max-wait-millis: 1000 #等待超时时间
+  redis:
+      database: 0
+      host: 119.29.56.187
+      port: 6379
+      lettuce:
+        pool:
+          max-active: 8
+          max-wait: -1ms
+          max-idle: 8
+          min-idle: 0
+      timeout: 1000ms
+  mail:
+      host: smtp.163.com
+      username: God_4795@163.com
+      password: hp980501
+      default-encoding: UTF-8
+  thymeleaf:
+      cache: true
+      servlet:
+        content-type: text/html
+      encoding: UTF-8
+      mode: HTML
+      suffix: .html
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://10.0.0.11:7001/eureka
+
+  instance:
+    instance-id: gateway-4795.com
+    prefer-ip-address: true
+
+zuul:
+  ignored-services: "*"
+  routes:
+    myuser1.path: /api/**
+    myuser1.serviceId: test-api
+  host:
+      connect-timeout-millis: 150000000
+      socket-timeout-millis: 600000000
+      connection-request-timeout-millis: 100000000
+ribbon:
+  ReadTimeout: 100000000
+  ConnectTimeout: 100000000
