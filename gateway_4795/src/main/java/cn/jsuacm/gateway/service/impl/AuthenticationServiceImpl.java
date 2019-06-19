@@ -4,15 +4,18 @@ import cn.jsuacm.gateway.mapper.AuthenticationMapper;
 import cn.jsuacm.gateway.mapper.UserMapper;
 import cn.jsuacm.gateway.pojo.Authentication;
 import cn.jsuacm.gateway.pojo.User;
+import cn.jsuacm.gateway.pojo.enity.PageResult;
 import cn.jsuacm.gateway.service.AuthenticationService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
-
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 /**
  * @ClassName AuthenticationServiceImpl
  * @Description 权限服务实现
@@ -114,6 +117,36 @@ public class AuthenticationServiceImpl extends ServiceImpl<AuthenticationMapper,
     @Override
     public boolean deleteAdministratorAuthentication(int uid) {
         return deleteRole(uid, AuthenticationService.ADMINISTRATOR);
+    }
+
+    /**
+     * 用户分页获取所有用户的权限信息
+     *
+     * @param row
+     * @param pageSize
+     * @return
+     */
+    @Override
+    public PageResult<UserAuthentication> getUserAuthentication(int row, int pageSize) {
+        // 按照分页获取用户权限信息
+        Page<Authentication> page = new Page<>();
+        page.setSize(pageSize);
+        page.setPages(row);
+        IPage<Authentication> authenticationIpage = authenticationMapper.selectPage(page, null);
+        PageResult<UserAuthentication> userAuthenticationPageResult = new PageResult<>();
+        // 设置页面返回值
+        userAuthenticationPageResult.setPageSize(authenticationIpage.getSize());
+        userAuthenticationPageResult.setRow(authenticationIpage.getCurrent());
+        userAuthenticationPageResult.setTatolSize(authenticationIpage.getTotal());
+        //获取用户名，并且封装成返回的对象
+        List<UserAuthentication> userAuthentications = new LinkedList<>();
+        for (Authentication authentication : authenticationIpage.getRecords()){
+            User user = userMapper.selectById(authentication.getUid());
+            UserAuthentication userAuthentication = new UserAuthentication(authentication.getAid(),authentication.getUid(),user.getAccountNumbser(),authentication.getRole());
+            userAuthentications.add(userAuthentication);
+        }
+        userAuthenticationPageResult.setPageContext(userAuthentications);
+        return userAuthenticationPageResult;
     }
 
     /**

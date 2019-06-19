@@ -1,7 +1,10 @@
 package cn.jsuacm.gateway.service;
 
 import cn.jsuacm.gateway.pojo.Authentication;
+import cn.jsuacm.gateway.pojo.enity.PageResult;
 import com.baomidou.mybatisplus.extension.service.IService;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
 import java.util.List;
 
@@ -100,10 +103,13 @@ public interface AuthenticationService extends IService<Authentication>{
     public boolean deleteAdministratorAuthentication(int uid);
 
 
-
-
-
-
+    /**
+     * 用户分页获取所有用户的权限信息
+     * @param row
+     * @param pageSize
+     * @return
+     */
+    public PageResult<UserAuthentication> getUserAuthentication(int row, int pageSize);
 
 
 
@@ -114,4 +120,12 @@ public interface AuthenticationService extends IService<Authentication>{
      */
     public List<String> getGrantedAuthorities(int uid);
 
+    @Data
+    @AllArgsConstructor
+    class UserAuthentication{
+        private int aid;
+        private int uid;
+        private String accountName;
+        private String role;
+    }
 }

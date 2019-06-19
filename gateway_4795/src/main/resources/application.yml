@@ -2,7 +2,7 @@ server:
   port: 4795
 spring:
   application:
-    name: noob-zuul-gateway
+    name: jsuccw-zuul-gateway
   datasource:
       type: com.alibaba.druid.pool.DruidDataSource #当前数据库操作类型
       driver-class-name: com.mysql.jdbc.Driver  # MySQL驱动包
@@ -50,8 +50,8 @@ eureka:
 zuul:
   ignored-services: "*"
   routes:
-    myuser1.path: /api/**
-    myuser1.serviceId: test-api
+    myuser1.path: /ccw/**
+    myuser1.serviceId: ccwsystem-8001
   host:
       connect-timeout-millis: 150000000
       socket-timeout-millis: 600000000

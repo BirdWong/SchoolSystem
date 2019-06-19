@@ -3,6 +3,8 @@ package cn.jsuacm.gateway.pojo;
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * @ClassName User
  * @Description 用户对象，定义了用户id，用户账号，用户邮箱，用户昵称，用户密码，用户头像链接
@@ -11,7 +13,7 @@ import lombok.Data;
  */
 @TableName(value = "user")
 @Data
-public class User {
+public class User implements Serializable{
 
     /**
      * 用户id，自增长

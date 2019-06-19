@@ -1,6 +1,7 @@
 package cn.jsuacm.gateway.controller;
 
 import cn.jsuacm.gateway.pojo.enity.MessageResult;
+import cn.jsuacm.gateway.pojo.enity.PageResult;
 import cn.jsuacm.gateway.service.AuthenticationService;
 import cn.jsuacm.gateway.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -160,7 +161,17 @@ public class AuthenticationController {
         }
     }
 
-
+    /**
+     * 按照分页返回用户的权限
+     * @param row
+     * @param pageSize
+     * @return
+     */
+    @GetMapping(value = "getPage/{row}/{size}")
+    public PageResult<AuthenticationService.UserAuthentication> getUserAuthentications(@PathVariable("row") int row, @PathVariable("size") int pageSize){
+        PageResult<AuthenticationService.UserAuthentication> userAuthentication = authenticationService.getUserAuthentication(row, pageSize);
+        return userAuthentication;
+    }
 
 
 }

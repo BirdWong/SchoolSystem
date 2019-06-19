@@ -2,7 +2,13 @@ package cn.jsuacm.gateway.service;
 
 import cn.jsuacm.gateway.pojo.User;
 import cn.jsuacm.gateway.pojo.enity.MessageResult;
+import cn.jsuacm.gateway.pojo.enity.PageResult;
 import com.baomidou.mybatisplus.extension.service.IService;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 /**
  * @ClassName UserService
@@ -104,4 +110,23 @@ public interface UserService extends IService<User> {
      * @return
      */
     public MessageResult updatePassword(int uid, String newPwd);
+
+
+    /**
+     * 分页获取用户所有信息以及权限
+     * @param row
+     * @param pageSize
+     * @return
+     */
+    public PageResult<UserAuthentication> getUserAuthentication(int row, int pageSize);
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    class UserAuthentication{
+        private int uid;
+        private String accountNumber;
+        private String email;
+        private List<String> roles;
+    }
 }

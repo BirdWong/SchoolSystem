@@ -1,21 +1,28 @@
 package cn.jsuacm.gateway.service.impl;
 
+import cn.jsuacm.gateway.mapper.AuthenticationMapper;
 import cn.jsuacm.gateway.mapper.UserMapper;
+import cn.jsuacm.gateway.pojo.Authentication;
 import cn.jsuacm.gateway.pojo.User;
 import cn.jsuacm.gateway.pojo.enity.MessageResult;
+import cn.jsuacm.gateway.pojo.enity.PageResult;
+import cn.jsuacm.gateway.service.AuthenticationService;
 import cn.jsuacm.gateway.service.UserService;
 import cn.jsuacm.gateway.util.EmailUtil;
 import cn.jsuacm.gateway.util.MD5Util;
 import cn.jsuacm.gateway.util.RedisUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -36,6 +43,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Autowired
     private EmailUtil emailUtil;
 
+    @Autowired
+    private AuthenticationMapper authenticationMapper;
+
 
     /**
      * 发送邮箱验证码
@@ -54,7 +64,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             }
             // 生成随机码
             String random = RandomStringUtils.random(6, false, true);
-            MessageResult messageResult = emailUtil.sendBindingMail(email, random);
+            MessageResult messageResult = EmailUtil.sendBindingMail(email, random);
             redisUtil.set("reg_"+email, random, EmailUtil.EMAIL_TIME);
             redisUtil.set(email, 1, EmailUtil.SIGN_TIME);
             return messageResult;
@@ -118,7 +128,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             }
             // 生成随机码
             String random = RandomStringUtils.random(6, false, true);
-            MessageResult messageResult = emailUtil.sendUpdataEmail(email, random);
+            MessageResult messageResult = EmailUtil.sendUpdataEmail(email, random);
             redisUtil.set("upd_"+email, random, EmailUtil.EMAIL_TIME);
             redisUtil.set(email, 1, EmailUtil.SIGN_TIME);
             return messageResult;
@@ -252,6 +262,42 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         User user = userMapper.selectById(uid);
         MessageResult messageResult = updatePwd(user, newPwd);
         return messageResult;
+    }
+
+    /**
+     * 分页获取用户的权限
+     *
+     * @param row
+     * @param pageSize
+     * @return
+     */
+    @Override
+    public PageResult<UserAuthentication> getUserAuthentication(int row, int pageSize) {
+        // 1. 查找到该页的所有用户
+        Page<User> userPage = new  Page<User>();
+        userPage.setSize(pageSize);
+        userPage.setPages(row);
+        IPage<User> userIPage = userMapper.selectPage(userPage, null);
+        // 2. 设置分页返回的信息
+        PageResult<UserAuthentication> pageResult = new PageResult<>();
+        pageResult.setRow(userIPage.getCurrent());
+        pageResult.setTatolSize(userIPage.getTotal());
+        pageResult.setPageSize(userIPage.getSize());
+        // 分装用户和权限
+        List<UserAuthentication> userAuthentications = new LinkedList<>();
+        for (User user : userIPage.getRecords()){
+            QueryWrapper<Authentication> wrapper = new QueryWrapper<>();
+            wrapper.eq("uid",user.getUid());
+            List<Authentication> authentications = authenticationMapper.selectList(wrapper);
+            List<String> roles = new LinkedList<>();
+            for(Authentication authentication : authentications){
+                roles.add(authentication.getRole());
+            }
+            UserAuthentication userAuthentication = new UserAuthentication(user.getUid(),user.getAccountNumbser(),user.getEmail(),roles);
+            userAuthentications.add(userAuthentication);
+        }
+        pageResult.setPageContext(userAuthentications);
+        return pageResult;
     }
 
     /**

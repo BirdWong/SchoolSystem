@@ -3,6 +3,8 @@ package cn.jsuacm.gateway.pojo;
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * @ClassName Authentication
  * @Description 权限实体类
@@ -11,7 +13,7 @@ import lombok.Data;
  */
 @TableName(value = "authentication")
 @Data
-public class Authentication {
+public class Authentication implements Serializable{
 
     @TableId(value = "aid", type = IdType.AUTO)
     private int aid;

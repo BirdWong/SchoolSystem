@@ -99,6 +99,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
                 // 修改用户密码
                 .antMatchers("/authentication/updatePassword").hasAnyAuthority(new String[]{AuthenticationService.ADMIN, AuthenticationService.ADMINISTRATOR})
 
+                // 其他的权限操作，必须拥有管理员或者超级管理员权限
+                .antMatchers("/authentication/*").hasAnyAuthority(new String[]{AuthenticationService.ADMIN, AuthenticationService.ADMINISTRATOR})
 
                 // 用户信息修改权限管理
                 .antMatchers("/user/sendRegisterEmail").permitAll()
