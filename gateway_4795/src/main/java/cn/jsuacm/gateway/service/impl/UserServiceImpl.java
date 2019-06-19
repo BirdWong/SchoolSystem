@@ -148,13 +148,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public MessageResult updatePasswordByEmail(String email, String newPwd, String code) {
         QueryWrapper<User> wrapper = new QueryWrapper<>();
         wrapper.eq("email",email);
-        List<User> users = userMapper.selectList(wrapper);
-
-        if (users.size() == 0){
+        User user = getOne(wrapper);
+        if (user == null){
             return new MessageResult(false, "该邮箱没有注册");
         }
-
-        User user = users.get(0);
         if (checkEmailCode("upd_"+user.getEmail(),code)) {
             MessageResult messageResult = updatePwd(user, newPwd);
             return messageResult;
@@ -243,11 +240,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public User getUser(String accountNumber) {
         QueryWrapper<User> wrapper = new QueryWrapper<>();
         wrapper.eq("account_number", accountNumber);
-        List<User> users = userMapper.selectList(wrapper);
-        if (users == null){
+        User user = getOne(wrapper);
+        if (user == null){
             return null;
         }
-        return users.get(0);
+        return user;
     }
 
     /**

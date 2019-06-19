@@ -49,7 +49,30 @@ public class MybatisPlusConfig {
     }
 
 
+    /**
+     *
+     * 执行拦截操作
+     *
+     * *******与前面两个冲突，开发环境都用不了********
+     * 自己多注意
+     * 报错： There is no getter for property named 'delegate' in 'class com.sun.prox
+     */
+//    @Bean
+//    public SqlExplainInterceptor sqlExplainInterceptor(){
+//
+//        SqlExplainInterceptor sqlExplainInterceptor = new SqlExplainInterceptor();
+//        List<ISqlParser> sqlParserList = new ArrayList<>();
+//        sqlParserList.add(new BlockAttackSqlParser());
+//        sqlExplainInterceptor.setSqlParserList(sqlParserList);
+//        return sqlExplainInterceptor;
+//    }
 
+
+
+    /**
+     * 乐观锁配置，实体必须有version对应的属性， 并且添加version注解
+     * @return
+     */
     @Bean
     public OptimisticLockerInterceptor optimisticLockerInterceptor(){
         return new OptimisticLockerInterceptor();

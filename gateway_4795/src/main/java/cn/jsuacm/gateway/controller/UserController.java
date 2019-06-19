@@ -2,12 +2,10 @@ package cn.jsuacm.gateway.controller;
 
 import cn.jsuacm.gateway.pojo.User;
 import cn.jsuacm.gateway.pojo.enity.MessageResult;
+import cn.jsuacm.gateway.pojo.enity.PageResult;
 import cn.jsuacm.gateway.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -141,6 +139,18 @@ public class UserController {
         return messageResult;
     }
 
+
+    /**
+     * 返回所有用户信息以及其权限
+     * @param row
+     * @param pageSize
+     * @return
+     */
+    @GetMapping(value = "getPage/{row}/{size}")
+    public PageResult<UserService.UserAuthentication> getAll(@PathVariable(value = "row") int row, @PathVariable(value = "size") int pageSize){
+        PageResult<UserService.UserAuthentication> userAuthentication = userService.getUserAuthentication(row, pageSize);
+        return userAuthentication;
+    }
 
 
 }

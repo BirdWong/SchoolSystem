@@ -108,6 +108,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
                 .antMatchers("/user/sendUpdateEmail").permitAll()
                 .antMatchers("/user/updatePasswordByEmail").permitAll()
 
+                // 查看所有用户信息和权限信息
+                .antMatchers("/user/getPage/*").hasAnyAuthority(new String[]{AuthenticationService.ADMIN, AuthenticationService.ADMINISTRATOR})
+
 
                 // 除上面外的所有请求全部需要鉴权认证
                 .anyRequest().authenticated();
