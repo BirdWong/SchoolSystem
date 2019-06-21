@@ -7,11 +7,15 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="ccwsystem" />
+        <module name="ccwsystem_8001" />
         <module name="eureka_7001" />
         <module name="gateway_4795" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="ccwsystem" target="1.8" />
+      <module name="ccwsystem_8001" target="1.8" />
       <module name="eureka_7001" target="1.8" />
       <module name="gateway_4795" target="1.8" />
       <module name="schoolsystem" target="1.8" />

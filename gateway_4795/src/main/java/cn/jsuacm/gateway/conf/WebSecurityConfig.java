@@ -83,7 +83,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
                 // 测试调试测试
                 .antMatchers("/test/**").permitAll()
                 .antMatchers("/haha").hasAnyAuthority("ROLE_ADMIN")
+                .antMatchers("/ccw/article/testtest/*").permitAll()
 
+
+                /*
+                 * ******权限中心模块安全配置********
+                 */
                 // 添加权限管理
                 .antMatchers("/authentication/add/menber").hasAnyAuthority(new String[]{AuthenticationService.ADMIN, AuthenticationService.ADMINISTRATOR})
                 .antMatchers("/authentication/add/admin").hasAnyAuthority(AuthenticationService.ADMINISTRATOR)
@@ -110,6 +115,26 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 
                 // 查看所有用户信息和权限信息
                 .antMatchers("/user/getPage/*").hasAnyAuthority(new String[]{AuthenticationService.ADMIN, AuthenticationService.ADMINISTRATOR})
+
+                // 给其他模块用来判断是否有这个用户
+                .antMatchers("/user/isUser/*").permitAll()
+
+
+                /*
+                 *  *********工作室路径安全配置*************
+                 *  - 模块:ccwsystem-8001
+                 *  - 路由路径： ccw
+                 */
+                // 获取一篇公共的文章不需要登录
+                .antMatchers("/ccw/article/userArticle/*").permitAll()
+                // 获取一个用户的所有阅读量不需要登录
+                .antMatchers("/ccw/article/views/*").permitAll()
+
+
+
+
+
+
 
 
                 // 除上面外的所有请求全部需要鉴权认证

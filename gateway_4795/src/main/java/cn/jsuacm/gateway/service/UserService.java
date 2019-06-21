@@ -129,4 +129,12 @@ public interface UserService extends IService<User> {
         private String email;
         private List<String> roles;
     }
+
+
+    /**
+     * 判断是否有这个用户，用于给其他模块验证是否存在用户
+     * @param uid 用户的id
+     * @return
+     */
+    public boolean isUser(int uid);
 }

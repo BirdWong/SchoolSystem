@@ -10,6 +10,7 @@
     <modules>
         <module>gateway_4795</module>
         <module>eureka_7001</module>
+        <module>ccwsystem_8001</module>
     </modules>
 
     <packaging>pom</packaging>

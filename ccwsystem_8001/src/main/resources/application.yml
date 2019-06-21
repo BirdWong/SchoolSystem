@@ -1,0 +1,32 @@
+server:
+  port: 8001
+spring:
+  application:
+    name: ccwsystem-8001
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://119.29.56.187:3306/schoolsystem?characterEncoding=utf8&useSSL=false #数据库url设置
+    username: root
+    password: 912719483
+    dbcp2:
+      min-idle: 2 #数据库连接池最小维持连接数
+      initial-size: 5 #初始化连接数
+      max-total: 10 #最大连接数
+      max-wait-millis: 1000 #等待超时时间
+  redis:
+        database: 0
+        host: 119.29.56.187
+        port: 6379
+        lettuce:
+          pool:
+            max-active: 8
+            max-wait: -1ms
+            max-idle: 8
+            min-idle: 0
+        timeout: 1000ms
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://10.0.0.11:7001/eureka

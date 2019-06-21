@@ -39,7 +39,7 @@ public class MyJwtTokenFilter extends OncePerRequestFilter {
         if (authHeader != null && authHeader.startsWith(JwtUtils.PREFIX)){
             String authToken = authHeader.substring(JwtUtils.PREFIX.length());
             Claims Claims = JwtUtils.parseJWT(authToken);
-            String username = String.valueOf(Claims.get("id"));
+            String username = String.valueOf(Claims.get("account"));
             System.out.println("username:" + username);
             //验证token,具体怎么验证看需求，可以只验证token不查库，把权限放在jwt中即可
             UserDetails UserDetails = myUserDetailsService.loadUserByUsername(username);

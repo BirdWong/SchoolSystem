@@ -1,7 +1,10 @@
 package cn.jsuacm.gateway.conf;
 
+import cn.jsuacm.gateway.pojo.User;
+import cn.jsuacm.gateway.service.UserService;
 import cn.jsuacm.gateway.util.JwtUser;
 import cn.jsuacm.gateway.util.JwtUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -24,6 +27,9 @@ import java.util.List;
 public class MyAuthenticationSuccessHandler implements AuthenticationSuccessHandler{
 
 
+    @Autowired
+    private UserService userService;
+
     @Override
     public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
         System.out.println("登陆成功");
@@ -36,7 +42,9 @@ public class MyAuthenticationSuccessHandler implements AuthenticationSuccessHand
         for (GrantedAuthority role : userDetail.getAuthorities()){
             authorities.add(role.getAuthority());
         }
-        String jwtToken = JwtUtils.createJwtToken(userDetail.getUsername(), authorities);
+        User user = userService.getUser(userDetail.getUsername());
+
+        String jwtToken = JwtUtils.createJwtToken(user.getUid(), user.getAccountNumbser(), authorities);
         httpServletResponse.addHeader("Authorization",JwtUtils.PREFIX+jwtToken);
         httpServletResponse.getWriter().write("{\"status\":\"true\",\"result\":\"ok\"}");
         httpServletResponse.getWriter().flush();

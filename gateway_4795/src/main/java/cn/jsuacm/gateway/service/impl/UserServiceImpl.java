@@ -298,6 +298,22 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     /**
+     * 判断是否有这个用户，用于给其他模块验证是否存在用户
+     *
+     * @param uid 用户的id
+     * @return
+     */
+    @Override
+    public boolean isUser(int uid) {
+        User user = getById(uid);
+        if (user == null){
+            return false;
+        }else {
+            return true;
+        }
+    }
+
+    /**
      * 查询邮箱是否注册过
      * @param email 邮箱
      * @return

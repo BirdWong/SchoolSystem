@@ -152,5 +152,10 @@ public class UserController {
         return userAuthentication;
     }
 
+    @GetMapping(value = "isUser/{uid}")
+    public boolean isUser(@PathVariable(value = "uid") int uid){
+        return userService.isUser(uid);
+    }
+
 
 }
