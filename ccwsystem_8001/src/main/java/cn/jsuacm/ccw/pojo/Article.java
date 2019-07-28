@@ -118,7 +118,7 @@ public class Article implements Serializable{
      * @return
      */
     public static MessageResult checkArticle(Article article, int kind){
-        if (article.getTitle() == null || article.getTitle().length() == 0 || article.getTitle().length() < 101){
+        if (article.getTitle() == null || article.getTitle().length() == 0 || article.getTitle().length() > 101){
             return new MessageResult(false, "请正确填写标题，并且长度不能超过100");
         }
         if (article.getKind() != kind){

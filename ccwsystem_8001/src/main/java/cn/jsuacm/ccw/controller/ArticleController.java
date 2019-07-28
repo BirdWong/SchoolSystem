@@ -54,8 +54,8 @@ public class ArticleController {
             article.setUid(uid);
             article.setContent(String.valueOf(map.get("content")));
             article.setHtmlContent(String.valueOf(map.get("htmlContent")));
-            article.setStatus(Integer.valueOf(String.valueOf("status")));
-            article.setTitle(String.valueOf("title"));
+            article.setStatus(Integer.valueOf(String.valueOf(map.get("status"))));
+            article.setTitle(String.valueOf(map.get("title")));
             MessageResult messageResult = articleService.addUserArticle(uid, article);
             return messageResult;
         }else {
@@ -132,9 +132,9 @@ public class ArticleController {
     @PostMapping(value = "changeStatus")
     @ApiOperation(value = "修改文章状态", notes = "修改文章的状态，必须验证是否是本人的文章", httpMethod = "post")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "uid", required = true, value = "用户id", dataType = "int", paramType = "post"),
-            @ApiImplicitParam(name = "aid", required = true, value = "文章的id", dataType = "int", paramType = "post"),
-            @ApiImplicitParam(name = "status", required = true, value = "文章的状态", dataType = "int", paramType = "post")
+            @ApiImplicitParam(name = "uid", required = true, value = "用户id", dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "aid", required = true, value = "文章的id", dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "status", required = true, value = "文章的状态", dataType = "int", paramType = "query")
     })
     public MessageResult changeStatus(HttpServletRequest req, @RequestBody Map<String, Object> map){
         int uid = Integer.valueOf(String.valueOf(map.get("uid")));

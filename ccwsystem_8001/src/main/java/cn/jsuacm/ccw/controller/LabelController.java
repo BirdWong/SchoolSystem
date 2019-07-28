@@ -4,6 +4,7 @@ import cn.jsuacm.ccw.pojo.Label;
 import cn.jsuacm.ccw.pojo.enity.MessageResult;
 import cn.jsuacm.ccw.service.LabelService;
 import cn.jsuacm.ccw.util.CheckUserUtil;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -22,6 +23,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping(value = "label")
+@Api(value = "label", description = "标签操作")
 public class LabelController {
 
     @Autowired

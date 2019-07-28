@@ -150,7 +150,6 @@ public class ArticleInfomationController {
     @GetMapping(value = "admin/deleteAllByLid/{lid}")
     @ApiOperation(value = "管理员通过标签id删除标签下的所有文章", notes = "管理员获取用户的文章或者标签信息， 通过标签的id删除属于这个标签的所有文章信息以及文章", httpMethod = "path")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "uid", value = "用户的id", required = true, dataType = "int", paramType = "path"),
             @ApiImplicitParam(name = "lid", value = "标签的id", required = true, dataType = "int", paramType = "path")
     })
     public MessageResult adminDeleteAllByLid(@PathVariable(value = "uid")int uid, @PathVariable("lid") int lid){

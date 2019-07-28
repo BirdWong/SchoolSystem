@@ -60,13 +60,13 @@ public class CategoryController {
      * @param category
      * @return
      */
-    @PostMapping(value = "addSencondCategory")
+    @PostMapping(value = "addSecondCategory")
     @ApiOperation(value = "添加一个二级分类" , notes = "添加二级分类如果该二级分类下的一级分类已经有这个分类了，则添加失败")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "parentId", required = true, value = "二级分类的父分类id", dataType = "int", paramType = "query"),
             @ApiImplicitParam(name = "cname", required = true, value = "二级分类的名称", dataType = "string", paramType = "query")
     })
-    public MessageResult addSencondCategory(@RequestBody Category category){
+    public MessageResult addSecondCategory(@RequestBody Category category){
         MessageResult messageResult = categoryService.saveChildren(category);
         return messageResult;
     }
@@ -78,7 +78,7 @@ public class CategoryController {
      * @return
      */
     @GetMapping(value = "deleteCategory/{cid}")
-    @ApiOperation(value = "删除一个一级分类", notes = "删除一个一级分类， 同时会删除其附属的二级分类以及二级分类相关的文章信息")
+    @ApiOperation(value = "删除一个分类", notes = "删除一个分类， 如果是一级分类会同时会删除其附属的二级分类以及二级分类相关的文章信息")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "cid", required = true, value = "一级分类的id", dataType = "int", paramType = "query")
     })
