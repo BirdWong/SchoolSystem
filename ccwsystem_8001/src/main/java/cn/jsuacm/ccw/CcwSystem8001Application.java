@@ -16,6 +16,8 @@ import org.springframework.context.annotation.ComponentScans;
 @SpringBootApplication
 public class CcwSystem8001Application {
     public static void main(String[] args) {
+        // 解决elasticsearch和redis的冲突
+        System.setProperty("es.set.netty.runtime.available.processors","false");
         SpringApplication.run(CcwSystem8001Application.class, args);
     }
 }

@@ -64,6 +64,13 @@ public interface ArticleService extends IService<Article>{
 
 
     /**
+     * 查看一篇文章有多少浏览量
+     * @param aid 文章id
+     * @return
+     */
+    public MessageResult getView(int aid);
+
+    /**
      * 查看这个用户一共有多少浏览量
      * @param uid
      * @return
@@ -88,13 +95,56 @@ public interface ArticleService extends IService<Article>{
 
 
     /**
+     * 获取一个用户的公开的文章列表
+     * @param uid
+     * @param row
+     * @param pageSize
+     * @return
+     */
+    public PageResult<Article> getUserPublicArticleList(int uid, int row, int pageSize);
+
+
+    /**
+     * 获取一个用户的私密的文章列表
+     * @param uid
+     * @param row
+     * @param pageSize
+     * @return
+     */
+    public PageResult<Article> getUserPrivateArticleList(int uid, int row, int pageSize);
+
+    /**
+     * 获取一个用户的草稿箱的文章列表
+     * @param uid
+     * @param row
+     * @param pageSize
+     * @return
+     */
+    public PageResult<Article> getUserDraftArticleList(int uid, int row, int pageSize);
+
+
+    /**
      * 获取用户发表的公开，用户个人的文章归档
      * @param uid
      * @return
      */
-    public TreeMap<String, LinkedList<Article>> getUserArchive(int uid);
+    public TreeMap<String, LinkedList<Article>> getUserPublicArchive(int uid);
 
 
+    /**
+     * 获取用户私密的文章归档
+     * @param uid 用户的id
+     * @return
+     */
+    public TreeMap<String, LinkedList<Article>> getUserPrivateArchive(int uid);
+
+
+    /**
+     * 获取用户的草稿文章列表
+     * @param uid 用户的id
+     * @return
+     */
+    public TreeMap<String, LinkedList<Article>> getUserDraftArchive(int uid);
     /**
      * 获取用户最近发表的文章, 过滤非公开和非用户类型文章
      * @param uid 用户的id
@@ -102,4 +152,28 @@ public interface ArticleService extends IService<Article>{
      * @return
      */
     public List<Article> getNewArticle(int uid, int size);
+
+
+    /**
+     * 分页获取24H内点击次数最高的文章
+     * @param current 当前页
+     * @param pageSize 页面大小
+     * @return
+     */
+    public PageResult<Article> getHotsArticles(int current, int pageSize);
+
+
+    /**
+     * 删除用户类型的文章
+     * @param uid
+     * @return
+     */
+    public void deleteUserArticleByUid(int uid);
+
+
+    /**
+     * 根据aid删除文章
+     * @param aid
+     */
+    public void deleteByAid(int aid);
 }
