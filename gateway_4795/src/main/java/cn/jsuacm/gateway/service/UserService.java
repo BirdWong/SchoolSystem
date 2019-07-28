@@ -137,4 +137,6 @@ public interface UserService extends IService<User> {
      * @return
      */
     public boolean isUser(int uid);
+
+
 }

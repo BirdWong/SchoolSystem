@@ -45,8 +45,8 @@ public class MyAuthenticationSuccessHandler implements AuthenticationSuccessHand
         User user = userService.getUser(userDetail.getUsername());
 
         String jwtToken = JwtUtils.createJwtToken(user.getUid(), user.getAccountNumbser(), authorities);
-        httpServletResponse.addHeader("Authorization",JwtUtils.PREFIX+jwtToken);
-        httpServletResponse.getWriter().write("{\"status\":\"true\",\"result\":\"ok\"}");
+        httpServletResponse.getWriter().write("{\"status\":\"true\",\"result\":\""+user.getUid()+"\", \"Authorization\":\""+JwtUtils.PREFIX+jwtToken+"\"}");
+
         httpServletResponse.getWriter().flush();
     }
 }

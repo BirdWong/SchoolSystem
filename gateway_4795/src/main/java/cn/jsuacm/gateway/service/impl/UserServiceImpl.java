@@ -74,13 +74,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public MessageResult registerUser(User user, String code) {
-        if(!checkEmail(user.getEmail())){
-            return new MessageResult(false,"邮箱已经被注册");
+        if (!checkEmailCode("reg_"+user.getEmail(), code)){
+            return new MessageResult(false, "验证码错误");
         }
-        if (!checkAccountNUmber(user.getAccountNumbser())){
-            return new MessageResult(false, "用户名已经被注册");
-        }
-        if (checkUser(user) && checkEmailCode("reg_"+user.getEmail(), code)) {
+        if (checkUser(user)) {
+            if(!checkEmail(user.getEmail())){
+                return new MessageResult(false,"邮箱已经被注册");
+            }
+            if (!checkAccountNUmber(user.getAccountNumbser())){
+                return new MessageResult(false, "用户名已经被注册");
+            }
             // 密码转换md5后再次加密
             user.setPassword(MD5Util.convertMD5(MD5Util.string2MD5(user.getPassword())));
             userMapper.insert(user);

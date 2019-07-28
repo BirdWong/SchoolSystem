@@ -80,10 +80,24 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
                         "/**/*.css",
                         "/**/*.js"
                 ).permitAll()
+
+
+
                 // 测试调试测试
-                .antMatchers("/test/**").permitAll()
-                .antMatchers("/haha").hasAnyAuthority("ROLE_ADMIN")
-                .antMatchers("/ccw/article/testtest/*").permitAll()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
                 /*
@@ -116,8 +130,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
                 // 查看所有用户信息和权限信息
                 .antMatchers("/user/getPage/*").hasAnyAuthority(new String[]{AuthenticationService.ADMIN, AuthenticationService.ADMINISTRATOR})
 
-                // 给其他模块用来判断是否有这个用户
+                // 给其他模块用来判断是否有这个用户,或者获取这个用户的信息
                 .antMatchers("/user/isUser/*").permitAll()
+                .antMatchers("/user/getUser/*").permitAll()
 
 
                 /*
@@ -125,13 +140,96 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
                  *  - 模块:ccwsystem-8001
                  *  - 路由路径： ccw
                  */
-                // 获取一篇公共的文章不需要登录
+
+
+                /*
+                 * *********文章内容操作********
+                 *        标识前缀 article
+                 */
+                // 管理员分页获取用户的所有文章/私有文章/草稿文章列表
+                .antMatchers("/ccw/article/admin/**").hasAnyAuthority(new String[]{AuthenticationService.ADMIN, AuthenticationService.ADMINISTRATOR})
+
+                // 分页获取最热的文章列表
+                .antMatchers("/ccw/article/getHots/**").permitAll()
+
+                // 获取这个用户最新的文章列表，自动过滤私有/草稿文章
+                .antMatchers("/ccw/article/getNewArticle/**").permitAll()
+
+                // 获取一个用户公开的文章列表
+                .antMatchers("/ccw/article/getUserPublicArticleList/**").permitAll()
+
+                // 获取一个用户公开的文章归档
+                .antMatchers("/ccw/article/getUserPublicArchive/*").permitAll()
+
+                // 获取一个用户的公开的文章内容
                 .antMatchers("/ccw/article/userArticle/*").permitAll()
-                // 获取一个用户的所有阅读量不需要登录
+
+                // 查看一篇/所有文章的观看数量
+                .antMatchers("/ccw/article/view/*").permitAll()
                 .antMatchers("/ccw/article/views/*").permitAll()
 
+                /*
+                 * ***********分类接口*******
+                 *      前缀标识：category
+                 */
+                // 添加一个一级分类
+                .antMatchers("/ccw/category/addFirstCategory").hasAnyAuthority(new String[]{AuthenticationService.ADMIN, AuthenticationService.ADMINISTRATOR})
+
+                // 添加一个二级分类
+                .antMatchers("/ccw/category/addSecondCategory").hasAnyAuthority(new String[]{AuthenticationService.ADMIN, AuthenticationService.ADMINISTRATOR})
+
+                // 删除一个一级分类
+                .antMatchers("/ccw/category/deleteCategory/*").hasAnyAuthority(new String[]{AuthenticationService.ADMINISTRATOR, AuthenticationService.ADMIN})
+
+                // 更新一个分类
+                .antMatchers("/ccw/category/updateCategory").hasAnyAuthority(new String[]{AuthenticationService.ADMIN, AuthenticationService.ADMINISTRATOR})
+
+                //获取所有的分类信息
+                .antMatchers("/ccw/category/getAllCategory").permitAll()
+
+                // 获取所有的一级分类
+                .antMatchers("/ccw/category/getFirstCategory").permitAll()
+
+                // 通过一级分类id获取二级分类列表
+                .antMatchers("/ccw/category/getSecondByCid/*").permitAll()
 
 
+                /*
+                 * ***********标签接口操作**************
+                 *      前缀标识：label
+                 */
+
+
+                // 获取所有用户的所有的标签
+                .antMatchers("/ccw/label/getAll").permitAll()
+                // 通过标签id获取标签信息
+                .antMatchers("/ccw/label/getById/*").permitAll()
+                // 通过用户id获取标签信息
+                .antMatchers("/ccw/label/getByUid/*").permitAll()
+
+
+                /*
+                 * ***********文章信息接口**************
+                 *      前缀标识：articleInfomation
+                 */
+                // 管理员的操作
+                .antMatchers("/ccw/articleInfomation/admin/**").hasAnyAuthority(new String[]{AuthenticationService.ADMIN, AuthenticationService.ADMINISTRATOR})
+
+                // 通过文章id/ 用户id/ 标签id/ 分类id获取用户公开的文章信息
+                .antMatchers("/ccw/articleInfomation/getPublicByAid").permitAll()
+                .antMatchers("/ccw/articleInfomation/getPublicByCid").permitAll()
+                .antMatchers("/ccw/articleInfomation/getPublicByLid").permitAll()
+                .antMatchers("/ccw/articleInfomation/getPublicByUid").permitAll()
+
+
+                /*
+                 * ***********es搜索接口操作*********
+                 *      前缀标识：search
+                 */
+                // 通过文章信息搜索文章
+                .antMatchers("/ccw/search/article/**").permitAll()
+                // 通过用户的信息搜索文章
+                .antMatchers("/ccw/search/user/**").permitAll()
 
 
 

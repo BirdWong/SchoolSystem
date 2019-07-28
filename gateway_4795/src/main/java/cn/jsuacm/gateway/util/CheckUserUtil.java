@@ -1,6 +1,5 @@
-package cn.jsuacm.ccw.util;
+package cn.jsuacm.gateway.util;
 
-import cn.jsuacm.ccw.util.JwtUtils;
 import io.jsonwebtoken.Claims;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,8 +25,8 @@ public class CheckUserUtil {
         String authHeader = req.getHeader(tokenHeader);
         if (authHeader != null && authHeader.startsWith(JwtUtils.PREFIX)){
             String authToken = authHeader.substring(JwtUtils.PREFIX.length());
-            Claims Claims = JwtUtils.parseJWT(authToken);
-            int id = Integer.valueOf(String.valueOf(Claims.get("id")));
+            Claims claims = JwtUtils.parseJWT(authToken);
+            int id = Integer.valueOf(String.valueOf(claims.get("id")));
             if (id == uid){
                 return true;
             }else {

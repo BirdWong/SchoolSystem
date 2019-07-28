@@ -40,6 +40,7 @@ public class AuthenticationServiceImpl extends ServiceImpl<AuthenticationMapper,
      */
     @Override
     public boolean addMemBerAuthentication(int uid) {
+
         return addRole(uid, AuthenticationService.MENBER);
     }
 
@@ -51,6 +52,7 @@ public class AuthenticationServiceImpl extends ServiceImpl<AuthenticationMapper,
      */
     @Override
     public boolean addAdminAuthentication(int uid) {
+
         return addRole(uid, AuthenticationService.ADMIN);
     }
 
@@ -223,4 +225,7 @@ public class AuthenticationServiceImpl extends ServiceImpl<AuthenticationMapper,
         authenticationMapper.delete(wrapper);
         return true;
     }
+
+
+
 }
