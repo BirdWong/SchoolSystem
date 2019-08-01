@@ -14,12 +14,18 @@ import org.springframework.web.client.RestTemplate;
  */
 @Configuration
 public class ConfigBean {
-    @Bean
+    @Bean(name = "restTemplate")
     @LoadBalanced
     public RestTemplate getRestTemplate(){
         SimpleClientHttpRequestFactory simpleClientHttpRequestFactory = new   SimpleClientHttpRequestFactory();
         simpleClientHttpRequestFactory.setConnectTimeout(5000);
         simpleClientHttpRequestFactory.setReadTimeout(5000);
         return new RestTemplate(simpleClientHttpRequestFactory);
+    }
+
+
+    @Bean(name="remoteRestTemplate")
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
     }
 }

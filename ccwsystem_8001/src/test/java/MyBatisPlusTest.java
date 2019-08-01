@@ -1,5 +1,5 @@
-import cn.jsuacm.ccw.mapper.ArticleMapper;
-import cn.jsuacm.ccw.pojo.Article;
+import cn.jsuacm.ccw.mapper.blog.ArticleMapper;
+import cn.jsuacm.ccw.pojo.blog.Article;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -149,6 +149,17 @@
             <artifactId>springfox-swagger-ui</artifactId>
             <version>2.7.0</version>
         </dependency>
+
+
+
+
+        <!--rss解析工具-->
+        <dependency>
+            <groupId>com.rometools</groupId>
+            <artifactId>rome</artifactId>
+            <version>1.12.1</version>
+        </dependency>
+
     </dependencies>
 
     <build>

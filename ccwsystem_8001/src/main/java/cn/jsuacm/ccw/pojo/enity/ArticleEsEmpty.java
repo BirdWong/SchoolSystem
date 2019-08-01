@@ -18,7 +18,7 @@ import java.util.Date;
  */
 @Data
 @NoArgsConstructor
-@Document(indexName = "school",type = "article", shards = 1,replicas = 0, refreshInterval = "-1")
+@Document(indexName = "article",type = "article", shards = 1,replicas = 0, refreshInterval = "-1")
 public class ArticleEsEmpty implements Serializable{
 
     /**

@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ComponentScans;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
  * @ClassName CcwSystem8001Application
@@ -14,6 +15,7 @@ import org.springframework.context.annotation.ComponentScans;
  */
 @EnableEurekaClient
 @SpringBootApplication
+@EnableSwagger2
 public class CcwSystem8001Application {
     public static void main(String[] args) {
         // 解决elasticsearch和redis的冲突
