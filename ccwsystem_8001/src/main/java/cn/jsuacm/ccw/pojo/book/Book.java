@@ -98,8 +98,8 @@ public class Book {
     /**
      * 已经被借出去的数量
      */
-    @TableField(value = "use_size", strategy = FieldStrategy.NOT_NULL)
+    @TableField(value = "`use_size`", strategy = FieldStrategy.NOT_NULL)
     @ApiModelProperty(value = "剩余的数量" ,dataType = "int", required = true)
-    private int use;
+    private int hasUse;
 
 }

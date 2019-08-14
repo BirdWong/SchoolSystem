@@ -6,13 +6,11 @@ import cn.jsuacm.gateway.pojo.Authentication;
 import cn.jsuacm.gateway.pojo.User;
 import cn.jsuacm.gateway.pojo.enity.MessageResult;
 import cn.jsuacm.gateway.pojo.enity.PageResult;
-import cn.jsuacm.gateway.service.AuthenticationService;
 import cn.jsuacm.gateway.service.UserService;
 import cn.jsuacm.gateway.util.EmailUtil;
 import cn.jsuacm.gateway.util.MD5Util;
 import cn.jsuacm.gateway.util.RedisUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.commons.lang.RandomStringUtils;
@@ -315,6 +313,27 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             return true;
         }
     }
+
+    /**
+     * 获取实验室所有成员
+     *
+     * @return
+     */
+    @Override
+    public List<User> getCcwMenber() {
+        return userMapper.getCcwMenber();
+    }
+
+    /**
+     * 获取正在实验室的成员
+     *
+     * @return
+     */
+    @Override
+    public List<User> getCcwIngMenber() {
+        return userMapper.getCcwIngMenber();
+    }
+
 
     /**
      * 查询邮箱是否注册过

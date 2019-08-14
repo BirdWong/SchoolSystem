@@ -1,9 +1,10 @@
-import com.rometools.rome.feed.synd.SyndEntry;
-import com.rometools.rome.feed.synd.SyndFeed;
-import com.rometools.rome.io.FeedException;
-import com.rometools.rome.io.SyndFeedInput;
-import com.rometools.rome.io.XmlReader;
+import cn.jsuacm.ccw.pojo.projects.Commit;
+import cn.jsuacm.ccw.service.projects.CommitService;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,62 +20,16 @@ import java.util.zip.GZIPInputStream;
  * @Author h4795
  * @Date 2019/07/31 20:18
  */
+@RunWith(value = SpringRunner.class)
+@SpringBootTest(classes = SpringBootApplicationTest.class)
 public class AtomTest {
 
+    @Autowired
+    CommitService commitService;
 
 
     @Test
-    public void testRss(){
-        String urlString = "https://code.aliyun.com/cdhuishuo/lq-wechat.atom";
-        try {
-            URL url = new URL(urlString);
-            parseXml(url);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (FeedException e) {
-            e.printStackTrace();
-        }
+    public void test(){
+        commitService.getByGitHub("https://api.github.com/repos/birdwong/schoolsystem/commits", "RocWong");
     }
-
-
-    public void parseXml(URL url) throws IllegalArgumentException, FeedException {
-
-        try {
-            SyndFeedInput input = new SyndFeedInput();
-            SyndFeed feed = null;
-            URLConnection conn;
-            conn = url.openConnection();
-            String content_encoding = conn.getHeaderField("Content-Encoding");
-
-
-            InputStream inputStream = conn.getInputStream();
-            if (content_encoding != null && content_encoding.contains("gzip")) {
-                System.out.println("conent encoding is gzip");
-                GZIPInputStream gzin = new GZIPInputStream(inputStream);
-                XmlReader reader = new XmlReader(gzin);
-                feed = input.build(reader);
-            } else {
-                XmlReader xmlReader = new XmlReader(inputStream);
-                feed = input.build(xmlReader);
-            }
-
-            List entries = feed.getEntries();//得到所有的标题<title></title>
-            for(int i=0; i < entries.size(); i++) {
-                SyndEntry entry = (SyndEntry)entries.get(i);
-                System.out.println(entry.getTitle());
-                System.out.println(entry.getAuthor());
-                System.out.println(entry.getContents());
-                System.out.println(entry.getCategories());
-                System.out.println(entry.getLink());
-                System.out.println(entry.getDescription());
-
-            }
-            System.out.println("feed size:" + feed.getEntries().size());
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
 }

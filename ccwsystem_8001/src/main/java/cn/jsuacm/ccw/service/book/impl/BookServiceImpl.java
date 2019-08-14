@@ -15,12 +15,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -62,41 +62,45 @@ public class BookServiceImpl extends ServiceImpl<BookMapper, Book> implements Bo
 
         try {
             String url = uri.replace("{isbn}", isbn);
-            ResponseEntity<String> entity = restTemplate.getForEntity(url, String.class);
-            
-            Map<String,Object> values = new ObjectMapper().readValue(entity.getBody(), Map.class);
-            if (values.get("id") == null){
-                return new MessageResult(false, String.valueOf(values.get("msg")));
-            }else {
-                Book book = new Book();
-                book.setTitle(String.valueOf(values.get("title")));
-                List<String> authors = (List<String>)values.get("author");
-                StringBuilder author = new StringBuilder();
-                boolean sign = true;
-                for (String str : authors){
-                    if (sign){
-                        sign = false;
-                    }else {
-                        author.append(",");
-                    }
-                    author.append(str);
-                }
-                book.setAuthor(author.toString());
-                book.setIsbn(isbn);
-                book.setPages(Integer.valueOf(String.valueOf(values.get("pages"))));
-                book.setPrice(String.valueOf(values.get("price")));
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM");
-                book.setPubdate(dateFormat.parse(String.valueOf(values.get("pubdate"))));
-                book.setPublisher(String.valueOf(values.get("publisher")));
-                book.setSize(size);
-                book.setUse(0);
-                if (hasBook(book)){
-                    return new MessageResult(false, "已经存在此书");
-                }
-                save(book);
-                esBookService.saveBook(book);
-                return new MessageResult(true, book.getId()+"");
+
+            Map<String,Object> values = null;
+            try {
+                ResponseEntity<String> entity = restTemplate.getForEntity(url, String.class);
+                values = new ObjectMapper().readValue(entity.getBody(), Map.class);
+            }catch (HttpClientErrorException e){
+                return new MessageResult(false, "isbn输入错误或者没有此书籍");
             }
+
+
+            Book book = new Book();
+            book.setTitle(String.valueOf(values.get("title")));
+            List<String> authors = (List<String>)values.get("author");
+            StringBuilder author = new StringBuilder();
+            boolean sign = true;
+            for (String str : authors){
+                if (sign){
+                    sign = false;
+                }else {
+                    author.append(",");
+                }
+                author.append(str);
+            }
+            book.setAuthor(author.toString());
+            book.setIsbn(isbn);
+            book.setPages(Integer.valueOf(String.valueOf(values.get("pages"))));
+            book.setPrice(String.valueOf(values.get("price")));
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM");
+            book.setPubdate(dateFormat.parse(String.valueOf(values.get("pubdate"))));
+            book.setPublisher(String.valueOf(values.get("publisher")));
+            book.setSize(size);
+            book.setHasUse(0);
+            if (hasBook(book)){
+                return new MessageResult(false, "已经存在此书");
+            }
+            save(book);
+            esBookService.saveBook(book);
+            return new MessageResult(true, book.getId()+"");
+
         } catch (IOException e) {
             return new MessageResult(false, "请求错误，请检查isbn是否填写正确或者一个小时后尝试, 如果超过24小时不可用请联系维护人员进行第三方接口检测：文档：https://douban-api-docs.zce.me/  接口代理：https://douban.uieee.com");
         } catch (ParseException e) {
@@ -137,7 +141,7 @@ public class BookServiceImpl extends ServiceImpl<BookMapper, Book> implements Bo
                 return new MessageResult(false, "更新的信息与其他书籍重复");
             } else {
                 Book use = bookMapper.getUse(book.getId());
-                book.setUse(use.getUse());
+                book.setHasUse(use.getHasUse());
                 updateById(book);
                 esBookService.saveBook(book);
                 return new MessageResult(true, book.getId()+"");
@@ -160,11 +164,17 @@ public class BookServiceImpl extends ServiceImpl<BookMapper, Book> implements Bo
         if (book == null){
             return new MessageResult(false, "没有这本书籍");
         }
-        if (book.getSize() != book.getUse()) {
+        if (book.getHasUse() != 0) {
             return new MessageResult(false, "还有书籍未归还");
         } else {
-            removeById(id);
-            esBookService.deleteById(id);
+            try {
+                removeById(id);
+                esBookService.deleteById(id);
+            }catch (Exception e){
+                return new MessageResult(false, "删除失败");
+            }
+
+
             return new MessageResult(true, "删除成功");
         }
     }
@@ -205,7 +215,7 @@ public class BookServiceImpl extends ServiceImpl<BookMapper, Book> implements Bo
     @Override
     public void hasBorrow(int bid) {
         Book book = getById(bid);
-        book.setUse(book.getUse() + 1);
+        book.setHasUse(book.getHasUse() + 1);
         updateById(book);
         esBookService.changeUse(bid, 1);
     }
@@ -218,7 +228,7 @@ public class BookServiceImpl extends ServiceImpl<BookMapper, Book> implements Bo
     @Override
     public void hasReturn(int bid) {
         Book book = getById(bid);
-        book.setUse(book.getUse() - 1);
+        book.setHasUse(book.getHasUse() - 1);
         updateById(book);
         esBookService.changeUse(bid, -1);
     }
@@ -235,7 +245,7 @@ public class BookServiceImpl extends ServiceImpl<BookMapper, Book> implements Bo
         IPage<Book> iPage = new Page<>();
         iPage.setSize(pageSize);
         iPage.setCurrent(current);
-        IPage<Book> bookIPage = bookMapper.selectPage(iPage, null);
+        IPage<Book> bookIPage = bookMapper.selectPage(iPage, new QueryWrapper<Book>());
         PageResult<Book> pageResult = new PageResult<>();
         pageResult.setPageContext(bookIPage.getRecords());
         pageResult.setTatolSize(bookIPage.getTotal());

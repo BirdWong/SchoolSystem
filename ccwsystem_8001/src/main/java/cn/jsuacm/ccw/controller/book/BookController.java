@@ -35,7 +35,7 @@ public class BookController {
      * @return
      */
     @PutMapping("admin/addByIsbn")
-    @ApiOperation(value = "通过书籍的isbn信息从豆瓣获取信息添加图书", notes = "通过isbn信息从豆瓣接口查询到书籍的部分信息保存到数据库， 如果数据库中已经有重复的isbn将保存失败， 返回信息很重要，建议显示给用户，在后期第三方接口失效后可以给用户进行排查", httpMethod = "put")
+    @ApiOperation(value = "通过书籍的isbn信息从豆瓣获取信息添加图书", notes = "通过isbn信息从豆瓣接口查询到书籍的部分信息保存到数据库， 如果数据库中已经有重复的isbn将保存失败， 返回信息很重要，建议显示给用户，在后期第三方接口失效后可以给用户进行排查", httpMethod = "PUT")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "isbn", required = true, value = "书籍的isbn信息", dataType = "string", paramType = "query"),
             @ApiImplicitParam( name = "size", required = true, value = "书籍拥有的数量", dataType = "int", paramType = "query")
@@ -51,7 +51,7 @@ public class BookController {
      * @return
      */
     @PostMapping("admin/addByInfo")
-    @ApiOperation(value = "用户通过手动输入书籍信息添加书籍", notes = "用户手动输入添加书籍信息，请注意对应的内容格式尽量与isbn添加的格式信息相同", httpMethod = "post")
+    @ApiOperation(value = "用户通过手动输入书籍信息添加书籍", notes = "用户手动输入添加书籍信息，请注意对应的内容格式尽量与isbn添加的格式信息相同", httpMethod = "POST")
     @ApiImplicitParams({
             @ApiImplicitParam( name = "title", required = true, value = "书籍名称", dataType = "string", paramType = "query"),
             @ApiImplicitParam( name = "author", required = true, value = "作者名称，多位作者的话用英文逗号分割','", dataType = "string", paramType = "query"),
@@ -71,7 +71,7 @@ public class BookController {
      * @return
      */
     @PostMapping("admin/update")
-    @ApiOperation(value = "用户通过手动输入书籍信息修改书籍信息", notes = "用户通过手动输入书籍信息修改书籍信息，请注意对应的内容格式尽量与isbn添加的格式信息相同", httpMethod = "post")
+    @ApiOperation(value = "用户通过手动输入书籍信息修改书籍信息", notes = "用户通过手动输入书籍信息修改书籍信息，请注意对应的内容格式尽量与isbn添加的格式信息相同", httpMethod = "POST")
     @ApiImplicitParams({
             @ApiImplicitParam( name = "id", required = true, value = "书籍的id", dataType = "int", paramType = "query"),
             @ApiImplicitParam( name = "title", required = false, value = "书籍名称", dataType = "string", paramType = "query"),
@@ -94,7 +94,7 @@ public class BookController {
      * @return
      */
     @GetMapping(value = "getById/{bid}")
-    @ApiOperation(value = "通过id获取书籍信息", httpMethod = "get")
+    @ApiOperation(value = "通过id获取书籍信息", httpMethod = "GET")
     @ApiImplicitParams({
             @ApiImplicitParam( name = "bid", required = true, value = "书籍的id", dataType = "int", paramType = "path")
     })
@@ -109,7 +109,7 @@ public class BookController {
      * @return
      */
     @GetMapping(value = "admin/deleteById/{bid}")
-    @ApiOperation(value = "通过书籍id删除书籍", httpMethod = "get")
+    @ApiOperation(value = "通过书籍id删除书籍", httpMethod = "GET")
     @ApiImplicitParams({
             @ApiImplicitParam( name = "bid", required = true, value = "书籍的id", dataType = "int", paramType = "path")
     })
@@ -125,7 +125,7 @@ public class BookController {
      * @return
      */
     @PutMapping(value = "admin/deleteByIds")
-    @ApiOperation(value = "通过一组书籍id删除书籍", httpMethod = "put")
+    @ApiOperation(value = "通过一组书籍id删除书籍", httpMethod = "PUT")
     @ApiImplicitParams({
             @ApiImplicitParam( name = "ids", required = true, value = "书籍的id数组", dataType = "array", paramType = "query")
     })
@@ -141,7 +141,7 @@ public class BookController {
      * @return
      */
     @GetMapping(value = "getPages/{current}/{pageSize}")
-    @ApiOperation(value = "分页获取书籍信息", httpMethod = "get")
+    @ApiOperation(value = "分页获取书籍信息", httpMethod = "GET")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "current", required = true, value = "当前页", dataType = "int", paramType = "path"),
             @ApiImplicitParam(name = "pageSize", required = true, value = "页面大小", dataType = "int", paramType = "path")

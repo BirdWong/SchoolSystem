@@ -87,7 +87,7 @@ public class ArticleCollectionServiceImpl extends ServiceImpl<ArticleCollectionM
     public MessageResult deleteByAid(int aid, int uid) {
         // 确认这个文章是属于这个用户的
         QueryWrapper<ArticleInfomation> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("uid", uid);
+        queryWrapper.eq("aid", aid);
         ArticleInfomation articleInfomation = articleInfomationMapper.selectOne(queryWrapper);
         if (articleInfomation != null && articleInfomation.getUid() != uid){
             return new MessageResult(false, "这篇文章不属于这个用户");

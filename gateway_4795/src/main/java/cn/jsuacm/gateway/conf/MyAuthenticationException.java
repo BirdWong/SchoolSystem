@@ -21,6 +21,7 @@ public class MyAuthenticationException implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
         System.out.println("AuthenticationEntryPoint检测到异常:"+e);
+        System.out.println(httpServletRequest.getRequestURI());
         httpServletResponse.setStatus(200);
         httpServletResponse.setCharacterEncoding("UTF-8");
         httpServletResponse.setContentType("application/json; charset=utf-8");

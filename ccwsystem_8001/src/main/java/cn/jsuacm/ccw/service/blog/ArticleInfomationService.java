@@ -3,6 +3,7 @@ package cn.jsuacm.ccw.service.blog;
 import cn.jsuacm.ccw.pojo.blog.ArticleComplex;
 import cn.jsuacm.ccw.pojo.blog.ArticleInfomation;
 import cn.jsuacm.ccw.pojo.enity.MessageResult;
+import cn.jsuacm.ccw.pojo.enity.PageResult;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -89,7 +90,7 @@ public interface ArticleInfomationService extends IService<ArticleInfomation>{
      * @param status 文章状态
      * @return
      */
-    public List<ArticleInfomation> getByUid(int uid, int status);
+    public PageResult<ArticleInfomation> getByUid(int uid, int status, int current, int pageSize);
 
 
     /**
@@ -110,7 +111,7 @@ public interface ArticleInfomationService extends IService<ArticleInfomation>{
      * @param status  文章状态
      * @return
      */
-    public List<ArticleInfomation> getByLid(int lid, int status);
+    public PageResult<ArticleInfomation> getByLid(int lid, int status, int current, int pageSize);
 
 
     /**
@@ -119,7 +120,7 @@ public interface ArticleInfomationService extends IService<ArticleInfomation>{
      * @param status 文章的状态
      * @return
      */
-    public List<ArticleInfomation> getByCid(int cid, int status);
+    public PageResult<ArticleInfomation> getByCid(int cid, int status, int current, int pageSize);
 
 
     /**
@@ -128,5 +129,14 @@ public interface ArticleInfomationService extends IService<ArticleInfomation>{
      * @return
      */
     public MessageResult update(ArticleInfomation articleInfomation);
+
+
+    /**
+     * 通过文章id和用户id获取一篇文章信息
+     * @param aid 文章id
+     * @param uid 用户id
+     * @return
+     */
+    public ArticleInfomation getUpdateInfo(int aid, int uid);
 
 }

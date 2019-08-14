@@ -31,6 +31,21 @@ spring:
       cluster-nodes: 127.0.0.1:9300
       repositories:
         enabled: true
+  mail:
+    host: smtp.163.com
+    username: God_4795@163.com
+    password: hp980501
+    default-encoding: UTF-8
+  thymeleaf:
+    cache: true
+    servlet:
+      content-type: text/html
+    encoding: UTF-8
+    mode: HTML
+    suffix: .html
+
+
+
 eureka:
   client:
     service-url:

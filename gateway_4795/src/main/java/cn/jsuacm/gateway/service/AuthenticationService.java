@@ -23,6 +23,12 @@ public interface AuthenticationService extends IService<Authentication>{
 
 
     /**
+     * 正在工作室标识
+     */
+    public static String ING = "ROLE_ING";
+
+
+    /**
      * 模块管理员权限
      */
     public static String ADMIN = "ROLE_ADMIN";
@@ -72,12 +78,26 @@ public interface AuthenticationService extends IService<Authentication>{
 
 
     /**
+     * 添加识别信息， 确认是否已经毕业， 如果没有这个权限只有menber权限会认为是毕业学长， 不会进入管理部分
+     * @param uid
+     * @return
+     */
+    public boolean addIngAuthentication(int uid);
+
+    /**
      * 删除用户实验室成员权限
      * @param uid 被删除权限的id
      * @return
      */
     public boolean deleteMemBerAuthentication(int uid);
 
+
+    /**
+     * 删除正在工作室的权限
+     * @param uid
+     * @return
+     */
+    public boolean deleteIngAuthentication(int uid);
 
     /**
      * 删除管理员权限
@@ -119,6 +139,15 @@ public interface AuthenticationService extends IService<Authentication>{
      * @return
      */
     public List<String> getGrantedAuthorities(int uid);
+
+
+    /**
+     * 通过用户的id获取这个用户的所有权限
+     * @param uid
+     * @return
+     */
+    public List<Authentication> getAuthenticationByUid(int uid);
+
 
     @Data
     @AllArgsConstructor

@@ -6,12 +6,15 @@ import cn.jsuacm.ccw.mapper.blog.CategoryMapper;
 import cn.jsuacm.ccw.mapper.blog.LabelMapper;
 import cn.jsuacm.ccw.pojo.blog.*;
 import cn.jsuacm.ccw.pojo.enity.MessageResult;
+import cn.jsuacm.ccw.pojo.enity.PageResult;
 import cn.jsuacm.ccw.service.blog.ArticleCollectionService;
 import cn.jsuacm.ccw.service.blog.ArticleInfomationService;
 import cn.jsuacm.ccw.service.blog.EsArticleService;
 import cn.jsuacm.ccw.service.blog.UserFocusService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -283,13 +286,13 @@ public class ArticleInfomationServiceImpl extends ServiceImpl<ArticleInfomationM
      * @return
      */
     @Override
-    public List<ArticleInfomation> getByUid(int uid, int status) {
-        List<ArticleInfomation> articleInfomations = articleInfomationMapper.getByUid(uid, status);
-        for (ArticleInfomation articleInfomation : articleInfomations){
-            articleInfomation.setLids(articleLabelMapper.queryByAid(articleInfomation.getAid()));
-        }
-        return articleInfomations;
+    public PageResult<ArticleInfomation> getByUid(int uid, int status, int current, int pageSize) {
+        QueryWrapper<ArticleInfomation> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("uid", uid).eq("status", status);
+        PageResult<ArticleInfomation> pageResult = getPagesForQuery(queryWrapper,current, pageSize);
+        return pageResult;
     }
+
 
     /**
      * 通过文章id和文章状态查询这个文章信息
@@ -301,6 +304,8 @@ public class ArticleInfomationServiceImpl extends ServiceImpl<ArticleInfomationM
     public ArticleInfomation getByAid(int aid, int status) {
         ArticleInfomation articleInfomation = articleInfomationMapper.getByAid(aid, status);
         articleInfomation.setLids(articleLabelMapper.queryByAid(aid));
+        Category category = categoryMapper.selectById(articleInfomation.getCid());
+        articleInfomation.setParent_id(category.getParentId());
         return articleInfomation;
     }
 
@@ -312,7 +317,7 @@ public class ArticleInfomationServiceImpl extends ServiceImpl<ArticleInfomationM
      * @return
      */
     @Override
-    public List<ArticleInfomation> getByLid(int lid, int status) {
+    public PageResult<ArticleInfomation> getByLid(int lid, int status, int current, int pageSize) {
         // 查询与这个标签相关的所有文章信息
         List<ArticleLabel> articleLabels = articleLabelMapper.queryByLid(lid);
 
@@ -327,7 +332,12 @@ public class ArticleInfomationServiceImpl extends ServiceImpl<ArticleInfomationM
                 articleInfomations.add(articleInfomation);
             }
         }
-        return articleInfomations;
+        PageResult<ArticleInfomation> pageResult = new PageResult<>();
+        pageResult.setTatolSize((long)articleInfomations.size());
+        pageResult.setPageSize((long)pageSize);
+        pageResult.setRow((long)current);
+        pageResult.setPageContext(articleInfomations.subList(current*pageSize, (current+1)* pageSize));
+        return pageResult;
     }
 
     /**
@@ -337,13 +347,10 @@ public class ArticleInfomationServiceImpl extends ServiceImpl<ArticleInfomationM
      * @return
      */
     @Override
-    public List<ArticleInfomation> getByCid(int cid, int status) {
-        List<ArticleInfomation> articleInfomations = articleInfomationMapper.getByCid(cid, status);
-        for (ArticleInfomation articleInfomation : articleInfomations){
-            List<ArticleLabel> articleLabels = articleLabelMapper.queryByAid(articleInfomation.getAid());
-            articleInfomation.setLids(articleLabels);
-        }
-        return articleInfomations;
+    public PageResult<ArticleInfomation> getByCid(int cid, int status,int current, int pageSize) {
+        QueryWrapper<ArticleInfomation> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("cid",cid).eq("status", status);
+        return getPagesForQuery(queryWrapper, current, pageSize);
     }
 
     /**
@@ -370,8 +377,8 @@ public class ArticleInfomationServiceImpl extends ServiceImpl<ArticleInfomationM
                 lids.add(articleLabel.getLid());
             }
 
-            //
-            for (ArticleLabel articleLabel : oldArticleInfomation.getLids()){
+            ArrayList<ArticleLabel> articleLabels = new ArrayList<>(oldArticleInfomation.getLids());
+            for (ArticleLabel articleLabel : articleLabels){
                 // 如果原来就有这个标签， 就不用删除或者增加， 所以可以从list和set中移除
                 if (lids.contains(articleLabel.getLid())){
                     lids.remove(articleLabel.getLid());
@@ -392,11 +399,30 @@ public class ArticleInfomationServiceImpl extends ServiceImpl<ArticleInfomationM
                 articleLabelMapper.insert(articleLabel);
             }
             // 更新文章信息
-            update(articleInfomation);
+            updateById(articleInfomation);
             return new MessageResult(true, "修改成功");
         }else {
             return new MessageResult(false, "请检查信息从属关系或确认是否存在");    
         }
+    }
+
+    /**
+     * 通过文章id和用户id获取一篇文章信息
+     *
+     * @param aid 文章id
+     * @param uid 用户id
+     * @return
+     */
+    @Override
+    public ArticleInfomation getUpdateInfo(int aid, int uid) {
+
+        QueryWrapper<ArticleInfomation> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("aid", aid).eq("uid", uid);
+        ArticleInfomation articleInfomation = articleInfomationMapper.selectOne(queryWrapper);
+        articleInfomation.setLids(articleLabelMapper.queryByAid(aid));
+        Category category = categoryMapper.selectById(articleInfomation.getCid());
+        articleInfomation.setParent_id(category.getParentId());
+        return articleInfomation;
     }
 
 
@@ -469,5 +495,32 @@ public class ArticleInfomationServiceImpl extends ServiceImpl<ArticleInfomationM
         return true;
 
     }
+
+
+    /**
+     * 通过查询条件封装分页
+     * @param queryWrapper
+     * @param current
+     * @param pageSize
+     * @return
+     */
+    private PageResult<ArticleInfomation> getPagesForQuery(QueryWrapper<ArticleInfomation> queryWrapper,int current, int pageSize) {
+
+        IPage<ArticleInfomation> iPage = new Page<>();
+        iPage.setCurrent(current);
+        iPage.setSize(pageSize);
+
+        IPage<ArticleInfomation> infomationIPage = articleInfomationMapper.selectPage(iPage, queryWrapper);
+        PageResult<ArticleInfomation> pageResult = new PageResult<>();
+        pageResult.setPageContext(infomationIPage.getRecords());
+        pageResult.setTatolSize(infomationIPage.getTotal());
+        pageResult.setRow(infomationIPage.getCurrent());
+        pageResult.setPageSize(infomationIPage.getSize());
+        for (ArticleInfomation articleInfomation : pageResult.getPageContext()){
+            articleInfomation.setLids(articleLabelMapper.queryByAid(articleInfomation.getAid()));
+        }
+        return pageResult;
+    }
+
 
 }

@@ -74,17 +74,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
                 .antMatchers(
                         HttpMethod.GET,
                         "/",
-                        "/*.html",
+                        "/**.html",
                         "/favicon.ico",
-                        "/**/*.html",
+                        "/**/**.html",
                         "/**/*.css",
                         "/**/*.js"
                 ).permitAll()
 
 
-
                 // 测试调试测试
-
+                .antMatchers("/v2/api-docs").permitAll()
+                .antMatchers("/webjars/**").permitAll()
+                .antMatchers("/api").permitAll()
+                .antMatchers("/swagger-resources/**").permitAll()
 
 
 
@@ -104,22 +106,28 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
                  * ******权限中心模块安全配置********
                  */
                 // 添加权限管理
-                .antMatchers("/authentication/add/menber").hasAnyAuthority(new String[]{AuthenticationService.ADMIN, AuthenticationService.ADMINISTRATOR})
-                .antMatchers("/authentication/add/admin").hasAnyAuthority(AuthenticationService.ADMINISTRATOR)
-                .antMatchers("/authentication/add/teacher").hasAnyAuthority(AuthenticationService.ADMINISTRATOR)
-                .antMatchers("/authentication/add/administrator").hasAnyAuthority(AuthenticationService.ADMINISTRATOR)
+                .antMatchers("/authentication/add/ing/*").hasAnyAuthority(new String[]{AuthenticationService.ADMIN, AuthenticationService.ADMINISTRATOR})
+                .antMatchers("/authentication/add/menber/*").hasAnyAuthority(new String[]{AuthenticationService.ADMIN, AuthenticationService.ADMINISTRATOR})
+                .antMatchers("/authentication/add/admin/*").hasAnyAuthority(AuthenticationService.ADMINISTRATOR)
+                .antMatchers("/authentication/add/teacher/*").hasAnyAuthority(AuthenticationService.ADMINISTRATOR)
+                .antMatchers("/authentication/add/administrator/*").hasAnyAuthority(AuthenticationService.ADMINISTRATOR)
+
 
                 //删除权限管理
-                .antMatchers("/authentication/delete/menber").hasAnyAuthority(new String[]{AuthenticationService.ADMIN, AuthenticationService.ADMINISTRATOR})
-                .antMatchers("/authentication/delete/admin").hasAnyAuthority(AuthenticationService.ADMINISTRATOR)
-                .antMatchers("/authentication/delete/teacher").hasAnyAuthority(AuthenticationService.ADMINISTRATOR)
-                .antMatchers("/authentication/delete/administrator").hasAnyAuthority(AuthenticationService.ADMINISTRATOR)
+                .antMatchers("/authentication/delete/ing/*").hasAnyAuthority(new String[]{AuthenticationService.ADMIN, AuthenticationService.ADMINISTRATOR})
+                .antMatchers("/authentication/delete/menber/*").hasAnyAuthority(new String[]{AuthenticationService.ADMIN, AuthenticationService.ADMINISTRATOR})
+                .antMatchers("/authentication/delete/admin/*").hasAnyAuthority(AuthenticationService.ADMINISTRATOR)
+                .antMatchers("/authentication/delete/teacher/*").hasAnyAuthority(AuthenticationService.ADMINISTRATOR)
+                .antMatchers("/authentication/delete/administrator/*").hasAnyAuthority(AuthenticationService.ADMINISTRATOR)
 
                 // 修改用户密码
                 .antMatchers("/authentication/updatePassword").hasAnyAuthority(new String[]{AuthenticationService.ADMIN, AuthenticationService.ADMINISTRATOR})
 
+                // 获取用户的权限
+                .antMatchers("/authentication/getAuthenticationByUid/*").permitAll()
+
                 // 其他的权限操作，必须拥有管理员或者超级管理员权限
-                .antMatchers("/authentication/*").hasAnyAuthority(new String[]{AuthenticationService.ADMIN, AuthenticationService.ADMINISTRATOR})
+                .antMatchers("/authentication/**").hasAnyAuthority(new String[]{AuthenticationService.ADMIN, AuthenticationService.ADMINISTRATOR})
 
                 // 用户信息修改权限管理
                 .antMatchers("/user/sendRegisterEmail").permitAll()
@@ -127,12 +135,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
                 .antMatchers("/user/sendUpdateEmail").permitAll()
                 .antMatchers("/user/updatePasswordByEmail").permitAll()
 
-                // 查看所有用户信息和权限信息
-                .antMatchers("/user/getPage/*").hasAnyAuthority(new String[]{AuthenticationService.ADMIN, AuthenticationService.ADMINISTRATOR})
+                // 查看所有用户信息以及其权限信息
+                .antMatchers("/user/getPage/**").hasAnyAuthority(new String[]{AuthenticationService.ADMIN, AuthenticationService.ADMINISTRATOR})
+
+                // 查看实验室所有成员列表
+                .antMatchers("/user/getCcwMenber").permitAll()
+                // 查看正在实验室成员列表
+                .antMatchers("/user/getCcwIngMenber").permitAll()
+
+
 
                 // 给其他模块用来判断是否有这个用户,或者获取这个用户的信息
                 .antMatchers("/user/isUser/*").permitAll()
-                .antMatchers("/user/getUser/*").permitAll()
+                .antMatchers("/user/getUserById/*").permitAll()
+                .antMatchers("/user/getUserByAccountNumber/*").permitAll()
 
 
                 /*
@@ -234,6 +250,39 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 
 
 
+
+
+
+                /*
+                 * ************图书接口操作**************
+                 *      前缀标识：book
+                 */
+                .antMatchers("/ccw/book/admin/**").hasAnyAuthority(new String[]{AuthenticationService.ADMIN, AuthenticationService.ADMINISTRATOR})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                /*
+                 * ***********借阅操作接口*************
+                 *      前缀标识：borrow
+                 */
+                .antMatchers("/ccw/borrow/admin/**").hasAnyAuthority(new String[]{AuthenticationService.ADMIN, AuthenticationService.ADMINISTRATOR})
+
+
+
+
+
+                .antMatchers("/ccw/**").hasAnyAuthority(new String[]{AuthenticationService.MENBER, AuthenticationService.ADMIN, AuthenticationService.ADMINISTRATOR})
 
                 // 除上面外的所有请求全部需要鉴权认证
                 .anyRequest().authenticated();

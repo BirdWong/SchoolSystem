@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -99,7 +100,7 @@ public class UserController {
      * @return
      */
     @PostMapping(value = "updatePassword")
-    @ApiOperation(value = "通过旧密码修改密码", notes = "通过旧密码修改密码，需要token二次校验",httpMethod = "post")
+    @ApiOperation(value = "通过旧密码修改密码", notes = "通过旧密码修改密码，需要token二次校验",httpMethod = "POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "uid", required = true, value = "用户id", dataType = "int", paramType = "query"),
             @ApiImplicitParam(name = "oldPwd", required = true, value = "旧密码", dataType = "string", paramType = "query"),
@@ -122,7 +123,7 @@ public class UserController {
      * @return
      */
     @PostMapping(value = "updateUsername")
-    @ApiOperation(value = "更新用户名", notes = "更新用户名， 需要token二次校验", httpMethod = "post")
+    @ApiOperation(value = "更新用户名", notes = "更新用户名， 需要token二次校验", httpMethod = "POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "uid", required = true, value = "用户的id", dataType = "int", paramType = "query"),
             @ApiImplicitParam(name = "username", required = true, value = "用户名称", dataType = "string",paramType = "query")
@@ -148,7 +149,7 @@ public class UserController {
      * @return
      */
     @PostMapping(value = "updateUrl")
-    @ApiOperation(value = "更新用户的头像链接", notes = "修改用户的头像链接，会进行token二次验证", httpMethod = "post")
+    @ApiOperation(value = "更新用户的头像链接", notes = "修改用户的头像链接，会进行token二次验证", httpMethod = "POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "uid", required = true, value = "用户id", dataType = "int", paramType = "query"),
             @ApiImplicitParam(name = "url", required = true, value = "头像链接", dataType = "int", paramType = "query")
@@ -172,7 +173,7 @@ public class UserController {
      * @return
      */
     @PostMapping(value = "updateEmail")
-    @ApiOperation(value = "更新用户邮箱信息", notes = "用户修改自己的绑定邮箱，首先需要发送修改信息邮件， 会进行token二次验证是否是本人操作", httpMethod = "post")
+    @ApiOperation(value = "更新用户邮箱信息", notes = "用户修改自己的绑定邮箱，首先需要发送修改信息邮件， 会进行token二次验证是否是本人操作", httpMethod = "POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "uid", required = true, value = "用户id", dataType = "int", paramType = "query"),
             @ApiImplicitParam(name = "email", required = true, value = "用户的新邮箱", dataType = "string", paramType = "query"),
@@ -197,7 +198,7 @@ public class UserController {
      * @return
      */
     @PostMapping(value = "sendUpdateEmail")
-    @ApiOperation(value = "发送修改信息的验证码", notes = "发送信息修改验证码可以用于修改邮箱， 密码。 找回密码等功能", httpMethod = "post")
+    @ApiOperation(value = "发送修改信息的验证码", notes = "发送信息修改验证码可以用于修改邮箱， 密码。 找回密码等功能", httpMethod = "POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "email", required = true, value = "邮箱账户", dataType = "string", paramType = "query")
     })
@@ -215,7 +216,7 @@ public class UserController {
      * @return
      */
     @GetMapping(value = "getPage/{row}/{size}")
-    @ApiOperation(value = "返回所有用户信息以及用户的权限", notes = "用户信息固定， 但是权限数量未知， 是list保存", httpMethod = "get")
+    @ApiOperation(value = "返回所有用户信息以及用户的权限", notes = "用户信息固定， 但是权限数量未知， 是list保存", httpMethod = "GET")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "row", required = true, value = "当前页", dataType = "int", paramType = "path"),
             @ApiImplicitParam(name = "size", required = true, value = "页面大小", dataType = "int", paramType = "path")
@@ -241,27 +242,85 @@ public class UserController {
 
 
     /**
-     * 获取一个用户的信息
+     * 通过用户id获取一个用户的信息
      * @param uid
      * @return
      */
-    @GetMapping("getUser/{uid}")
-    @ApiOperation(value = "获取一个用户的信息", notes = "获取一个用户的信息， 会自动去除敏感信息")
+    @GetMapping("getUserById/{uid}")
+    @ApiOperation(value = "通过用户id获取一个用户的信息", notes = "获取一个用户的信息， 会自动去除敏感信息")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "uid", required = true, value = "用户的id", dataType = "int", paramType = "path")
     })
-    public User getUser(@PathVariable(value = "uid") int uid){
+    public User getUserById(@PathVariable(value = "uid") int uid){
         User user = userService.getById(uid);
         //去除敏感信息
         String email = user.getEmail();
+        email = clearEmailInfo(email);
+        user.setEmail(email);
+        user.setPassword("");
+        return user;
+    }
+
+
+
+
+    /**
+     * 通过账号获取一个用户的信息
+     * @param accountNumber 用户账号
+     * @return
+     */
+    @GetMapping("getUserByAccountNumber/{accountNumber}")
+    @ApiOperation(value = "通过账号获取一个用户的信息", notes = "通过账号获取一个用户的信息， 会自动去除敏感信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "accountNumber", required = true, value = "用户的账号", dataType = "string", paramType = "path")
+    })
+    public User getUserByAccountNumber(@PathVariable(value = "accountNumber") String accountNumber){
+        User user = userService.getUser(accountNumber);
+        //去除敏感信息
+        String email = user.getEmail();
+        email = clearEmailInfo(email);
+        user.setEmail(email);
+        user.setPassword("");
+        return user;
+    }
+
+
+    /**
+     * 隐藏具体邮箱
+     * @param email
+     * @return
+     */
+    private String clearEmailInfo(String email) {
         int index = email.indexOf("@");
         if (index > 6){
             email = email.substring(0,3)+"***"+email.substring(index-3, email.length());
         }else if(index > 2){
             email = email.substring(0,1)+"***"+email.substring(index - 1, email.length());
         }
-        user.setEmail(email);
-        user.setPassword("");
-        return user;
+        return email;
     }
+
+
+    /**
+     * 获取实验室成员
+     * @return
+     */
+    @GetMapping(value = "/getCcwMenber")
+    @ApiOperation(value = "获取实验室所有成员， 无论是否毕业", httpMethod = "GET")
+    public List<User> getCcwMenber(){
+        return userService.getCcwMenber();
+    }
+
+
+
+    /**
+     * 获取正在实验室成员
+     * @return
+     */
+    @GetMapping(value = "/getCcwIngMenber")
+    @ApiOperation(value = "获取正在实验室成员", httpMethod = "GET")
+    public List<User> getCcwIngMenber(){
+        return userService.getCcwIngMenber();
+    }
+
 }

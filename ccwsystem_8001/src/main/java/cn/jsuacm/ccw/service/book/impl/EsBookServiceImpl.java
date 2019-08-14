@@ -2,42 +2,22 @@ package cn.jsuacm.ccw.service.book.impl;
 
 import cn.jsuacm.ccw.mapper.book.BookMapper;
 import cn.jsuacm.ccw.pojo.book.Book;
-import cn.jsuacm.ccw.pojo.enity.ArticleEsEmpty;
 import cn.jsuacm.ccw.pojo.enity.BookEsEmpty;
 import cn.jsuacm.ccw.pojo.enity.PageResult;
 import cn.jsuacm.ccw.service.EsBasic;
-import cn.jsuacm.ccw.service.book.BookService;
 import cn.jsuacm.ccw.service.book.EsBookRepository;
 import cn.jsuacm.ccw.service.book.EsBookService;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.index.query.MatchQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
-import org.elasticsearch.search.SearchHits;
-import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
-import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
-import org.springframework.data.elasticsearch.core.SearchResultMapper;
-import org.springframework.data.elasticsearch.core.aggregation.AggregatedPage;
-import org.springframework.data.elasticsearch.core.aggregation.impl.AggregatedPageImpl;
-import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
-import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.stereotype.Service;
 
-import javax.xml.crypto.Data;
-import java.io.IOException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import java.util.Optional;
 
 /**
  * @ClassName EsBookServiceImpl
@@ -100,7 +80,7 @@ public class EsBookServiceImpl extends EsBasic<BookEsEmpty> implements EsBookSer
         if (bookEsEmpty == null){
             return  false;
         }
-        bookEsEmpty.setUse(bookEsEmpty.getUse() + status);
+        bookEsEmpty.setHasUse(bookEsEmpty.getHasUse() + status);
         repository.save(bookEsEmpty);
         return true;
     }
@@ -174,7 +154,7 @@ public class EsBookServiceImpl extends EsBasic<BookEsEmpty> implements EsBookSer
     public BookEsEmpty insertInfo(SearchHit searchHit) {
         BookEsEmpty data = new BookEsEmpty();
         data.setId(Integer.valueOf(String.valueOf(searchHit.getSourceAsMap().get("id"))));
-        data.setUse(Integer.valueOf(String.valueOf(searchHit.getSourceAsMap().get("use"))));
+        data.setHasUse(Integer.valueOf(String.valueOf(searchHit.getSourceAsMap().get("hasUse"))));
         data.setAuthor(String.valueOf(searchHit.getSourceAsMap().get("author")));
         data.setIsbn(String.valueOf(searchHit.getSourceAsMap().get("isbn")));
         data.setPages(Integer.valueOf(String.valueOf(searchHit.getSourceAsMap().get("pages"))));

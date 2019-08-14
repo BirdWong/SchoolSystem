@@ -48,7 +48,7 @@ public class JwtUtils {
     public static String createJwtToken(int uid, String accountNumber, List<String> authorizations){
         String issuer = "4795";
         String subject = "";
-        long ttlMillis = 30*60*1000; //30min
+        long ttlMillis = 4*60*60*1000; // 4 hours
         return createJwtToken(uid, accountNumber, authorizations, issuer, subject, ttlMillis);
     }
 

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+
+<div id="mailContentContainer" class="qmbox qm_con_body_content qqmail_webmail_only" style="">
+
+
+    <style type="text/css">
+        .qmbox body{ margin:0 auto; padding:0; font-family:Microsoft Yahei,Tahoma,Arial; color:#333333;background-color:#fff; font-size:12px;}
+        .qmbox a{color:#00a2ca; line-height:22px; text-decoration:none;}
+        .qmbox a:hover{text-decoration:underline;color:#00a2ca;}
+    </style>
+
+
+
+
+
+
+    <table width="640" border="0" align="center" cellpadding="0" cellspacing="0" bgcolor="#ffffff" style="font-family:'Microsoft YaHei';">
+        <tbody><tr>
+            <td>
+                <table width="800" border="0" align="center" cellpadding="0" cellspacing="0" height="40"></table>
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+
+                <table width="800" border="0" align="center" cellpadding="0" cellspacing="0" bgcolor="#373d41" height="48" style="font-family:'Microsoft YaHei';">
+                    <tbody><tr>
+                        <td width="147" height="48" border="0" align="center" valign="middle" style="color:#ffffff; padding-left:20px;">
+                            <a href="https://rjxy.jsu.edu.cn/" style="color:#ffffff;text-decoration:none;font-family:'Microsoft YaHei'; font-size: large;">吉首大学软件学院</a>
+                        </td>
+                        <td width="630" height="48" colspan="2" align="right" valign="middle" style="color:#ffffff; padding-right:20px;">
+                            <a href="http://jsuacm.cn/" style="color:#ffffff;text-decoration:none;font-family:'Microsoft YaHei'; font-size: medium;">创新创业工作室</a>
+                        </td>
+                    </tr>
+                    </tbody></table>
+
+            </td>
+        </tr>
+
+
+        <tr>
+            <td>
+
+                <table width="800" border="0" align="left" cellpadding="0" cellspacing="0" style=" border:1px solid #edecec; border-top:none; border-bottom:none; padding:0 20px;font-size:14px;color:#333333;">
+                    <tbody><tr>
+                        <td width="760" height="56" border="0" align="left" colspan="2" style="font-family:'Microsoft YaHei'; font-size:22px;vertical-align:bottom;"><span th:text="${name}"></span>同学：</td>
+                    </tr>
+                    <tr>
+                        <td width="760" height="30" border="0" align="left" colspan="2">&nbsp;</td>
+                    </tr>
+
+
+
+                    <tr>
+                        <td width="40" height="32" border="0" align="left" valign="middle" style=" width:40px; text-align:left;vertical-align:middle; line-height:32px; float:left;"><img width="32" height="32" border="0" src="http://gtms02.alicdn.com/tps/i2/T1CPucFwxeXXa94Hfd-32-32.png"></td>
+                        <td width="720" height="32" border="0" align="left" valign="middle" style=" width:720px; text-align:left;vertical-align:middle;line-height:32px;font-family:'Microsoft YaHei'; font-size: medium;">
+                            您的报名信息已经提交至后台审核！
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="720" height="32" colspan="2" style="padding-left:40px;font-family:'Microsoft YaHei';  font-size: medium;">
+                            <span style="color:#f60" th:text="${name}"></span>的面试时间：<span style="border-bottom:1px dashed #ccc;color: #28f2ff; z-index:1" t="7" onclick="return false;"  th:text="${date}"></span>
+                            <br>
+                            地点：<span style="color: red" th:text="${address}"></span>
+                            <br>
+                            请准时到达参加面试。
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td width="720" height="32" colspan="2" style="padding-left:40px;">&nbsp;</td>
+                    </tr>
+                    <tr th:if="not ${#strings.isEmpty(msg)}">
+                        <td width="720" height="32" colspan="2" style="padding-left:40px;font-family:'Microsoft YaHei';  font-size: medium;">
+                            备注：
+                            <span th:text="${msg}"></span>
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+                        <td width="720" height="32" colspan="2" style="padding-left:40px;">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td width="720" height="32" colspan="2" style="padding-left:40px;font-family:'Microsoft YaHei';color:red; font-size: medium;">
+                            温馨提醒：未参与面试，将视为自动放弃。
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td width="720" height="32" colspan="2" style="padding-left:40px;">&nbsp;</td>
+                    </tr>
+
+
+
+
+                    <tr>
+                        <td width="720" height="32" colspan="2" style="padding-left:40px;">&nbsp;</td>
+                    </tr>
+
+
+                    <tr>
+                        <td width="720" height="14" colspan="2" style="padding-bottom:16px; border-bottom:1px dashed #e5e5e5;font-family:'Microsoft YaHei';">吉首大学软件学院创新创业工作室</td>
+                    </tr>
+                    <tr>
+                        <td width="720" height="14" colspan="2" style="padding:8px 0 28px;color:#999999; font-size:12px;font-family:'Microsoft YaHei';">此为系统邮件请勿回复</td>
+                    </tr>
+                    </tbody></table>
+
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <table width="800" height="10" border="0" align="center" cellpadding="0" cellspacing="0" style="border: 1px solid #edecec; border-top:none;">
+                    <tbody><tr>
+                        <td width="800" height="10" align="center" valign="middle">
+                            <p style="font-size:small; color:#b2b2b2;">Copyright ©<span style="border-bottom: 1px dashed rgb(204, 204, 204); z-index: 1; position: static;" t="7" onclick="return false;" data="2019">2019</span> 创新创业工作室</p>
+                        </td>
+                    </tr>
+                    </tbody></table>
+            </td>
+        </tr>
+
+        </tbody></table>
+</div>
+</body>
+</html>

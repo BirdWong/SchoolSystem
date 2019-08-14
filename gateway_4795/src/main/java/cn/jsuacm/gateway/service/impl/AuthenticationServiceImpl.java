@@ -79,6 +79,17 @@ public class AuthenticationServiceImpl extends ServiceImpl<AuthenticationMapper,
     }
 
     /**
+     * 添加识别信息， 确认是否已经毕业， 如果没有这个权限只有menber权限会认为是毕业学长， 不会进入管理部分
+     *
+     * @param uid
+     * @return
+     */
+    @Override
+    public boolean addIngAuthentication(int uid) {
+        return addRole(uid, AuthenticationService.ING);
+    }
+
+    /**
      * 删除用户实验室成员权限
      *
      * @param uid 被删除权限的id
@@ -86,7 +97,22 @@ public class AuthenticationServiceImpl extends ServiceImpl<AuthenticationMapper,
      */
     @Override
     public boolean deleteMemBerAuthentication(int uid) {
-        return deleteRole(uid, AuthenticationService.MENBER);
+        if (deleteIngAuthentication(uid)) {
+            return deleteRole(uid, AuthenticationService.MENBER);
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * 删除正在工作室的权限
+     *
+     * @param uid
+     * @return
+     */
+    @Override
+    public boolean deleteIngAuthentication(int uid) {
+        return deleteRole(uid, AuthenticationService.ING);
     }
 
     /**
@@ -168,6 +194,22 @@ public class AuthenticationServiceImpl extends ServiceImpl<AuthenticationMapper,
         }
 
         return grantedAuthorities;
+    }
+
+    /**
+     * 通过用户的id获取这个用户的所有权限
+     *
+     * @param uid
+     * @return
+     */
+    @Override
+    public List<Authentication> getAuthenticationByUid(int uid) {
+        QueryWrapper<Authentication> queryWrapper = new QueryWrapper<>();
+
+        queryWrapper.eq("uid", uid);
+
+        List<Authentication> authentications = authenticationMapper.selectList(queryWrapper);
+        return authentications;
     }
 
 

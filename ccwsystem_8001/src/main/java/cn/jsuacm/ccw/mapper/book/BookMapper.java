@@ -39,7 +39,7 @@ public interface BookMapper extends BaseMapper<Book>{
      * @param id
      * @return
      */
-    @Select("select use_size from book where id=#{id}")
+    @Select("select use_size as hasUse from book where id=#{id}")
     public Book getUse(@Param(value = "id") int id);
 
 }

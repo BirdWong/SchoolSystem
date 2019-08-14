@@ -260,10 +260,18 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         Map<Object, Object> hotArticle = null;
         synchronized (ArticleServiceImpl.class) {
             if (redisUtil.hasKey("hot_article")) {
-                hotArticle = redisUtil.hmget("hot_article");
-                Object articleOrDefault = hotArticle.getOrDefault(String.valueOf(article.getAid()), 0);
-                hotArticle.put(String.valueOf(article.getAid()), Integer.valueOf(String.valueOf(articleOrDefault)) + 1);
-                redisUtil.hmset("hot_article", hotArticle, redisUtil.getExpire("hot_article"));
+                Object hots = redisUtil.hget("hot_article", article.getAid() + "");
+                if (hots == null){
+                    redisUtil.hset("hot_article", article.getAid() + "", 1);
+                }else {
+                    try {
+                        Integer hot = Integer.valueOf(String.valueOf(hots));
+                        hot+=1;
+                        redisUtil.hset("hot_article", article.getAid() + "", hot);
+                    }catch (Exception e){
+                        redisUtil.hset("hot_article", article.getAid() + "", 1);
+                    }
+                }
             }else {
                 hotArticle = new HashMap();
                 hotArticle.put(article.getAid(), 1);

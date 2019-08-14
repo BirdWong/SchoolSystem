@@ -139,4 +139,17 @@ public interface UserService extends IService<User> {
     public boolean isUser(int uid);
 
 
+    /**
+     * 获取实验室成员
+     * @return
+     */
+    public List<User> getCcwMenber();
+
+
+    /**
+     * 获取正在实验室的成员
+     * @return
+     */
+    public List<User> getCcwIngMenber();
+
 }

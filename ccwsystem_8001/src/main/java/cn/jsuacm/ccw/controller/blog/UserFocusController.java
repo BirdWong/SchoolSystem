@@ -36,7 +36,7 @@ public class UserFocusController {
      * @return
      */
     @PostMapping("add")
-    @ApiOperation(value = "添加一个关注", notes = "添加一个关注， 必须关注者id和被关注者id都是存在的， 会进行二次token校验", httpMethod = "post")
+    @ApiOperation(value = "添加一个关注", notes = "添加一个关注， 必须关注者id和被关注者id都是存在的， 会进行二次token校验", httpMethod = "POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "toUid", required = true, value = "被关注者id", dataType = "int", paramType = "query"),
             @ApiImplicitParam(name = "fromUid", required = true, value = "关注者id", dataType = "int", paramType = "query"),
@@ -59,7 +59,7 @@ public class UserFocusController {
      * @return
      */
     @GetMapping("deleteById/{uid}/{id}")
-    @ApiOperation(value = "通过记录id删除一条记录", notes = "通过记录id删除一条记录， uid是这条记录拥有者的id， 会进行二次token验证",httpMethod = "get")
+    @ApiOperation(value = "通过记录id删除一条记录", notes = "通过记录id删除一条记录， uid是这条记录拥有者的id， 会进行二次token验证",httpMethod = "GET")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "uid", required = true, value = "关注者的id", dataType = "int", paramType = "path"),
             @ApiImplicitParam(name = "id", required = true, value = "记录id", dataType = "int", paramType = "path")
@@ -80,7 +80,7 @@ public class UserFocusController {
      * @return
      */
     @GetMapping("deleteByFromUid/{uid}")
-    @ApiOperation(value = "删除一个用户的所有关注记录", notes = "删除一个用户的所有关注记录, 会进行二次token验证",httpMethod = "get")
+    @ApiOperation(value = "删除一个用户的所有关注记录", notes = "删除一个用户的所有关注记录, 会进行二次token验证",httpMethod = "GET")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "uid", required = true, value = "用户id", dataType = "int", paramType = "path")
     })
@@ -103,7 +103,7 @@ public class UserFocusController {
      * @return
      */
     @GetMapping("deleteByToUid/{uid}")
-    @ApiOperation(value = "删除一个用户的所有被关注记录", notes = "删除一个用户的所有被关注记录, 会进行二次token验证",httpMethod = "get")
+    @ApiOperation(value = "删除一个用户的所有被关注记录", notes = "删除一个用户的所有被关注记录, 会进行二次token验证",httpMethod = "GET")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "uid", required = true, value = "用户id", dataType = "int", paramType = "path")
     })
@@ -123,7 +123,7 @@ public class UserFocusController {
      * @return
      */
     @GetMapping("getFocusList/{uid}")
-    @ApiOperation(value = "获取用户的关注列表， 会二次验证", httpMethod = "get")
+    @ApiOperation(value = "获取用户的关注列表， 会二次验证", httpMethod = "GET")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "uid", required = true, value = "用户id", dataType = "int", paramType = "path")
     })
@@ -148,7 +148,7 @@ public class UserFocusController {
      * @return
      */
     @GetMapping("getFansList/{uid}")
-    @ApiOperation(value = "获取用户的粉丝列表， 会二次验证", httpMethod = "get")
+    @ApiOperation(value = "获取用户的粉丝列表， 会二次验证", httpMethod = "GET")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "uid", required = true, value = "用户id", dataType = "int", paramType = "path")
     })
@@ -167,7 +167,7 @@ public class UserFocusController {
      * @return
      */
     @GetMapping("getFocusCount/{uid}")
-    @ApiOperation(value = "获取用户的关注数量", httpMethod = "get")
+    @ApiOperation(value = "获取用户的关注数量", httpMethod = "GET")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "uid", required = true, value = "用户id", dataType = "int", paramType = "path")
     })
@@ -185,7 +185,7 @@ public class UserFocusController {
      * @return
      */
     @GetMapping("getFansCount/{uid}")
-    @ApiOperation(value = "获取用户的粉丝数量", httpMethod = "get")
+    @ApiOperation(value = "获取用户的粉丝数量", httpMethod = "GET")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "uid", required = true, value = "用户id", dataType = "int", paramType = "path")
     })

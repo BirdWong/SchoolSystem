@@ -68,7 +68,7 @@ public class EsController {
      * @return 返回一个带页面信息的文章信息对象集合
      */
     @GetMapping("article/user/{pageNumber}/{pageSize}/{keyword}")
-    @ApiOperation(value = "通过关键字搜索用户的名称查看他的文章", notes = "通过一个关键字，在文章的用户名内搜索", httpMethod = "get")
+    @ApiOperation(value = "通过关键字搜索用户的名称查看他的文章", notes = "通过一个关键字，在文章的用户名内搜索", httpMethod = "GET")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "keywork", required = true, value = "需要搜索的关键字", dataType = "string", paramType = "path"),
             @ApiImplicitParam(name = "pageNumber", required = true, value = "当前页", dataType = "int", paramType = "path"),
@@ -87,7 +87,7 @@ public class EsController {
      * @return 返回一个带页面信息的书籍信息对象集合
      */
     @GetMapping("book/title/{pageNumber}/{pageSize}/{keyword}")
-    @ApiOperation(value = "通过关键字搜索书名", httpMethod = "get")@ApiImplicitParams({
+    @ApiOperation(value = "通过关键字搜索书名", httpMethod = "GET")@ApiImplicitParams({
             @ApiImplicitParam(name = "keywork", required = true, value = "需要搜索的关键字", dataType = "string", paramType = "path"),
             @ApiImplicitParam(name = "pageNumber", required = true, value = "当前页", dataType = "int", paramType = "path"),
             @ApiImplicitParam(name = "pageSize", required = true, value = "页面的大小", dataType = "int", paramType = "path")
@@ -95,7 +95,6 @@ public class EsController {
     public PageResult<BookEsEmpty> searchBookByTitle(@PathVariable(value = "keyword") String keyword, @PathVariable(value = "pageNumber") Integer pageNumber, @PathVariable(value = "pageSize") Integer pageSize){
         return  esBookService.searchByName(keyword, pageNumber, pageSize);
     }
-
 
 
     /**
@@ -106,7 +105,7 @@ public class EsController {
      * @return 返回一个带页面信息的书籍信息对象集合
      */
     @GetMapping("book/more/{pageNumber}/{pageSize}/{keyword}")
-    @ApiOperation(value = "通过关键字搜索书名/出版社/作者", httpMethod = "get")@ApiImplicitParams({
+    @ApiOperation(value = "通过关键字搜索书名/出版社/作者", httpMethod = "GET")@ApiImplicitParams({
             @ApiImplicitParam(name = "keywork", required = true, value = "需要搜索的关键字", dataType = "string", paramType = "path"),
             @ApiImplicitParam(name = "pageNumber", required = true, value = "当前页", dataType = "int", paramType = "path"),
             @ApiImplicitParam(name = "pageSize", required = true, value = "页面的大小", dataType = "int", paramType = "path")
@@ -119,7 +118,7 @@ public class EsController {
 
 
     @PutMapping("updateUsername")
-    @ApiOperation(value = "用户修改用户昵称后同时也要更改es中的用户名信息", notes = "用户修改用户昵称后同时也要更改es中的用户名信息， 此接口和user模块中修改用户名接口同时使用", httpMethod = "put")
+    @ApiOperation(value = "用户修改用户昵称后同时也要更改es中的用户名信息", notes = "用户修改用户昵称后同时也要更改es中的用户名信息， 此接口和user模块中修改用户名接口同时使用", httpMethod = "PUT")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "uid", value = "用户的id", required = true, dataType = "int", paramType = "query"),
             @ApiImplicitParam(name = "username", value = "用户的新的昵称", required = true, dataType = "string", paramType = "query")

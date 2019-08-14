@@ -1,6 +1,5 @@
 package cn.jsuacm.ccw.service.book.impl;
 
-import cn.jsuacm.ccw.mapper.book.BookMapper;
 import cn.jsuacm.ccw.mapper.book.BorrowMapper;
 import cn.jsuacm.ccw.pojo.book.Book;
 import cn.jsuacm.ccw.pojo.book.Borrow;
@@ -15,7 +14,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.elasticsearch.common.recycler.Recycler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
@@ -53,17 +51,20 @@ public class BorrowServiceImpl extends ServiceImpl<BorrowMapper, Borrow> impleme
     private RestTemplate restTemplate;
 
 
-    private String url = "http://JSUCCW-ZUUL-GATEWAY/user/getUserByAccountNumber/";
+    private String urlGetUid = "http://JSUCCW-ZUUL-GATEWAY/user/getUserByAccountNumber/";
+
+    private String urlHasUid = "http://JSUCCW-ZUUL-GATEWAY/user/isUser/";
+
 
     /**
      * 添加一个借阅记录
      *
      * @param bid           图书记录
-     * @param accountNumber 账号
+     * @param uid 用户id
      * @return
      */
     @Override
-    public MessageResult addBorrow(int bid, String accountNumber) {
+    public MessageResult addBorrow(int bid, int uid) {
 
         //获取这本书的信息，确认是否还有剩余
         Book book = bookService.getById(bid);
@@ -72,25 +73,29 @@ public class BorrowServiceImpl extends ServiceImpl<BorrowMapper, Borrow> impleme
         if (book == null){
             return new MessageResult(false, "没有这本书籍");
         }
-        if (book.getSize() - book.getUse() == 0){
+        if (book.getSize() - book.getHasUse() == 0){
             return new MessageResult(false, "没有剩余书籍");
         }
         // 获取用户id， 同时确认用户确实存在
-        MessageResult messageResult = getUid(accountNumber);
-        if (!messageResult.isStatus()){
-            return messageResult;
+        if (!hasUid(uid)){
+            return new MessageResult(false, "用户不存在");
         }
-        int uid = Integer.valueOf(messageResult.getMsg());
+        // 拒绝重复借阅
+        Integer count = borrowMapper.countByBidAndUid(bid, uid);
+        if (count > 0){
+            return new MessageResult(false, "不可重复借阅");
+        }
+
         Borrow borrow = new Borrow();
         borrow.setBid(bid);
         borrow.setBeginTime(new Date());
         borrow.setDays(0);
-        borrow.setStatus(Borrow.BORROWING);
+        borrow.setStatus(Borrow.APPLY);
         borrow.setUid(uid);
         save(borrow);
         // 图书更新可用书目
         bookService.hasBorrow(bid);
-        return new MessageResult(true, "借阅成功");
+        return new MessageResult(true, "申请成功");
     }
 
 
@@ -125,6 +130,52 @@ public class BorrowServiceImpl extends ServiceImpl<BorrowMapper, Borrow> impleme
     }
 
     /**
+     * 同意一次借阅
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public MessageResult passApply(int id) {
+        Borrow borrow = borrowMapper.selectById(id);
+        if (borrow == null){
+            return  new MessageResult(false, "没有这条借阅记录");
+        }
+        if (borrow.getStatus() == Borrow.BORROWING){
+            return new MessageResult(false, "已经是借阅状态");
+        }
+        if (borrow.getStatus() == Borrow.RETURN){
+            return new MessageResult(false, "图书已经被归还了");
+        }
+
+        UpdateWrapper<Borrow> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.set("status", Borrow.BORROWING).set("begin_time", new Date());
+        updateWrapper.eq("id", id);
+        boolean update = update(updateWrapper);
+        if (update){
+            return new MessageResult(update, "申请通过");
+        }else {
+            return new MessageResult(update, "通过失败， 刷新后重试");
+        }
+    }
+
+    /**
+     * 拒接借阅
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public MessageResult refuseApply(int id) {
+        MessageResult messageResult = passApply(id);
+        if (messageResult.isStatus()){
+            messageResult = hasReturn(id);
+            return messageResult;
+        }
+        return messageResult;
+    }
+
+    /**
      * 用户获取自己的借书记录
      *
      * @param uid 用户id
@@ -134,13 +185,15 @@ public class BorrowServiceImpl extends ServiceImpl<BorrowMapper, Borrow> impleme
     public List<Borrow> getByUid(int uid) {
         List<Borrow> borrows = borrowMapper.findByUid(uid, false);
         for (Borrow borrow : borrows){
-            borrow.setDays(getDays(borrow.getBeginTime()));
+            if (borrow.getStatus() == Borrow.BORROWING) {
+                borrow.setDays(getDays(borrow.getBeginTime()));
+            }
         }
         return borrows;
     }
 
     /**
-     * 用户获取自己未归还的借书记录
+     * 用户获取自己未审批/未归还的借书记录
      *
      * @param uid 用户id
      * @return
@@ -149,7 +202,9 @@ public class BorrowServiceImpl extends ServiceImpl<BorrowMapper, Borrow> impleme
     public List<Borrow> getBorrowingByUid(int uid) {
         List<Borrow> borrows = borrowMapper.findByUid(uid, true);
         for (Borrow borrow : borrows){
-            borrow.setDays(getDays(borrow.getBeginTime()));
+            if (borrow.getStatus() == Borrow.BORROWING) {
+                borrow.setDays(getDays(borrow.getBeginTime()));
+            }
         }
         return borrows;
     }
@@ -196,7 +251,9 @@ public class BorrowServiceImpl extends ServiceImpl<BorrowMapper, Borrow> impleme
     public List<Borrow> getByBid(int bid) {
         List<Borrow> borrows = borrowMapper.findByBid(bid, false);
         for (Borrow borrow : borrows){
-            borrow.setDays(getDays(borrow.getBeginTime()));
+            if (borrow.getStatus() == Borrow.BORROWING) {
+                borrow.setDays(getDays(borrow.getBeginTime()));
+            }
         }
         return borrows;
     }
@@ -211,7 +268,9 @@ public class BorrowServiceImpl extends ServiceImpl<BorrowMapper, Borrow> impleme
     public List<Borrow> getBorrowingByBid(int bid) {
         List<Borrow> borrows = borrowMapper.findByBid(bid, true);
         for (Borrow borrow : borrows){
-            borrow.setDays(getDays(borrow.getBeginTime()));
+            if (borrow.getStatus() == Borrow.BORROWING) {
+                borrow.setDays(getDays(borrow.getBeginTime()));
+            }
         }
         return borrows;
     }
@@ -229,7 +288,7 @@ public class BorrowServiceImpl extends ServiceImpl<BorrowMapper, Borrow> impleme
 
         page.setCurrent(current);
         page.setSize(pageSize);
-        IPage<Borrow> borrowIPage = borrowMapper.selectPage(page, null);
+        IPage<Borrow> borrowIPage = borrowMapper.selectPage(page, new QueryWrapper<Borrow>());
         List<Borrow> borrows = borrowIPage.getRecords();
         for (Borrow borrow : borrows){
             if (borrow.getStatus() == Borrow.BORROWING) {
@@ -258,18 +317,15 @@ public class BorrowServiceImpl extends ServiceImpl<BorrowMapper, Borrow> impleme
         page.setCurrent(current);
         page.setSize(pageSize);
         QueryWrapper<Borrow> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("status", 0);
+        queryWrapper.ne("status", Borrow.RETURN);
         IPage<Borrow> borrowIPage = borrowMapper.selectPage(page, queryWrapper);
         List<Borrow> borrows = borrowIPage.getRecords();
         for (Borrow borrow : borrows){
-            borrow.setDays(getDays(borrow.getBeginTime()));
-        }
-        Collections.sort(borrows, new Comparator<Borrow>() {
-            @Override
-            public int compare(Borrow borrow, Borrow t1) {
-                return borrow.getDays() - t1.getDays();
+            if (borrow.getStatus() == Borrow.BORROWING) {
+                borrow.setDays(getDays(borrow.getBeginTime()));
             }
-        });
+        }
+        borrows.sort(Comparator.comparingInt(Borrow::getDays));
         PageResult<Borrow> pageResult = new PageResult<>();
         pageResult.setRow(borrowIPage.getCurrent());
         pageResult.setPageSize(borrowIPage.getSize());
@@ -286,7 +342,7 @@ public class BorrowServiceImpl extends ServiceImpl<BorrowMapper, Borrow> impleme
      */
     private int getDays(Date old) {
         Date now = new Date();
-        return (int) (now.getTime() - old.getTime() / 1000 / 24 / 3600);
+        return (int) ((now.getTime() - old.getTime() )/ 1000 / 24 / 3600);
     }
 
 
@@ -297,7 +353,7 @@ public class BorrowServiceImpl extends ServiceImpl<BorrowMapper, Borrow> impleme
      */
     private MessageResult getUid(String accountNumber){
         // 获取用户id， 同时确认用户确实存在
-        ResponseEntity<String> entity = restTemplate.getForEntity(url+accountNumber, String.class);
+        ResponseEntity<String> entity = restTemplate.getForEntity(urlGetUid +accountNumber, String.class);
         try {
             Map<String,Object> values = new ObjectMapper().readValue(entity.getBody(), Map.class);
             if (values.get("uid") == null){
@@ -307,6 +363,18 @@ public class BorrowServiceImpl extends ServiceImpl<BorrowMapper, Borrow> impleme
         } catch (IOException e) {
             return new MessageResult(false, "服务器内部错误");
         }
+    }
+
+
+    /**
+     * 确认是否有这个用户
+     * @param uid
+     * @return
+     */
+    private boolean hasUid(int uid){
+        ResponseEntity<String> entity = restTemplate.getForEntity(urlHasUid + String.valueOf(uid), String.class);
+
+        return "true".equals(entity.getBody());
     }
 
 }

@@ -33,7 +33,7 @@ public class CategoryController {
      * @return
      */
     @GetMapping(value = "getAllCategory")
-    @ApiOperation(value = "获取所有分类",notes = "获取所有的分类集合，以一级分类为键，二级分类集合为值", httpMethod = "get")
+    @ApiOperation(value = "获取所有分类",notes = "获取所有的分类集合，以一级分类为键，二级分类集合为值", httpMethod = "GET")
     public Map<Category, List<Category>> getAllCategory(){
         Map<Category, List<Category>> allCategory = categoryService.getAllCategory();
         return allCategory;
@@ -45,7 +45,7 @@ public class CategoryController {
      * @return
      */
     @PutMapping(value = "addFirstCategory")
-    @ApiOperation(value = "添加一个一级分类", notes = "添加一个一级分类，如果已经有这个一级分类了则添加失败", httpMethod = "put")
+    @ApiOperation(value = "添加一个一级分类", notes = "添加一个一级分类，如果已经有这个一级分类了则添加失败", httpMethod = "PUT")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "cname", required = true, value = "新加一级分类的名称", dataType = "string" , paramType = "query")
     })
@@ -94,7 +94,7 @@ public class CategoryController {
      * @return
      */
     @PostMapping(value = "updateCategory")
-    @ApiOperation(value = "更新一个分类" , notes = "更新一个分类信息", httpMethod = "post")
+    @ApiOperation(value = "更新一个分类" , notes = "更新一个分类信息", httpMethod = "POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "cid", required = true, value = "分类的id", dataType = "int", paramType = "query"),
             @ApiImplicitParam(name = "parentId", required = true, value = "父级分类id", dataType = "int", paramType = "query"),

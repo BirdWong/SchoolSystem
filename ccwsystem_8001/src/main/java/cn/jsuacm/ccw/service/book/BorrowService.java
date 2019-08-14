@@ -18,10 +18,10 @@ public interface BorrowService extends IService<Borrow>{
     /**
      * 添加一个借阅记录
      * @param bid 图书记录
-     * @param accountNumber 账号
+     * @param uid 用户id
      * @return
      */
-    public MessageResult addBorrow(int bid, String accountNumber);
+    public MessageResult addBorrow(int bid, int uid);
 
 
     /**
@@ -30,6 +30,22 @@ public interface BorrowService extends IService<Borrow>{
      * @return
      */
     public MessageResult hasReturn(int id);
+
+
+    /**
+     * 同意一次借阅
+     * @param id
+     * @return
+     */
+    public MessageResult passApply(int id);
+
+
+    /**
+     * 拒接借阅
+     * @param id
+     * @return
+     */
+    public MessageResult refuseApply(int id);
 
 
     /**

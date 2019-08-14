@@ -37,7 +37,7 @@ public class ArticleCollectionController {
      * @return
      */
     @PostMapping("add")
-    @ApiOperation(value = "添加一个收藏信息", notes = "添加一个收藏信息， aid是文章信息id， 不是文章id, 会进行二次token验证， 请确保是本人操作", httpMethod = "post")
+    @ApiOperation(value = "添加一个收藏信息", notes = "添加一个收藏信息， aid是文章信息id， 不是文章id, 会进行二次token验证， 请确保是本人操作", httpMethod = "POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "aid", required = true, value = "文章信息id", dataType = "int", paramType = "query"),
             @ApiImplicitParam(name = "uid", required = true, value = "用户id", dataType = "int", paramType = "query")
@@ -59,7 +59,7 @@ public class ArticleCollectionController {
      * @return
      */
     @GetMapping(value = "deleteById/{uid}/{id}")
-    @ApiOperation(value = "通过收藏id删除一条记录", notes = "通过文章id删除一条记录， 请确保这个记录时这个人的, 会进行二次验证", httpMethod = "get")
+    @ApiOperation(value = "通过收藏id删除一条记录", notes = "通过文章id删除一条记录， 请确保这个记录时这个人的, 会进行二次验证", httpMethod = "GET")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "uid", required = true, value = "用户的id", dataType = "int", paramType = "path"),
             @ApiImplicitParam(name = "id", required = true, value = "收藏记录的id", dataType = "int", paramType = "path")
@@ -81,7 +81,7 @@ public class ArticleCollectionController {
      * @return
      */
     @GetMapping(value = "deleteByAid/{aid}/{uid}")
-    @ApiOperation(value = "通过文章信息的id删除收藏记录", notes = "通过文章信息的id删除收藏记录， 用于删除文章的时候使用", httpMethod = "get")
+    @ApiOperation(value = "通过文章信息的id删除收藏记录", notes = "通过文章信息的id删除收藏记录， 用于删除文章的时候使用", httpMethod = "GET")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "aid", required = true, value = "文章信息id", dataType = "int", paramType = "path"),
             @ApiImplicitParam(name = "uid", required = true, value = "用户的id", dataType = "int", paramType = "path")
@@ -101,7 +101,7 @@ public class ArticleCollectionController {
      * @return
      */
     @GetMapping("admin/deleteByUid/{uid}")
-    @ApiOperation(value = "通过用户的id删除所有的关注信息", notes = "管理员用于删除用户时使用", httpMethod = "get")
+    @ApiOperation(value = "通过用户的id删除所有的关注信息", notes = "管理员用于删除用户时使用", httpMethod = "GET")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "uid", required = true, value = "用户的id", dataType = "int", paramType = "path")
     })
@@ -119,7 +119,7 @@ public class ArticleCollectionController {
      * @return
      */
     @GetMapping("getByUid/{uid}/{current}/{pageSize}")
-    @ApiOperation(value = "获取一个用户的收藏信息列表", notes = "获取一个用户的收藏信息列表， 会进行token二次验证", httpMethod = "get")
+    @ApiOperation(value = "获取一个用户的收藏信息列表", notes = "获取一个用户的收藏信息列表， 会进行token二次验证", httpMethod = "GET")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "uid", required = true, value = "用户的id", dataType = "int", paramType = "path"),
             @ApiImplicitParam(name = "current", required = true, value = "当前页", dataType = "int", paramType = "path"),
@@ -146,7 +146,7 @@ public class ArticleCollectionController {
      * @return
      */
     @GetMapping("getByUid/{uid}/{aid}/{current}/{pageSize}")
-    @ApiOperation(value = "获取一篇文章被收藏列表", notes = "获取一篇文章被收藏列表， 会进行token二次验证", httpMethod = "get")
+    @ApiOperation(value = "获取一篇文章被收藏列表", notes = "获取一篇文章被收藏列表， 会进行token二次验证", httpMethod = "GET")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "uid", required = true, value = "用户的id", dataType = "int", paramType = "path"),
             @ApiImplicitParam(name = "aid", required = true, value = "文章的id", dataType = "int", paramType = "path"),

@@ -4,6 +4,7 @@ import cn.jsuacm.ccw.pojo.blog.Article;
 import cn.jsuacm.ccw.pojo.blog.ArticleComplex;
 import cn.jsuacm.ccw.pojo.blog.ArticleInfomation;
 import cn.jsuacm.ccw.pojo.enity.MessageResult;
+import cn.jsuacm.ccw.pojo.enity.PageResult;
 import cn.jsuacm.ccw.service.blog.ArticleInfomationService;
 import cn.jsuacm.ccw.util.CheckUserUtil;
 import io.swagger.annotations.Api;
@@ -38,12 +39,12 @@ public class ArticleInfomationController {
      * @return
      */
     @PostMapping(value = "add")
-    @ApiOperation(value = "添加一个用户的文章信息", notes = "用户写完文章保存时，首先将文章保存到文章列表，然后从返回值获取文章的id， 如果有新的标签加入也是首先保存标签。然后回去标签的返回值或者重新获取标签列表，然后将信息填充完整", httpMethod = "post")
+    @ApiOperation(value = "添加一个用户的文章信息", notes = "用户写完文章保存时，首先将文章保存到文章列表，然后从返回值获取文章的id， 如果有新的标签加入也是首先保存标签。然后回去标签的返回值或者重新获取标签列表，然后将信息填充完整", httpMethod = "POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "uid", required = true, value = "用户的id", dataType = "int", paramType = "query"),
             @ApiImplicitParam(name = "content", required = true, value = "markdowm文本内容", dataType = "string", paramType = "query"),
             @ApiImplicitParam(name = "htmlContent", required = true, value = "html文本内容", dataType = "string", paramType = "query"),
-            @ApiImplicitParam(name = "status", required = true, value = "文章的状态", dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "status", required = true, value = "文章的状态 1公开， 0草稿 ， -1私有", dataType = "int", paramType = "query"),
             @ApiImplicitParam(name = "title", required = true, value = "文章的标题", dataType = "int", paramType = "query"),
             @ApiImplicitParam(name = "aid", required = false, value = "文章的id", dataType = "int", paramType = "query"),
             @ApiImplicitParam(name = "cid", required = true, value = "二级分类的id", dataType = "int", paramType = "query"),
@@ -67,7 +68,7 @@ public class ArticleInfomationController {
      * @param req
      * @return
      */
-    @ApiOperation(value = "通过文章信息id删除一个文章信息", notes = "此删除仅仅删除信息，其他的不会有任何操作", httpMethod = "get")
+    @ApiOperation(value = "通过文章信息id删除一个文章信息", notes = "此删除仅仅删除信息，其他的不会有任何操作", httpMethod = "GET")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "uid", required = true, value = "用户的id", dataType = "int", paramType = "path"),
             @ApiImplicitParam(name = "id", required = true, value = "文章信息的id", dataType = "int", paramType = "path")
@@ -91,7 +92,7 @@ public class ArticleInfomationController {
      * @return
      */
     @GetMapping("deleteByAid/{uid}/{aid}")
-    @ApiOperation(value = "通过文章的id删除一个文章信息", notes = "通过用户的id获取文章的信息列表， 通过信息列表中的aid删除一个文章信息, 返回的uid和token必须用一个人的， 会进行token二次验证", httpMethod = "get")
+    @ApiOperation(value = "通过文章的id删除一个文章信息", notes = "通过用户的id获取文章的信息列表， 通过信息列表中的aid删除一个文章信息, 返回的uid和token必须用一个人的， 会进行token二次验证", httpMethod = "GET")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "uid", required = true, value = "用户id", dataType = "int", paramType = "path"),
             @ApiImplicitParam(name = "aid", required = true, value = "文章的id", dataType = "int", paramType = "path")
@@ -111,7 +112,7 @@ public class ArticleInfomationController {
      * @return
      */
     @GetMapping("admin/deleteByAid/{aid}")
-    @ApiOperation(value = "管理员通过文章的aid删除一篇文章信息", notes = "通过获取到的文章id删除一篇文章信息，操作者必须有管理员权限", httpMethod = "get")
+    @ApiOperation(value = "管理员通过文章的aid删除一篇文章信息", notes = "通过获取到的文章id删除一篇文章信息，操作者必须有管理员权限", httpMethod = "GET")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "aid", value = "文章id", dataType = "int", paramType = "path")
     })
@@ -128,7 +129,7 @@ public class ArticleInfomationController {
      * @return
      */
     @GetMapping(value = "deleteAllByLid/{uid}/{lid}")
-    @ApiOperation(value = "用户通过标签id删除标签下的所有文章", notes = "登陆过后的用户获取自己创建的标签信息， 通过标签的id删除属于这个标签的所有文章信息以及文章", httpMethod = "path")
+    @ApiOperation(value = "用户通过标签id删除标签下的所有文章", notes = "登陆过后的用户获取自己创建的标签信息， 通过标签的id删除属于这个标签的所有文章信息以及文章", httpMethod = "GET")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "uid", value = "用户的id", required = true, dataType = "int", paramType = "path"),
             @ApiImplicitParam(name = "lid", value = "标签的id", required = true, dataType = "int", paramType = "path")
@@ -154,7 +155,7 @@ public class ArticleInfomationController {
      * @return
      */
     @GetMapping(value = "admin/deleteAllByLid/{lid}")
-    @ApiOperation(value = "管理员通过标签id删除标签下的所有文章", notes = "管理员获取用户的文章或者标签信息， 通过标签的id删除属于这个标签的所有文章信息以及文章", httpMethod = "path")
+    @ApiOperation(value = "管理员通过标签id删除标签下的所有文章", notes = "管理员获取用户的文章或者标签信息， 通过标签的id删除属于这个标签的所有文章信息以及文章", httpMethod = "GET")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "lid", value = "标签的id", required = true, dataType = "int", paramType = "path")
     })
@@ -185,7 +186,7 @@ public class ArticleInfomationController {
      * @return
      */
     @GetMapping("admin/deleteAllByUid/{uid}")
-    @ApiOperation(value = "删除用户在博客模块中的所有信息", notes = "会删除用户在博客信息中的记录， 并且删除用户创建的标签，以及用户的所有用户属性文章， 公告通知文章会转移到超级管理员账号下", httpMethod = "get")
+    @ApiOperation(value = "删除用户在博客模块中的所有信息", notes = "会删除用户在博客信息中的记录， 并且删除用户创建的标签，以及用户的所有用户属性文章， 公告通知文章会转移到超级管理员账号下", httpMethod = "GET")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "uid", required = true, value = "用户的id", dataType = "int", paramType = "path")
     })
@@ -199,13 +200,15 @@ public class ArticleInfomationController {
      * @param uid 用户id
      * @return
      */
-    @GetMapping("getPublicByUid/{uid}")
-    @ApiOperation(value = "获取这个用户的公开文章信息", notes = "通过用户的uid信息获取这个用户的公开文章信息", httpMethod = "get")
+    @GetMapping("getPublicByUid/{uid}/{current}/{pageSize}")
+    @ApiOperation(value = "获取这个用户的公开文章信息", notes = "通过用户的uid信息获取这个用户的公开文章信息", httpMethod = "GET")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "uid", required = true, value = "用户的id", dataType = "int", paramType = "path")
+            @ApiImplicitParam(name = "uid", required = true, value = "用户的id", dataType = "int", paramType = "path"),
+            @ApiImplicitParam(name = "current", required = true, value = "当前页", dataType = "int ", paramType = "path"),
+            @ApiImplicitParam(name = "pageSize", required = true, value = "页面大小", dataType = "int", paramType = "path")
     })
-    public List<ArticleInfomation> getPublicByUid(@PathVariable(value = "uid") int uid){
-        return articleInfomationService.getByUid(uid, Article.PUBLIC_ARTICLE);
+    public PageResult getPublicByUid(@PathVariable(value = "uid") int uid, @PathVariable(value = "current")int current, @PathVariable(value = "pageSize")int pageSize){
+        return articleInfomationService.getByUid(uid, Article.PUBLIC_ARTICLE, current, pageSize);
     }
 
 
@@ -215,14 +218,16 @@ public class ArticleInfomationController {
      * @param uid 用户id
      * @return
      */
-    @GetMapping("getPrivateByUid/{uid}")
-    @ApiOperation(value = "获取用户自己的私有文章信息列表", notes = "用户获取自己的私人文章列表，必去已经登录， 会使用token二级校验", httpMethod = "get")
+    @GetMapping("getPrivateByUid/{uid}/{current}/{pageSize}")
+    @ApiOperation(value = "获取用户自己的私有文章信息列表", notes = "用户获取自己的私人文章列表，必去已经登录， 会使用token二级校验", httpMethod = "GET")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "uid", required = true, value = "用户的id", dataType = "int", paramType = "path")
+            @ApiImplicitParam(name = "uid", required = true, value = "用户的id", dataType = "int", paramType = "path"),
+            @ApiImplicitParam(name = "current", required = true, value = "当前页", dataType = "int ", paramType = "path"),
+            @ApiImplicitParam(name = "pageSize", required = true, value = "页面大小", dataType = "int", paramType = "path")
     })
-    public List<ArticleInfomation> getPrivateByUid(HttpServletRequest req, @PathVariable(value = "uid") int uid){
+    public PageResult getPrivateByUid(HttpServletRequest req, @PathVariable(value = "uid") int uid, @PathVariable(value = "current")int current, @PathVariable(value = "pageSize")int pageSize){
         if (CheckUserUtil.isUser(req, uid)){
-            return articleInfomationService.getByUid(uid, Article.PRIVETA_ARTICLE);
+            return articleInfomationService.getByUid(uid, Article.PRIVETA_ARTICLE, current, pageSize);
         }else {
             return null;
         }
@@ -235,14 +240,16 @@ public class ArticleInfomationController {
      * @param uid 用户id
      * @return
      */
-    @GetMapping("getDraftByUid/{uid}")
-    @ApiOperation(value = "获取用户自己的草稿文章信息列表", notes = "用户的获取自己的草稿文章列表， 必须已经登录， 会token二次校验", httpMethod = "get")
+    @GetMapping("getDraftByUid/{uid}/{current}/{pageSize}")
+    @ApiOperation(value = "获取用户自己的草稿文章信息列表", notes = "用户的获取自己的草稿文章列表， 必须已经登录， 会token二次校验", httpMethod = "GET")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "uid", required = true, value = "用户的id", dataType = "int", paramType = "path")
+            @ApiImplicitParam(name = "uid", required = true, value = "用户的id", dataType = "int", paramType = "path"),
+            @ApiImplicitParam(name = "current", required = true, value = "当前页", dataType = "int ", paramType = "path"),
+            @ApiImplicitParam(name = "pageSize", required = true, value = "页面大小", dataType = "int", paramType = "path")
     })
-    public List<ArticleInfomation> getDraftByUid(HttpServletRequest req, @PathVariable(value = "uid") int uid){
+    public PageResult getDraftByUid(HttpServletRequest req, @PathVariable(value = "uid") int uid, @PathVariable(value = "current")int current, @PathVariable(value = "pageSize")int pageSize){
         if (CheckUserUtil.isUser(req, uid)){
-            return articleInfomationService.getByUid(uid, Article.DRAFT_ARTICLE);
+            return articleInfomationService.getByUid(uid, Article.DRAFT_ARTICLE, current, pageSize);
         }else {
             return null;
         }
@@ -254,13 +261,15 @@ public class ArticleInfomationController {
      * @param uid 用户的id
      * @return
      */
-    @GetMapping("admin/getPrivateByUid/{uid}")
-    @ApiOperation(value = "管理员获取一个用户的私人文章列表",notes = "管理员获取一个用户的私人文章列表", httpMethod = "get")
+    @GetMapping("admin/getPrivateByUid/{uid}/{current}/{pageSize}")
+    @ApiOperation(value = "管理员获取一个用户的私人文章列表",notes = "管理员获取一个用户的私人文章列表", httpMethod = "GET")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "uid", required = true, value = "用户的id", dataType = "int", paramType = "path")
+            @ApiImplicitParam(name = "uid", required = true, value = "用户的id", dataType = "int", paramType = "path"),
+            @ApiImplicitParam(name = "current", required = true, value = "当前页", dataType = "int ", paramType = "path"),
+            @ApiImplicitParam(name = "pageSize", required = true, value = "页面大小", dataType = "int", paramType = "path")
     })
-    public List<ArticleInfomation> adminGetPrivateByUid(@PathVariable(value = "uid") int uid){
-        return articleInfomationService.getByUid(uid, Article.PRIVETA_ARTICLE);
+    public PageResult adminGetPrivateByUid(@PathVariable(value = "uid") int uid,  @PathVariable(value = "current")int current, @PathVariable(value = "pageSize")int pageSize){
+        return articleInfomationService.getByUid(uid, Article.PRIVETA_ARTICLE,current, pageSize);
     }
 
 
@@ -270,13 +279,15 @@ public class ArticleInfomationController {
      * @param uid 用户的id
      * @return
      */
-    @ApiOperation(value = "管理员获取一个用户的草稿文章列表",notes = "管理员获取一个用户的草稿文章列表", httpMethod = "get")
+    @ApiOperation(value = "管理员获取一个用户的草稿文章列表",notes = "管理员获取一个用户的草稿文章列表", httpMethod = "GET")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "uid", required = true, value = "用户的id", dataType = "int", paramType = "path")
+            @ApiImplicitParam(name = "uid", required = true, value = "用户的id", dataType = "int", paramType = "path"),
+            @ApiImplicitParam(name = "current", required = true, value = "当前页", dataType = "int ", paramType = "path"),
+            @ApiImplicitParam(name = "pageSize", required = true, value = "页面大小", dataType = "int", paramType = "path")
     })
-    @GetMapping("admin/getDraftByUid/{uid}")
-    public List<ArticleInfomation> adminGetDraftByUid(@PathVariable(value = "uid") int uid){
-        return articleInfomationService.getByUid(uid, Article.DRAFT_ARTICLE);
+    @GetMapping("admin/getDraftByUid/{uid}/{current}/{pageSize}")
+    public PageResult adminGetDraftByUid(@PathVariable(value = "uid") int uid,  @PathVariable(value = "current")int current, @PathVariable(value = "pageSize")int pageSize){
+        return articleInfomationService.getByUid(uid, Article.DRAFT_ARTICLE,current, pageSize);
     }
 
 
@@ -287,7 +298,7 @@ public class ArticleInfomationController {
      * @return
      */
     @GetMapping("getPublicByAid/{aid}")
-    @ApiOperation(value = "通过文章id获取一篇公开文章的文章信息", notes = "通过文章id获取一篇公开文章的文章信息", httpMethod = "get")
+    @ApiOperation(value = "通过文章id获取一篇公开文章的文章信息", notes = "通过文章id获取一篇公开文章的文章信息", httpMethod = "GET")
     public ArticleInfomation getPublicByAid(@PathVariable(value = "aid") int aid){
         return articleInfomationService.getByAid(aid, Article.PUBLIC_ARTICLE);
     }
@@ -343,7 +354,7 @@ public class ArticleInfomationController {
      * @return
      */
     @GetMapping("admin/getPrivateByAid/{aid}")
-    @ApiOperation(value = "管理员通过文章的id获取的私人文章信息",notes = "管理员通过文章的id获取的私人文章信息", httpMethod = "get")
+    @ApiOperation(value = "管理员通过文章的id获取的私人文章信息",notes = "管理员通过文章的id获取的私人文章信息", httpMethod = "GET")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "aid", required = true, value = "文章的id", dataType = "int", paramType = "path")
     })
@@ -360,7 +371,7 @@ public class ArticleInfomationController {
      * @return
      */
     @GetMapping("admin/getDraftByAid/{aid}")
-    @ApiOperation(value = "管理员通过文章的id获取的草稿文章信息",notes = "管理员通过文章的id获取的草稿文章信息", httpMethod = "get")
+    @ApiOperation(value = "管理员通过文章的id获取的草稿文章信息",notes = "管理员通过文章的id获取的草稿文章信息", httpMethod = "GET")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "aid", required = true, value = "文章的id", dataType = "int", paramType = "path")
     })
@@ -375,13 +386,15 @@ public class ArticleInfomationController {
      * @param lid 标签id
      * @return
      */
-    @GetMapping("getPublicByLid/{lid}")
-    @ApiOperation(value = "通过标签信息公开文章信息", notes = "通过标签的lid信息获取这个标签的公开文章信息", httpMethod = "get")
+    @GetMapping("getPublicByLid/{lid}/{current}/{pageSize}")
+    @ApiOperation(value = "通过标签信息公开文章信息", notes = "通过标签的lid信息获取这个标签的公开文章信息", httpMethod = "GET")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "lid", required = true, value = "标签的id", dataType = "int", paramType = "path")
+            @ApiImplicitParam(name = "lid", required = true, value = "标签的id", dataType = "int", paramType = "path"),
+            @ApiImplicitParam(name = "current", required = true, value = "当前页", dataType = "int ", paramType = "path"),
+            @ApiImplicitParam(name = "pageSize", required = true, value = "页面大小", dataType = "int", paramType = "path")
     })
-    public List<ArticleInfomation> getPublicByLid(@PathVariable(value = "lid") int lid){
-        return articleInfomationService.getByLid(lid, Article.PUBLIC_ARTICLE);
+    public PageResult getPublicByLid(@PathVariable(value = "lid") int lid,  @PathVariable(value = "current")int current, @PathVariable(value = "pageSize")int pageSize){
+        return articleInfomationService.getByLid(lid, Article.PUBLIC_ARTICLE,current, pageSize);
     }
 
 
@@ -392,15 +405,17 @@ public class ArticleInfomationController {
      * @param lid 标签id
      * @return
      */
-    @GetMapping("getPrivateByLid/{uid}/{lid}")
+    @GetMapping("getPrivateByLid/{uid}/{lid}/{current}/{pageSize}")
     @ApiOperation(value = "用户通过标签id获取自己的私人文章信息列表", notes = "已经登录的用户通过标签的id获取这个私人文章的详细信息列表， 会toekn二次校验")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "uid", value = "用户的id", required = true, dataType = "int", paramType = "path"),
-            @ApiImplicitParam(name = "lid", value = "标签的id", required = true, dataType = "int", paramType = "path")
+            @ApiImplicitParam(name = "lid", value = "标签的id", required = true, dataType = "int", paramType = "path"),
+            @ApiImplicitParam(name = "current", required = true, value = "当前页", dataType = "int ", paramType = "path"),
+            @ApiImplicitParam(name = "pageSize", required = true, value = "页面大小", dataType = "int", paramType = "path")
     })
-    public List<ArticleInfomation> getPrivateByLid(HttpServletRequest req, @PathVariable(value = "uid") int uid, @PathVariable(value = "lid") int lid){
+    public PageResult getPrivateByLid(HttpServletRequest req, @PathVariable(value = "uid") int uid, @PathVariable(value = "lid") int lid,  @PathVariable(value = "current")int current, @PathVariable(value = "pageSize")int pageSize){
         if (CheckUserUtil.isUser(req, uid)){
-            return articleInfomationService.getByLid(lid, Article.PRIVETA_ARTICLE);
+            return articleInfomationService.getByLid(lid, Article.PRIVETA_ARTICLE,current, pageSize);
         }else {
             return  null;
         }
@@ -414,15 +429,17 @@ public class ArticleInfomationController {
      * @param lid 标签id
      * @return
      */
-    @GetMapping("getDraftByLid/{uid}/{lid}")
+    @GetMapping("getDraftByLid/{uid}/{lid}/{current}/{pageSize}")
     @ApiOperation(value = "用户通过标签id获取自己的草稿文章信息列表", notes = "已经登录的用户通过标签的id获取这个草稿文章的详细信息列表， 会toekn二次校验")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "uid", value = "用户的id", required = true, dataType = "int", paramType = "path"),
-            @ApiImplicitParam(name = "lid", value = "标签的id", required = true, dataType = "int", paramType = "path")
+            @ApiImplicitParam(name = "lid", value = "标签的id", required = true, dataType = "int", paramType = "path"),
+            @ApiImplicitParam(name = "current", required = true, value = "当前页", dataType = "int ", paramType = "path"),
+            @ApiImplicitParam(name = "pageSize", required = true, value = "页面大小", dataType = "int", paramType = "path")
     })
-    public List<ArticleInfomation> getDraftByLid(HttpServletRequest req, @PathVariable(value = "uid") int uid, @PathVariable(value = "lid") int lid){
+    public PageResult getDraftByLid(HttpServletRequest req, @PathVariable(value = "uid") int uid, @PathVariable(value = "lid") int lid,  @PathVariable(value = "current")int current, @PathVariable(value = "pageSize")int pageSize){
         if (CheckUserUtil.isUser(req, uid)){
-            return articleInfomationService.getByLid(lid, Article.DRAFT_ARTICLE);
+            return articleInfomationService.getByLid(lid, Article.DRAFT_ARTICLE,current, pageSize);
         }else {
             return  null;
         }
@@ -434,13 +451,15 @@ public class ArticleInfomationController {
      * @param lid 标签id
      * @return
      */
-    @GetMapping("admin/getPrivateByLid/{lid}")
-    @ApiOperation(value = "管理员通过标签的id获取的私人文章信息",notes = "管理员通过标签的id获取的私人文章信息", httpMethod = "get")
+    @GetMapping("admin/getPrivateByLid/{lid}/{current}/{pageSize}")
+    @ApiOperation(value = "管理员通过标签的id获取的私人文章信息",notes = "管理员通过标签的id获取的私人文章信息", httpMethod = "GET")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "lid", required = true, value = "标签的id", dataType = "int", paramType = "path")
+            @ApiImplicitParam(name = "lid", required = true, value = "标签的id", dataType = "int", paramType = "path"),
+            @ApiImplicitParam(name = "current", required = true, value = "当前页", dataType = "int ", paramType = "path"),
+            @ApiImplicitParam(name = "pageSize", required = true, value = "页面大小", dataType = "int", paramType = "path")
     })
-    public List<ArticleInfomation> adminGetPriavteByLid(@PathVariable(value = "lid") int lid){
-        return articleInfomationService.getByLid(lid, Article.PRIVETA_ARTICLE);
+    public PageResult adminGetPriavteByLid(@PathVariable(value = "lid") int lid,  @PathVariable(value = "current")int current, @PathVariable(value = "pageSize")int pageSize){
+        return articleInfomationService.getByLid(lid, Article.PRIVETA_ARTICLE,current, pageSize);
     }
 
 
@@ -449,13 +468,15 @@ public class ArticleInfomationController {
      * @param lid 标签id
      * @return
      */
-    @GetMapping("admin/getDraftByLid/{lid}")
-    @ApiOperation(value = "管理员通过标签的id获取的草稿文章信息",notes = "管理员通过标签的id获取的草稿文章信息", httpMethod = "get")
+    @GetMapping("admin/getDraftByLid/{lid}/{current}/{pageSize}")
+    @ApiOperation(value = "管理员通过标签的id获取的草稿文章信息",notes = "管理员通过标签的id获取的草稿文章信息", httpMethod = "GET")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "lid", required = true, value = "标签的id", dataType = "int", paramType = "path")
+            @ApiImplicitParam(name = "lid", required = true, value = "标签的id", dataType = "int", paramType = "path"),
+            @ApiImplicitParam(name = "current", required = true, value = "当前页", dataType = "int ", paramType = "path"),
+            @ApiImplicitParam(name = "pageSize", required = true, value = "页面大小", dataType = "int", paramType = "path")
     })
-    public List<ArticleInfomation> adminGetDraftByLid(@PathVariable(value = "lid") int lid){
-        return articleInfomationService.getByLid(lid, Article.DRAFT_ARTICLE);
+    public PageResult adminGetDraftByLid(@PathVariable(value = "lid") int lid,  @PathVariable(value = "current")int current, @PathVariable(value = "pageSize")int pageSize){
+        return articleInfomationService.getByLid(lid, Article.DRAFT_ARTICLE,current, pageSize);
     }
 
 
@@ -464,13 +485,15 @@ public class ArticleInfomationController {
      * @param cid 分类的id
      * @return
      */
-    @GetMapping(value = "getPublicByCid/{cid}")
-    @ApiOperation(value = "获取这个分类下的公开文章信息", notes = "通过分类id获取这个分类下的公开文章信息", httpMethod = "get")
+    @GetMapping(value = "getPublicByCid/{cid}/{current}/{pageSize}")
+    @ApiOperation(value = "获取这个分类下的公开文章信息", notes = "通过分类id获取这个分类下的公开文章信息", httpMethod = "GET")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "cid", required = true, value = "二级分类的id", dataType = "int", paramType = "path")
+            @ApiImplicitParam(name = "cid", required = true, value = "二级分类的id", dataType = "int", paramType = "path"),
+            @ApiImplicitParam(name = "current", required = true, value = "当前页", dataType = "int ", paramType = "path"),
+            @ApiImplicitParam(name = "pageSize", required = true, value = "页面大小", dataType = "int", paramType = "path")
     })
-    public List<ArticleInfomation> getPublicByCid(@PathVariable(value = "cid") int cid){
-        return articleInfomationService.getByCid(cid, Article.PUBLIC_ARTICLE);
+    public PageResult getPublicByCid(@PathVariable(value = "cid") int cid,  @PathVariable(value = "current")int current, @PathVariable(value = "pageSize")int pageSize){
+        return articleInfomationService.getByCid(cid, Article.PUBLIC_ARTICLE,current, pageSize);
     }
 
 
@@ -481,15 +504,17 @@ public class ArticleInfomationController {
      * @param cid 分类id
      * @return
      */
-    @GetMapping(value = "getPrivateByCid/{uid}/{cid}")
+    @GetMapping(value = "getPrivateByCid/{uid}/{cid}/{current}/{pageSize}")
     @ApiOperation(value = "用户通过分类id获取自己的私人文章信息列表", notes = "已经登录的用户通过分类的id获取这个私人文章的详细信息列表， 会toekn二次校验")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "uid", value = "用户的id", required = true, dataType = "int", paramType = "path"),
-            @ApiImplicitParam(name = "cid", value = "分类的id", required = true, dataType = "int", paramType = "path")
+            @ApiImplicitParam(name = "cid", value = "分类的id", required = true, dataType = "int", paramType = "path"),
+            @ApiImplicitParam(name = "current", required = true, value = "当前页", dataType = "int ", paramType = "path"),
+            @ApiImplicitParam(name = "pageSize", required = true, value = "页面大小", dataType = "int", paramType = "path")
     })
-    public List<ArticleInfomation> getPrivateByCid(HttpServletRequest req, @PathVariable(value = "uid") int uid, @PathVariable(value = "cid") int cid){
+    public PageResult getPrivateByCid(HttpServletRequest req, @PathVariable(value = "uid") int uid, @PathVariable(value = "cid") int cid,  @PathVariable(value = "current")int current, @PathVariable(value = "pageSize")int pageSize){
         if (CheckUserUtil.isUser(req, uid)){
-            return articleInfomationService.getByCid(cid, Article.PRIVETA_ARTICLE);
+            return articleInfomationService.getByCid(cid, Article.PRIVETA_ARTICLE,current, pageSize);
         }else {
             return null;
         }
@@ -504,15 +529,17 @@ public class ArticleInfomationController {
      * @param cid 分类id
      * @return
      */
-    @GetMapping(value = "getDraftByCid/{uid}/{cid}")
+    @GetMapping(value = "getDraftByCid/{uid}/{cid}/{current}/{pageSize}")
     @ApiOperation(value = "用户通过分类id获取自己的草稿文章信息列表", notes = "已经登录的用户通过分类的id获取这个草稿文章的详细信息列表， 会toekn二次校验")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "uid", value = "用户的id", required = true, dataType = "int", paramType = "path"),
-            @ApiImplicitParam(name = "cid", value = "分类的id", required = true, dataType = "int", paramType = "path")
+            @ApiImplicitParam(name = "cid", value = "分类的id", required = true, dataType = "int", paramType = "path"),
+            @ApiImplicitParam(name = "current", required = true, value = "当前页", dataType = "int ", paramType = "path"),
+            @ApiImplicitParam(name = "pageSize", required = true, value = "页面大小", dataType = "int", paramType = "path")
     })
-    public List<ArticleInfomation> getDraftByCid(HttpServletRequest req, @PathVariable(value = "uid") int uid, @PathVariable(value = "cid") int cid){
+    public PageResult getDraftByCid(HttpServletRequest req, @PathVariable(value = "uid") int uid, @PathVariable(value = "cid") int cid,  @PathVariable(value = "current")int current, @PathVariable(value = "pageSize")int pageSize){
         if (CheckUserUtil.isUser(req, uid)){
-            return articleInfomationService.getByCid(cid, Article.DRAFT_ARTICLE);
+            return articleInfomationService.getByCid(cid, Article.DRAFT_ARTICLE,current, pageSize);
         }else {
             return null;
         }
@@ -524,13 +551,15 @@ public class ArticleInfomationController {
      * @param cid 分类的id
      * @return
      */
-    @GetMapping(value = "admin/getPrivateByCid/{cid}")
-    @ApiOperation(value = "管理员通过分类的id获取分类下的私人文章信息",notes = "管理员通过分类的id获取分类下的私人文章信息", httpMethod = "get")
+    @GetMapping(value = "admin/getPrivateByCid/{cid}/{current}/{pageSize}")
+    @ApiOperation(value = "管理员通过分类的id获取分类下的私人文章信息",notes = "管理员通过分类的id获取分类下的私人文章信息", httpMethod = "GET")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "cid", required = true, value = "分类的id", dataType = "int", paramType = "path")
+            @ApiImplicitParam(name = "cid", required = true, value = "分类的id", dataType = "int", paramType = "path"),
+            @ApiImplicitParam(name = "current", required = true, value = "当前页", dataType = "int ", paramType = "path"),
+            @ApiImplicitParam(name = "pageSize", required = true, value = "页面大小", dataType = "int", paramType = "path")
     })
-    public List<ArticleInfomation> adminGetPrivateByCid(@PathVariable(value = "cid") int cid){
-        return articleInfomationService.getByCid(cid, Article.PRIVETA_ARTICLE);
+    public PageResult adminGetPrivateByCid(@PathVariable(value = "cid") int cid,  @PathVariable(value = "current")int current, @PathVariable(value = "pageSize")int pageSize){
+        return articleInfomationService.getByCid(cid, Article.PRIVETA_ARTICLE,current, pageSize);
     }
 
     /**
@@ -538,13 +567,15 @@ public class ArticleInfomationController {
      * @param cid 分类的id
      * @return
      */
-    @GetMapping(value = "admin/getDraftByCid/{cid}")
-    @ApiOperation(value = "管理员通过分类的id获取分类下的草稿文章信息",notes = "管理员通过分类的id获取分类下的草稿文章信息", httpMethod = "get")
+    @GetMapping(value = "admin/getDraftByCid/{cid}/{current}/{pageSize}")
+    @ApiOperation(value = "管理员通过分类的id获取分类下的草稿文章信息",notes = "管理员通过分类的id获取分类下的草稿文章信息", httpMethod = "GET")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "cid", required = true, value = "分类的id", dataType = "int", paramType = "path")
+            @ApiImplicitParam(name = "cid", required = true, value = "分类的id", dataType = "int", paramType = "path"),
+            @ApiImplicitParam(name = "current", required = true, value = "当前页", dataType = "int ", paramType = "path"),
+            @ApiImplicitParam(name = "pageSize", required = true, value = "页面大小", dataType = "int", paramType = "path")
     })
-    public List<ArticleInfomation> adminGetDraftByCid(@PathVariable(value = "cid") int cid){
-        return articleInfomationService.getByCid(cid, Article.DRAFT_ARTICLE);
+    public PageResult adminGetDraftByCid(@PathVariable(value = "cid") int cid,  @PathVariable(value = "current")int current, @PathVariable(value = "pageSize")int pageSize){
+        return articleInfomationService.getByCid(cid, Article.DRAFT_ARTICLE,current, pageSize);
     }
 
 
@@ -556,7 +587,7 @@ public class ArticleInfomationController {
      * @return
      */
     @PostMapping("update")
-    @ApiOperation(value = "用户修改文章信息", notes = "保存用户对分类标签等信息进行的修改", httpMethod = "post")
+    @ApiOperation(value = "用户修改文章信息", notes = "保存用户对分类标签等信息进行的修改", httpMethod = "POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "aid", required = true, value = "文章的id", dataType = "int", paramType = "query"),
             @ApiImplicitParam(name = "cid", required = true, value = "二级分类的id", dataType = "int", paramType = "query"),
@@ -572,5 +603,26 @@ public class ArticleInfomationController {
         }
     }
 
+
+    /**
+     * 通过用户id和文章id获取一篇文章信息
+     * @param req
+     * @param uid
+     * @param aid
+     * @return
+     */
+    @GetMapping(value = "/getUpdateInfo/{uid}/{aid}")
+    @ApiOperation(value = "用户修改文章时获取文章信息", httpMethod = "GET")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "aid", required = true, value = "文章的id", dataType = "int", paramType = "path"),
+            @ApiImplicitParam(name = "uid", required = true, value = "用户的id", dataType = "int", paramType = "path")
+    })
+    public ArticleInfomation getUpdateInfo(HttpServletRequest req, @PathVariable(value = "uid") int uid, @PathVariable(value = "aid") int aid){
+        if (CheckUserUtil.isUser(req, uid)){
+            return articleInfomationService.getUpdateInfo(aid, uid);
+        }else {
+            return null;
+        }
+    }
 
 }

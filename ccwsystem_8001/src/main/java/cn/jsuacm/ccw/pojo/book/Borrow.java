@@ -24,6 +24,8 @@ import java.util.Date;
 public class Borrow {
 
 
+    @TableField(exist = false)
+    public static short APPLY = -1;
 
     @TableField(exist = false)
     public static short BORROWING = 0;

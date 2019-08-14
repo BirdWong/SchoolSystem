@@ -37,7 +37,7 @@ public class LabelController {
      * @return
      */
     @PostMapping("add")
-    @ApiOperation(value = "添加一个用户的标签", notes = "添加一个用户的标签， 需要进行token二次校验", httpMethod = "post")
+    @ApiOperation(value = "添加一个用户的标签", notes = "添加一个用户的标签， 需要进行token二次校验", httpMethod = "POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "lname", required = true, value = "标签的名称", dataType =  "string", paramType = "query"),
             @ApiImplicitParam(name = "uid", required = true, value = "用户的id", dataType = "int", paramType = "query")
@@ -59,7 +59,7 @@ public class LabelController {
      * @return
      */
     @PostMapping(value = "update")
-    @ApiOperation(value = "修改一个用户的标签", notes = "修改一个用户的标签， 需要进行token二次校验", httpMethod = "post")
+    @ApiOperation(value = "修改一个用户的标签", notes = "修改一个用户的标签， 需要进行token二次校验", httpMethod = "POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "lid", required = true, value = "标签的id", dataType = "int", paramType = "query"),
             @ApiImplicitParam(name = "lname", required = true, value = "标签的名称", dataType = "string", paramType = "query"),
@@ -84,7 +84,7 @@ public class LabelController {
      * @return
      */
     @GetMapping(value = "delete/{uid}/{lid}")
-    @ApiOperation(value = "删除一个用户的标签", notes = "通过用户的标签id删除一个标签， 需要进行token二次校验",httpMethod = "get")
+    @ApiOperation(value = "删除一个用户的标签", notes = "通过用户的标签id删除一个标签， 需要进行token二次校验",httpMethod = "GET")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "uid", required = true, value = "用户的id", dataType = "int", paramType = "path"),
             @ApiImplicitParam(name = "lid", required = true, value = "标签的id", dataType = "int", paramType = "path")
@@ -106,7 +106,7 @@ public class LabelController {
      * @return
      */
     @GetMapping(value = "getByUid/{uid}")
-    @ApiOperation(value = "通过用户的id获取这个用户的所有标签信息", notes = "通过用户的id获取这个用户的所有标签信息", httpMethod = "get")
+    @ApiOperation(value = "通过用户的id获取这个用户的所有标签信息", notes = "通过用户的id获取这个用户的所有标签信息", httpMethod = "GET")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "uid", required = true, value = "用户的id", dataType = "int", paramType = "path")
     })
@@ -127,7 +127,7 @@ public class LabelController {
      * @return
      */
     @GetMapping(value = "getById/{lid}")
-    @ApiOperation(value = "根据标签的id，获取这个标签的信息", httpMethod = "get")
+    @ApiOperation(value = "根据标签的id，获取这个标签的信息", httpMethod = "GET")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "lid", required = true, value = "标签的名称", dataType = "int", paramType = "path")
     })

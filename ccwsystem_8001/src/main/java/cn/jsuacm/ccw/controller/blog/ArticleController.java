@@ -37,7 +37,7 @@ public class ArticleController {
 //     * @return
 //     */
 //    @PostMapping(value = "addUserArticle")
-//    @ApiOperation(value = "用户添加一篇博客", notes = "用户添加一篇自己的博客， 只允许是用户属性的文章,会有token二次校验", httpMethod = "post")
+//    @ApiOperation(value = "用户添加一篇博客", notes = "用户添加一篇自己的博客， 只允许是用户属性的文章,会有token二次校验", httpMethod = "POST")
 //    @ApiImplicitParams({
 //            @ApiImplicitParam(name = "uid", required = true, value = "用户的id", dataType = "int", paramType = "query"),
 //            @ApiImplicitParam(name = "content", required = true, value = "markdowm文本内容", dataType = "string", paramType = "query"),
@@ -74,7 +74,7 @@ public class ArticleController {
      * @return
      */
     @GetMapping(value = "getUpdateArticle/{uid}/{aid}")
-    @ApiOperation(value = "获取一篇文章的详细信息用于更改", notes = "用户获取内容编辑修改自己的文章，必须强校验是否就是用户自己,如果该用户没有这篇文章，或者没有对应的权限将会返回空",httpMethod = "get")
+    @ApiOperation(value = "获取一篇文章的详细信息用于更改", notes = "用户获取内容编辑修改自己的文章，必须强校验是否就是用户自己,如果该用户没有这篇文章，或者没有对应的权限将会返回空",httpMethod = "GET")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "uid", required = true, value = "用户的id", dataType = "int", paramType = "path"),
             @ApiImplicitParam(name = "aid", required = true, value = "文章的id", dataType = "int", paramType = "path")
@@ -97,8 +97,9 @@ public class ArticleController {
      * @return
      */
     @PostMapping(value = "updateUserArticle")
-    @ApiOperation(value = "更新一篇用户文章", notes = "用户更新自己的文章，必须强教研是否用户就是自己", httpMethod = "post")
+    @ApiOperation(value = "更新一篇用户文章", notes = "用户更新自己的文章，必须强教研是否用户就是自己", httpMethod = "POST")
     @ApiImplicitParams({
+            @ApiImplicitParam(name = "aid", required = true,value = "文章的id",dataType = "int", paramType = "query"),
             @ApiImplicitParam(name = "uid", required = true, value = "用户的id", dataType = "int", paramType = "query"),
             @ApiImplicitParam(name = "content", required = true, value = "markdowm文本内容", dataType = "string", paramType = "query"),
             @ApiImplicitParam(name = "htmlContent", required = true, value = "html文本内容", dataType = "string", paramType = "query"),
@@ -114,8 +115,9 @@ public class ArticleController {
             article.setContent(String.valueOf(map.get("content")));
             article.setHtmlContent(String.valueOf(map.get("htmlContent")));
             article.setKind(Integer.valueOf(String.valueOf(map.get("kind"))));
-            article.setStatus(Integer.valueOf(String.valueOf("status")));
-            article.setTitle(String.valueOf("title"));
+            article.setStatus(Integer.valueOf(String.valueOf(map.get("status"))));
+            article.setTitle(String.valueOf(map.get("title")));
+            article.setAid(Integer.valueOf(String.valueOf(map.get("aid"))));
             return articleService.updateUserArticle(uid, article);
         }else {
             return new MessageResult(false, "没有操作权限");
@@ -130,7 +132,7 @@ public class ArticleController {
      * @return
      */
     @PostMapping(value = "changeStatus")
-    @ApiOperation(value = "修改文章状态", notes = "修改文章的状态，必须验证是否是本人的文章", httpMethod = "post")
+    @ApiOperation(value = "修改文章状态", notes = "修改文章的状态，必须验证是否是本人的文章", httpMethod = "POST")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "uid", required = true, value = "用户id", dataType = "int", paramType = "query"),
             @ApiImplicitParam(name = "aid", required = true, value = "文章的id", dataType = "int", paramType = "query"),
@@ -156,7 +158,7 @@ public class ArticleController {
      * @param aid 文章的id
      * @return
      */
-    @ApiOperation(value = "删除文章", notes = "删除文章，必须确认是否是本人的文章", httpMethod = "get")
+    @ApiOperation(value = "删除文章", notes = "删除文章，必须确认是否是本人的文章", httpMethod = "GET")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "uid", required = true, value = "用户的id", dataType = "int", paramType = "path"),
             @ApiImplicitParam(name = "aid", required = true, value = "文章的id", dataType = "int", paramType = "path")
@@ -178,7 +180,7 @@ public class ArticleController {
      * @return
      */
     @GetMapping(value = "view/{aid}")
-    @ApiOperation(value = "查看文章阅读数", notes = "查看一篇文章的阅读数量", httpMethod = "get")
+    @ApiOperation(value = "查看文章阅读数", notes = "查看一篇文章的阅读数量", httpMethod = "GET")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "aid", required = true, value = "文章的id", dataType = "int", paramType = "path")
     })
@@ -195,7 +197,7 @@ public class ArticleController {
      * @return
      */
     @GetMapping(value = "views/{uid}")
-    @ApiOperation(value = "查看用户总阅读数", notes = "查看一个用户的总阅读数量", httpMethod = "get")
+    @ApiOperation(value = "查看用户总阅读数", notes = "查看一个用户的总阅读数量", httpMethod = "GET")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "uid", required = true, value = "用户的id", dataType = "int", paramType = "path")
     })
@@ -211,7 +213,7 @@ public class ArticleController {
      * @return
      */
     @GetMapping("userArticle/{aid}")
-    @ApiOperation(value = "获取一篇用户公开的文章", notes = "获取一篇用户公开的文章",httpMethod = "get")
+    @ApiOperation(value = "获取一篇用户公开的文章", notes = "获取一篇用户公开的文章",httpMethod = "GET")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "aid", required = true, value = "文章id", dataType = "int", paramType = "path")
     })
@@ -228,7 +230,7 @@ public class ArticleController {
      * @return
      */
     @GetMapping("getUserArticleList/{uid}/{row}/{pageSize}")
-    @ApiOperation(value = "分页获取一个用户的所有文章", notes = "获取一个用户的所有文章， 必须添加验证是否是这个用户", httpMethod = "get")
+    @ApiOperation(value = "分页获取一个用户的所有文章", notes = "获取一个用户的所有文章， 必须添加验证是否是这个用户", httpMethod = "GET")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "uid", required = true, value = "用户id", dataType = "int", paramType = "path"),
             @ApiImplicitParam(name = "row", required = true, value = "当前页", dataType = "int", paramType = "path"),
@@ -251,7 +253,7 @@ public class ArticleController {
      * @return
      */
     @GetMapping("admin/getUserArticleList/{uid}/{current}/{pageSize}")
-    @ApiOperation(value = "管理员分页获取用户的所有文章列表", notes = "管理员分页获取用户的所有文章列表", httpMethod = "get")
+    @ApiOperation(value = "管理员分页获取用户的所有文章列表", notes = "管理员分页获取用户的所有文章列表", httpMethod = "GET")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "uid", required = true, value = "用户id", dataType = "int", paramType = "path"),
             @ApiImplicitParam(name = "row", required = true, value = "当前页", dataType = "int", paramType = "path"),
@@ -269,7 +271,7 @@ public class ArticleController {
      * @return
      */
     @GetMapping("getUserPublicArticleList/{uid}/{row}/{pageSize}")
-    @ApiOperation(value = "获取一个用户公开的文章列表", notes = "获取一个用户公开的文章列表", httpMethod = "get")
+    @ApiOperation(value = "获取一个用户公开的文章列表", notes = "获取一个用户公开的文章列表", httpMethod = "GET")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "uid", required = true, value = "用户id", dataType = "int", paramType = "path"),
             @ApiImplicitParam(name = "row", required = true, value = "当前页", dataType = "int", paramType = "path"),
@@ -289,7 +291,7 @@ public class ArticleController {
      * @return
      */
     @GetMapping("getUserPrivateArticleList/{uid}/{row}/{pageSize}")
-    @ApiOperation(value = "用户获取自己私有的文章列表", notes = "用户获取自己私有的文章列表", httpMethod = "get")
+    @ApiOperation(value = "用户获取自己私有的文章列表", notes = "用户获取自己私有的文章列表", httpMethod = "GET")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "uid", required = true, value = "用户id", dataType = "int", paramType = "path"),
             @ApiImplicitParam(name = "row", required = true, value = "当前页", dataType = "int", paramType = "path"),
@@ -312,7 +314,7 @@ public class ArticleController {
      * @return
      */
     @GetMapping("admin/getUserPrivateArticleList/{uid}")
-    @ApiOperation(value = "管理员获取一个用户私有的文章列表", notes = "管理员获取一个用户私有的文章列表", httpMethod = "get")
+    @ApiOperation(value = "管理员获取一个用户私有的文章列表", notes = "管理员获取一个用户私有的文章列表", httpMethod = "GET")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "uid", required = true, value = "用户id", dataType = "int", paramType = "path"),
             @ApiImplicitParam(name = "row", required = true, value = "当前页", dataType = "int", paramType = "path"),
@@ -331,7 +333,7 @@ public class ArticleController {
      * @return
      */
     @GetMapping("getUserDraftArticleList/{uid}/{row}/{pageSize}")
-    @ApiOperation(value = "获取一个用户草稿箱的文章列表", notes = "获取一个用户草稿箱的文章列表", httpMethod = "get")
+    @ApiOperation(value = "获取一个用户草稿箱的文章列表", notes = "获取一个用户草稿箱的文章列表", httpMethod = "GET")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "uid", required = true, value = "用户id", dataType = "int", paramType = "path"),
             @ApiImplicitParam(name = "row", required = true, value = "当前页", dataType = "int", paramType = "path"),
@@ -355,7 +357,7 @@ public class ArticleController {
      * @return
      */
     @GetMapping("admin/getUserDraftArticleList/{uid}")
-    @ApiOperation(value = "管理员获取一个用户草稿的文章列表", notes = "管理员获取一个用户草稿的文章列表", httpMethod = "get")
+    @ApiOperation(value = "管理员获取一个用户草稿的文章列表", notes = "管理员获取一个用户草稿的文章列表", httpMethod = "GET")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "uid", required = true, value = "用户id", dataType = "int", paramType = "path"),
             @ApiImplicitParam(name = "row", required = true, value = "当前页", dataType = "int", paramType = "path"),
@@ -372,7 +374,7 @@ public class ArticleController {
      * @return
      */
     @GetMapping(value = "getUserPublicArchive/{uid}")
-    @ApiOperation(value = "获取一个用户公开文章类型的时间归档", notes = "获取一个用户公开类型文章的时间归档，按照月份为单位归档", httpMethod = "get")
+    @ApiOperation(value = "获取一个用户公开文章类型的时间归档", notes = "获取一个用户公开类型文章的时间归档，按照月份为单位归档", httpMethod = "GET")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "uid", required = true, value = "用户的id", dataType = "int", paramType = "path")
     })
@@ -387,7 +389,7 @@ public class ArticleController {
      * @return
      */
     @GetMapping(value = "getUserPrivateArchive/{uid}")
-    @ApiOperation(value = "返回这个用户的私密文章归档， 自动忽略非用户文章", notes = "返回这个用户的私密文章归档， 自动忽略非用户文章，按照月份为单位归档", httpMethod = "get")
+    @ApiOperation(value = "返回这个用户的私密文章归档， 自动忽略非用户文章", notes = "返回这个用户的私密文章归档， 自动忽略非用户文章，按照月份为单位归档", httpMethod = "GET")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "uid", required = true, value = "用户的id", dataType = "int", paramType = "path")
     })
@@ -406,7 +408,7 @@ public class ArticleController {
      * @return
      */
     @GetMapping(value = "getUserDraftArchive/{uid}")
-    @ApiOperation(value = "返回这个用户的草稿文章归档， 自动忽略非用户文章", notes = "返回这个用户的草稿文章归档， 自动忽略非用户文章，按照月份为单位归档", httpMethod = "get")
+    @ApiOperation(value = "返回这个用户的草稿文章归档， 自动忽略非用户文章", notes = "返回这个用户的草稿文章归档， 自动忽略非用户文章，按照月份为单位归档", httpMethod = "GET")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "uid", required = true, value = "用户的id", dataType = "int", paramType = "path")
     })
@@ -429,7 +431,7 @@ public class ArticleController {
      * @return
      */
     @GetMapping(value = "getNewArticle/{uid}/{size}")
-    @ApiOperation(value = "获取这个用户最近的文章", notes = "自动过滤非用户公开和非用户类型文章", httpMethod = "get")
+    @ApiOperation(value = "获取这个用户最近的文章", notes = "自动过滤非用户公开和非用户类型文章", httpMethod = "GET")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "uid" , required = true, value = "用户的id", dataType = "int", paramType = "path"),
             @ApiImplicitParam(name = "size", required = true, value = "需要获取的数量", dataType = "int", paramType = "path")
@@ -447,7 +449,7 @@ public class ArticleController {
      * @return
      */
     @GetMapping(value = "getHots/{current}/{pageSize}")
-    @ApiOperation(value = "分页获取最热的文章", notes = "分页获取最热的文章内容", httpMethod = "get")
+    @ApiOperation(value = "分页获取最热的文章", notes = "分页获取最热的文章内容", httpMethod = "GET")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "current", required = true, value = "当前页", dataType = "int", paramType = "path"),
             @ApiImplicitParam(name = "pageSize", required = true, value = "页面的大小", dataType = "int", paramType = "path")

@@ -5,6 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
  * @ClassName GerawayServer4795App
@@ -15,6 +16,7 @@ import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 @SpringBootApplication
 @EnableZuulProxy
 @MapperScan("cn.jsuacm.gateway.mapper")
+@EnableSwagger2
 public class GerawayServer4795App {
     public static void main(String[] args) {
         SpringApplication.run(GerawayServer4795App.class, args);

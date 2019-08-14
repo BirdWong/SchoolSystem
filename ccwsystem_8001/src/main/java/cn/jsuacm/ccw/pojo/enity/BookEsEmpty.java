@@ -85,6 +85,6 @@ public class BookEsEmpty implements Serializable{
     /**
      * 剩余数量
      */
-    @Field
-    private Integer use;
+    @Field()
+    private Integer hasUse;
 }
