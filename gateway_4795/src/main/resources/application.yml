@@ -53,12 +53,5 @@ zuul:
     myuser1.path: /ccw/**
     myuser1.serviceId: ccwsystem-8001
   host:
-      connect-timeout-millis: 150000000
-      socket-timeout-millis: 600000000
-      connection-request-timeout-millis: 100000000
-  sensitive-headers:
-ribbon:
-  ReadTimeout: 100000000
-  ConnectTimeout: 100000000
-
-
+      connect-timeout-millis: 60000
+      socket-timeout-millis: 60000

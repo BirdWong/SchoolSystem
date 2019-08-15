@@ -50,7 +50,9 @@ eureka:
   client:
     service-url:
       defaultZone: http://172.17.0.1:7001/eureka
-
+  instance:
+      instance-id: ccwsystem_8001.com
+      prefer-ip-address: true
 
 mybatis-plus:
   configuration:
