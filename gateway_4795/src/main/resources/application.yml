@@ -6,7 +6,7 @@ spring:
   datasource:
       type: com.alibaba.druid.pool.DruidDataSource #当前数据库操作类型
       driver-class-name: com.mysql.jdbc.Driver  # MySQL驱动包
-      url: jdbc:mysql://127.0.0.1:3306/schoolsystem?characterEncoding=utf8&useSSL=false #数据库url设置
+      url: jdbc:mysql://172.17.0.1:3306/schoolsystem?characterEncoding=utf8&useSSL=false #数据库url设置
       username: root
       password: 4795
       dbcp2:
@@ -16,7 +16,7 @@ spring:
         max-wait-millis: 1000 #等待超时时间
   redis:
       database: 0
-      host: 127.0.0.1
+      host: 172.17.0.1
       port: 6379
       lettuce:
         pool:
@@ -41,7 +41,7 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: http://127.0.0.1:7001/eureka
+      defaultZone: http://172.17.0.1:7001/eureka
 
   instance:
     instance-id: gateway-4795.com

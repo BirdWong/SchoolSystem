@@ -64,7 +64,7 @@ public class ProjectController {
      * @param pageSize
      * @return
      */
-    @ApiOperation(value = "分页获取项目列表", httpMethod = "GET")
+    @ApiOperation(value = "分页获取所有正在进行的项目", httpMethod = "GET")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "current", required = true, value = "当前页", paramType = "path"),
             @ApiImplicitParam(name = "pageSize", required = true, value = "页面大小", paramType = "path")
@@ -83,7 +83,7 @@ public class ProjectController {
      * @param pageSize
      * @return
      */
-    @ApiOperation(value = "分页获取项目列表", httpMethod = "GET")
+    @ApiOperation(value = "分页获取所有结束的项目", httpMethod = "GET")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "current", required = true, value = "当前页", paramType = "path"),
             @ApiImplicitParam(name = "pageSize", required = true, value = "页面大小", paramType = "path")

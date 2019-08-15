@@ -242,10 +242,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
                  * ***********es搜索接口操作*********
                  *      前缀标识：search
                  */
-                // 通过文章信息搜索文章
+                // 通过文章信息/用户名搜索文章
                 .antMatchers("/ccw/search/article/**").permitAll()
-                // 通过用户的信息搜索文章
-                .antMatchers("/ccw/search/user/**").permitAll()
+                // 通过书籍的信息搜索书籍
+                .antMatchers("/ccw/search/book/**").hasAnyAuthority(new String[]{AuthenticationService.ADMIN, AuthenticationService.ADMINISTRATOR, AuthenticationService.MENBER})
+
+
+
 
 
 
@@ -265,19 +268,55 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 
 
 
-
-
-
-
-
-
-
                 /*
                  * ***********借阅操作接口*************
                  *      前缀标识：borrow
                  */
                 .antMatchers("/ccw/borrow/admin/**").hasAnyAuthority(new String[]{AuthenticationService.ADMIN, AuthenticationService.ADMINISTRATOR})
 
+
+                .antMatchers("/ccw/borrow/**").hasAnyAuthority(new String[]{AuthenticationService.ADMIN, AuthenticationService.ADMINISTRATOR, AuthenticationService.ING})
+
+
+                /*
+                 * ************项目成员接口***********
+                 *      前缀标识：collaborators
+                 */
+                .antMatchers("/ccw/collaborators/admin/**").hasAnyAuthority(new String[]{AuthenticationService.ADMINISTRATOR,AuthenticationService.ADMIN})
+                .antMatchers("/ccw/collaborators/**").hasAnyAuthority(AuthenticationService.ING)
+
+
+                /*
+                 * ***********项目接口操作***********
+                 *      前缀标识：project
+                 */
+                .antMatchers("/ccw/project/admin/**").hasAnyAuthority(new String[]{AuthenticationService.ADMIN, AuthenticationService.ADMINISTRATOR})
+
+
+                /*
+                 * ***********招新表单接口操作**********
+                 *      前缀标识: form
+                 */
+                .antMatchers("/ccw/form/admin/**").hasAnyAuthority(new String[]{AuthenticationService.ADMINISTRATOR, AuthenticationService.ADMIN})
+                .antMatchers("/ccw/form/get").permitAll()
+
+
+                /*
+                 * **********招新时间接口操作**********
+                 *      前缀标识：limitTime
+                 */
+                .antMatchers("/ccw/limitTime/**").hasAnyAuthority(new String[]{AuthenticationService.ADMIN, AuthenticationService.ADMINISTRATOR})
+                .antMatchers("/ccw/limitTime/get").permitAll()
+
+
+                /*
+                 * **********用户报名接口操作*********
+                 *      前缀标识: recruitment
+                 */
+                .antMatchers("/ccw/recruitment/admin/**").hasAnyAuthority(new String[]{AuthenticationService.ADMINISTRATOR, AuthenticationService.ADMIN})
+                .antMatchers(HttpMethod.POST,"/ccw/recruitment/add").permitAll()
+                .antMatchers(HttpMethod.PUT,"/ccw/recruitment/upload").permitAll()
+                .antMatchers("/ccw/recruitment/**").hasAnyAuthority(AuthenticationService.ING)
 
 
 

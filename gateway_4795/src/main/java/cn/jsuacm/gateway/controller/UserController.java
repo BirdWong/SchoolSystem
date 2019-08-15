@@ -276,6 +276,9 @@ public class UserController {
     })
     public User getUserByAccountNumber(@PathVariable(value = "accountNumber") String accountNumber){
         User user = userService.getUser(accountNumber);
+        if (user == null ){
+            return  null;
+        }
         //去除敏感信息
         String email = user.getEmail();
         email = clearEmailInfo(email);

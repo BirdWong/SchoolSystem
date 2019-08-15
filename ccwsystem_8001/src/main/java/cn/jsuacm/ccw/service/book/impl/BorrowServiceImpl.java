@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
@@ -222,7 +223,7 @@ public class BorrowServiceImpl extends ServiceImpl<BorrowMapper, Borrow> impleme
             int uid = Integer.valueOf(messageResult.getMsg());
             return getByUid(uid);
         }
-        return null;
+        return new ArrayList<>();
     }
 
     /**
@@ -353,14 +354,17 @@ public class BorrowServiceImpl extends ServiceImpl<BorrowMapper, Borrow> impleme
      */
     private MessageResult getUid(String accountNumber){
         // 获取用户id， 同时确认用户确实存在
-        ResponseEntity<String> entity = restTemplate.getForEntity(urlGetUid +accountNumber, String.class);
         try {
+            ResponseEntity<String> entity = restTemplate.getForEntity(urlGetUid +accountNumber, String.class);
+            if (entity.getBody() == null){
+                return new MessageResult(false, "没有这个用户");
+            }
             Map<String,Object> values = new ObjectMapper().readValue(entity.getBody(), Map.class);
             if (values.get("uid") == null){
                 return new MessageResult(false, "没有查找到这个用户:"+accountNumber);
             }
             return new MessageResult(true, String.valueOf(values.get("uid")));
-        } catch (IOException e) {
+        } catch (IOException | HttpServerErrorException e) {
             return new MessageResult(false, "服务器内部错误");
         }
     }

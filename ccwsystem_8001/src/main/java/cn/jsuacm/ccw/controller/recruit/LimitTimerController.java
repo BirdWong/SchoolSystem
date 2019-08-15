@@ -71,7 +71,7 @@ public class LimitTimerController {
      * 提前关闭报名
      * @return
      */
-    @GetMapping(value = "close")
+    @GetMapping(value = "admin/close")
     @ApiOperation(value = "提前关闭报名", notes = "提前关闭报名， 不管是否还有时间都会结束报名， 但是返回状态 true和false 提示信息不一样", httpMethod = "GET")
     public MessageResult close(){
         return limitTimerService.close();

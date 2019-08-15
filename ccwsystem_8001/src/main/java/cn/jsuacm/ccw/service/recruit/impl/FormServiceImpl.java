@@ -9,6 +9,7 @@ import cn.jsuacm.ccw.util.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -80,7 +81,7 @@ public class FormServiceImpl implements FormService {
         if (hasForm()){
             return (List<FormItemOption>) redisUtil.get(FormService.FORM_KEY);
         }
-        return null;
+        return new ArrayList<>();
     }
 
     /**
