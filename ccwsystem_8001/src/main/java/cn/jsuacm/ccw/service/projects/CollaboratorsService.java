@@ -70,4 +70,5 @@ public interface CollaboratorsService extends IService<Collaborators>{
      * @return
      */
     public MessageResult deleteByUid(int uid);
+
 }

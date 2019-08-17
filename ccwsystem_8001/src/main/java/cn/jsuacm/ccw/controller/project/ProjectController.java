@@ -117,7 +117,7 @@ public class ProjectController {
      * @param id 项目的id
      * @return
      */
-    @GetMapping(value = "admin/updateStatus")
+    @GetMapping(value = "admin/updateStatus/{id}")
     @ApiOperation(value = "更新项目的状态， 由开启到关闭/关闭到重新开启", httpMethod = "GET")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", required = true, value = "项目的id", dataType = "int", paramType = "path")
@@ -139,5 +139,20 @@ public class ProjectController {
     })
     public MessageResult delete(@PathVariable(value = "id") int id){
         return projectService.deleteById(id);
+    }
+
+
+    /**
+     * 通过id获取项目
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "通过项目id获取项目信息", httpMethod = "GET")
+    @GetMapping("/get/{id}")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", required = true, value = "项目id", dataType = "int", paramType = "path")
+    })
+    public Project getByPid(@PathVariable(value = "id") int id){
+        return projectService.getById(id);
     }
 }

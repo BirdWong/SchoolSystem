@@ -231,10 +231,6 @@ docker tag [imageId] java-dev
 # 启动镜像
 docker run -it -p 7001:7001 --name eureka java-dev
 
-
-# 进入镜像
-docker exec -it eureka /bin/bash
-
 # 下载代码
 git clone https://github.com/BirdWong/schoolsystem.git
 
@@ -242,7 +238,12 @@ git clone https://github.com/BirdWong/schoolsystem.git
 # 进入注册中心项目启动
 cd schoolsystem/eureka_7001
 
-mvn spirng-boot:run
+mvn spring-boot:run
+
+
+# 退出镜像
+ctrl + alt + p
+
 ```
 
 
@@ -252,9 +253,6 @@ mvn spirng-boot:run
 docker run -it -p 4795:4795 --name gateway java-dev
 
 
-# 进入镜像
-docker exec -it gateway /bin/bash
-
 # 下载代码
 git clone https://github.com/BirdWong/schoolsystem.git
 
@@ -262,7 +260,12 @@ git clone https://github.com/BirdWong/schoolsystem.git
 # 进入路由项目启动
 cd schoolsystem/gateway_4795
 
-mvn spirng-boot:run
+mvn spring-boot:run
+
+
+# 退出镜像
+ctrl + alt + p
+
 ```
 
 
@@ -272,9 +275,6 @@ mvn spirng-boot:run
 docker run -it -p 8001:8001 --name ccw java-dev
 
 
-# 进入镜像
-docker exec -it ccw /bin/bash
-
 # 下载代码
 git clone https://github.com/BirdWong/schoolsystem.git
 
@@ -282,9 +282,13 @@ git clone https://github.com/BirdWong/schoolsystem.git
 # 进入路由项目启动
 cd schoolsystem/ccwsystem_8001
 
-mvn spirng-boot:run
+mvn spring-boot:run
+
+
+# 退出镜像
+ctrl + alt + p
+
 ```
 
-
+**redis目前并没有设置密码，但是一定要设置32位密码， 可以通过sha256加密算法将短密码加密后设置成redis密码， 不设置密码会被入侵服务器**
 **<font color="red">如果mysql、redis、es等服务的配置发生改变，请手动修改项目中的配置文件</font>**
-**redis建议设置32位密码， 可以通过sha256加密算法将短密码加密后设置成redis密码**

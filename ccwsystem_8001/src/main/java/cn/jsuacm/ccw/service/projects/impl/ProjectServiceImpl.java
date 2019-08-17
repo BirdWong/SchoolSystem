@@ -98,6 +98,9 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> impl
      */
     private void deleteTimer(int pid){
         ScheduledFuture scheduledFuture = timerMap.get(pid);
+        if (scheduledFuture == null){
+            return;
+        }
         scheduledFuture.cancel(true);
         redisUtil.del(pid+"");
 
@@ -191,6 +194,9 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> impl
     @Transactional(rollbackFor = Exception.class)
     public MessageResult updateStatus(int id) {
         Project project = getById(id);
+        if (project == null){
+            return new MessageResult(false, "没有这个项目");
+        }
         project.setStatus(project.getStatus() * -1);
         UpdateWrapper<Project> updateWrapper = new UpdateWrapper<>();
         updateWrapper.eq("id", id).set("status",project.getStatus());
@@ -230,7 +236,7 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> impl
         List<Collaborators> collaborators = collaboratorsService.getByPid(project.getId());
         // 循环删除人员列表和这个人提交的提交记录
         for (Collaborators collaborator : collaborators){
-            collaboratorsService.removeById(collaborator.getId());
+            collaboratorsService.deleteById(collaborator.getId());
         }
         // 删除这个项目
         removeById(id);
