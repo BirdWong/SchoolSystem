@@ -242,7 +242,7 @@ mvn spring-boot:run
 
 
 # 退出镜像
-ctrl + alt + p
+ctrl + p + q
 
 ```
 
@@ -264,7 +264,7 @@ mvn spring-boot:run
 
 
 # 退出镜像
-ctrl + alt + p
+ctrl + p + q
 
 ```
 
@@ -286,7 +286,7 @@ mvn spring-boot:run
 
 
 # 退出镜像
-ctrl + alt + p
+ctrl + p + q
 
 ```
 
