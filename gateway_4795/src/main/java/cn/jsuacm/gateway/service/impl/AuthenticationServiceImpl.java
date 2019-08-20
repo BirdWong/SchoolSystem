@@ -86,7 +86,13 @@ public class AuthenticationServiceImpl extends ServiceImpl<AuthenticationMapper,
      */
     @Override
     public boolean addIngAuthentication(int uid) {
-        return addRole(uid, AuthenticationService.ING);
+        List<Authentication> authentications = getAuthenticationByUid(uid);
+        for (Authentication authentication : authentications){
+            if (authentication.getRole() == AuthenticationService.MENBER){
+                return addRole(uid, AuthenticationService.ING);
+            }
+        }
+        return false;
     }
 
     /**
@@ -97,6 +103,12 @@ public class AuthenticationServiceImpl extends ServiceImpl<AuthenticationMapper,
      */
     @Override
     public boolean deleteMemBerAuthentication(int uid) {
+        List<Authentication> authenticationByUid = getAuthenticationByUid(uid);
+        for (Authentication authentication : authenticationByUid){
+            if (authentication.getRole() == AuthenticationService.ING){
+                return false;
+            }
+        }
         if (deleteIngAuthentication(uid)) {
             return deleteRole(uid, AuthenticationService.MENBER);
         } else {

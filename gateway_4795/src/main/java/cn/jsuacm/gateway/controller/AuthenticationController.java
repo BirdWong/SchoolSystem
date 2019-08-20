@@ -272,7 +272,7 @@ public class AuthenticationController {
 
 
     @GetMapping(value = "getAuthenticationByUid/{uid}")
-    @ApiOperation(value = "通过用户肚饿id获取这个用户的所有权限", httpMethod = "GET")
+    @ApiOperation(value = "通过用户的id获取这个用户的所有权限", httpMethod = "GET")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "uid", value = "用户的id", required = true, dataType = "string", paramType = "path")
     })
