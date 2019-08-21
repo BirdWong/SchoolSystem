@@ -26,9 +26,9 @@ spring:
           min-idle: 0
       timeout: 1000ms
   mail:
-      host: smtp.163.com
-      username: God_4795@163.com
-      password: hp980501
+      host: smtp.mxhichina.com
+      username: admin@jsuacm.cn
+      password: Ccw2110.
       default-encoding: UTF-8
   thymeleaf:
       cache: true

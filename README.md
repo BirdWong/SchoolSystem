@@ -257,9 +257,15 @@ docker run -it -p 4795:4795 --name gateway java-dev
 git clone https://github.com/BirdWong/schoolsystem.git
 
 
-# 进入路由项目启动
+# 进入路由项目添加邮箱密码
 cd schoolsystem/gateway_4795
 
+vim src/main/resources/application.yml
+
+填写 spring.email.password 密码
+
+
+# 启动项目
 mvn spring-boot:run
 
 

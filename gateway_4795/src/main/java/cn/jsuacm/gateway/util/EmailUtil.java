@@ -2,6 +2,7 @@ package cn.jsuacm.gateway.util;
 
 import cn.jsuacm.gateway.pojo.enity.MessageResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
@@ -20,7 +21,12 @@ public class EmailUtil {
     /**
      * 发送邮箱
      */
-    private static String EMAIL_FROM = "God_4795@163.com";
+    private static String EMAIL_FROM;
+
+    @Value("${spring.mail.username}")
+    public  void setUsername(String username) {
+        EmailUtil.EMAIL_FROM = username;
+    }
 
     /**
      * 标题名称
