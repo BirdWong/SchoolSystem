@@ -376,9 +376,13 @@ public class BorrowServiceImpl extends ServiceImpl<BorrowMapper, Borrow> impleme
      * @return
      */
     private boolean hasUid(int uid){
-        ResponseEntity<String> entity = restTemplate.getForEntity(urlHasUid + String.valueOf(uid), String.class);
+        try {
+            ResponseEntity<String> entity = restTemplate.getForEntity(urlHasUid + String.valueOf(uid), String.class);
+            return "true".equals(entity.getBody());
+        }catch (Exception e){
+            return false;
+        }
 
-        return "true".equals(entity.getBody());
     }
 
 }

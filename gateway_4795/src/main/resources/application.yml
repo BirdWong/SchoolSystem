@@ -55,3 +55,4 @@ zuul:
   host:
       connect-timeout-millis: 60000
       socket-timeout-millis: 60000
+  sensitive-headers: # 修复header
