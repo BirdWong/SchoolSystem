@@ -473,7 +473,7 @@ public class RecruitmentServiceImpl implements RecruitmentService {
     public MessageResult sendEmail(Date date, String address, String msg) {
         boolean hasTime = limitTimerService.hasTime();
         if (hasTime){
-            return new MessageResult(false, "报名未结束， 不允许提前你发送面试信息");
+            return new MessageResult(false, "报名未结束， 不允许你提前发送面试信息");
         }
         if (hasRecruitment()){
             if (msg == null){

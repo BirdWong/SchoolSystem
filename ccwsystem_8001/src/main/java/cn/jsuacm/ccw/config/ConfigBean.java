@@ -1,10 +1,13 @@
 package cn.jsuacm.ccw.config;
 
+import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
+
+import javax.servlet.MultipartConfigElement;
 
 /**
  * @ClassName ConfigBean
@@ -27,5 +30,20 @@ public class ConfigBean {
     @Bean(name="remoteRestTemplate")
     public RestTemplate restTemplate() {
         return new RestTemplate();
+    }
+
+
+    /**
+     * 限制文件最大上传大小
+     * @return
+     */
+    @Bean
+    public MultipartConfigElement multipartConfigElement() {
+        MultipartConfigFactory factory = new MultipartConfigFactory();
+        //文件最大
+        factory.setMaxFileSize("300KB"); //KB,MB
+        /// 设置总上传数据总大小
+        factory.setMaxRequestSize("1024KB");
+        return factory.createMultipartConfig();
     }
 }
