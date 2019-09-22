@@ -7,6 +7,8 @@ import cn.jsuacm.ccw.service.recruit.LimitTimerService;
 import cn.jsuacm.ccw.service.recruit.RecruitmentService;
 import cn.jsuacm.ccw.util.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -19,6 +21,7 @@ import java.util.List;
  * @Date 2019/08/07 15:00
  */
 @Service
+@CacheConfig(cacheNames = "form")
 public class FormServiceImpl implements FormService {
 
 
@@ -77,6 +80,7 @@ public class FormServiceImpl implements FormService {
      * @return
      */
     @Override
+    @Cacheable
     public List<FormItemOption> getForm() {
         if (hasForm()){
             return (List<FormItemOption>) redisUtil.get(FormService.FORM_KEY);

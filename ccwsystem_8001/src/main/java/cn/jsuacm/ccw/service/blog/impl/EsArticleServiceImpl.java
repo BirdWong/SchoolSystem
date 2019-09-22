@@ -21,6 +21,8 @@ import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
@@ -48,6 +50,7 @@ import java.util.regex.Pattern;
  * @Date 2019/07/24 17:13
  */
 @Service
+@CacheConfig(cacheNames = "es_article")
 public class EsArticleServiceImpl extends EsBasic<ArticleEsEmpty> implements EsArticleService{
 
     @Autowired
@@ -86,6 +89,7 @@ public class EsArticleServiceImpl extends EsBasic<ArticleEsEmpty> implements EsA
      * @return
      */
     @Override
+    @Cacheable
     public PageResult<ArticleEsEmpty> findArticle(String keyWord, int current, int pageSize){
 
         // 组合查询，boost即为权重，数值越大，权重越大
@@ -111,6 +115,7 @@ public class EsArticleServiceImpl extends EsBasic<ArticleEsEmpty> implements EsA
      * @return
      */
     @Override
+    @Cacheable
     public PageResult<ArticleEsEmpty> findByUsername(String keyWord, int current, int pageSize) {
         QueryBuilder queryBuilder = QueryBuilders.boolQuery().
                 must(QueryBuilders.matchQuery("username", keyWord)).
@@ -232,7 +237,7 @@ public class EsArticleServiceImpl extends EsBasic<ArticleEsEmpty> implements EsA
         data.setKind(Integer.valueOf(searchHit.getSourceAsMap().get("kind").toString()));
         data.setCid(Integer.valueOf(searchHit.getSourceAsMap().get("cid").toString()));
         data.setUsername(String.valueOf(searchHit.getSourceAsMap().get("username")));
-        data.setCategory(String.valueOf(searchHit.getSourceAsMap().get("category")));
+        data.setCategory(String.valueOf(searchHit.getSourceAsMap().get("AnnouncementCategory")));
         Object createTime = searchHit.getSourceAsMap().get("createtime");
 
         if (createTime != null) {

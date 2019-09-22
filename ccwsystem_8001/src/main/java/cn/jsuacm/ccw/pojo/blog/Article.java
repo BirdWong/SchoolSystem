@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.*;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.*;
@@ -16,6 +17,7 @@ import java.util.*;
  * @Date 2019/06/18 21:40
  */
 @Data
+@NoArgsConstructor
 @TableName(value = "article")
 @ApiModel(value = "文章实体")
 public class Article implements Serializable{

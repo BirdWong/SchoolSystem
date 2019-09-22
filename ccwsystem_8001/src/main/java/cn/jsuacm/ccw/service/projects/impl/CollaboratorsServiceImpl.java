@@ -11,6 +11,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +25,7 @@ import java.util.*;
  * @Date 2019/08/01 21:56
  */
 @Service
+@CacheConfig(cacheNames = "collaborator")
 public class CollaboratorsServiceImpl extends ServiceImpl<CollaboratorsMapper, Collaborators> implements CollaboratorsService {
 
 
@@ -93,6 +96,7 @@ public class CollaboratorsServiceImpl extends ServiceImpl<CollaboratorsMapper, C
      * @return
      */
     @Override
+    @Cacheable
     public List<Collaborators> getByPid(int pid) {
         QueryWrapper<Collaborators> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("pid", pid);
@@ -107,6 +111,7 @@ public class CollaboratorsServiceImpl extends ServiceImpl<CollaboratorsMapper, C
      * @return
      */
     @Override
+    @Cacheable
     public List<Collaborators> getByUid(int uid) {
         QueryWrapper<Collaborators> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("uid", uid);

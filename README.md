@@ -160,7 +160,7 @@ docker restart elasticsearch
     "username":{
       "type": "text"
     },
-    "category":{
+    "announcementCategory":{
       "type": "text"
     }
   }
@@ -237,8 +237,8 @@ git clone https://github.com/BirdWong/schoolsystem.git
 
 # 进入注册中心项目启动
 cd schoolsystem/eureka_7001
-
-mvn spring-boot:run
+# 在此目录下会生成一个nohup.out 的文件， 以后可以通过 more tail cat等命令查看日志信息，记得定时清理
+nohup mvn spring-boot:run &
 
 
 # 退出镜像
@@ -266,7 +266,7 @@ vim src/main/resources/application.yml
 
 
 # 启动项目
-mvn spring-boot:run
+nohup mvn spring-boot:run &
 
 
 # 退出镜像
@@ -288,7 +288,7 @@ git clone https://github.com/BirdWong/schoolsystem.git
 # 进入路由项目启动
 cd schoolsystem/ccwsystem_8001
 
-mvn spring-boot:run
+nohup mvn spring-boot:run &
 
 
 # 退出镜像

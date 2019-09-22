@@ -5,6 +5,8 @@ import cn.jsuacm.ccw.service.recruit.FormService;
 import cn.jsuacm.ccw.service.recruit.LimitTimerService;
 import cn.jsuacm.ccw.util.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -17,6 +19,7 @@ import java.util.Date;
  */
 
 @Service
+@CacheConfig(cacheNames = "limit_timer")
 public class LimitTimerServiceImpl implements LimitTimerService {
 
     @Autowired
@@ -79,6 +82,7 @@ public class LimitTimerServiceImpl implements LimitTimerService {
      * @return
      */
     @Override
+    @Cacheable
     public MessageResult get() {
         if (hasTime()){
             Date date = (Date) redisUtil.get(BEGIN_TIME);

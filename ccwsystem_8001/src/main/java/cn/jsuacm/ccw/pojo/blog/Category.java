@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 
 /**
- * @ClassName Category
+ * @ClassName AnnouncementCategory
  * @Description TODO
  * @Author h4795
  * @Date 2019/06/21 17:29

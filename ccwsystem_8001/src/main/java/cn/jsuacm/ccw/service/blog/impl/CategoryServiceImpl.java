@@ -8,6 +8,8 @@ import cn.jsuacm.ccw.service.blog.CategoryService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -22,6 +24,7 @@ import java.util.Map;
  */
 
 @Service
+@CacheConfig(cacheNames = "AnnouncementCategory")
 public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> implements CategoryService{
 
     /**
@@ -43,6 +46,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
      * @return
      */
     @Override
+    @Cacheable
     public Map<Category, List<Category>> getAllCategory() {
         // 获取所有的一级分类
         QueryWrapper<Category> wrapper = new QueryWrapper<>();
@@ -182,6 +186,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
      * @return
      */
     @Override
+    @Cacheable
     public List<Category> findFirstCategories() {
         QueryWrapper<Category> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("parent_id", 0);
@@ -195,6 +200,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
      * @return
      */
     @Override
+    @Cacheable
     public List<Category> findSecondCategories(int cid) {
 
         QueryWrapper<Category> queryWrapper = new QueryWrapper<>();

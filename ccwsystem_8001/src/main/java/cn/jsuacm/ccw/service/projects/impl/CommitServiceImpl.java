@@ -13,6 +13,8 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -32,6 +34,7 @@ import java.util.*;
  * @Date 2019/08/01 10:56
  */
 @Service
+@CacheConfig(cacheNames = "commit")
 public class CommitServiceImpl extends ServiceImpl<CommitMapper, Commit> implements CommitService{
 
 
@@ -134,6 +137,7 @@ public class CommitServiceImpl extends ServiceImpl<CommitMapper, Commit> impleme
      * @return
      */
     @Override
+    @Cacheable
     public List<Commit> findByCid(int cid) {
         QueryWrapper<Commit> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("cid", cid);

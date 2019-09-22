@@ -11,6 +11,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -40,6 +42,7 @@ import java.util.regex.Pattern;
  * @Date 2019/08/04 20:49
  */
 @Service
+@CacheConfig(cacheNames = "recruitment")
 public class RecruitmentServiceImpl implements RecruitmentService {
 
 
@@ -96,6 +99,7 @@ public class RecruitmentServiceImpl implements RecruitmentService {
      * @return
      */
     @Override
+    @Cacheable
     public TreeMap<Integer, List<NewMenberInfo>> getToClass() {
         TreeMap<Integer, List<NewMenberInfo>> newMenberInfoMap = new TreeMap<>(Comparator.comparingInt(integer -> integer));
         if (hasRecruitment()){
@@ -121,6 +125,7 @@ public class RecruitmentServiceImpl implements RecruitmentService {
      * @return
      */
     @Override
+    @Cacheable
     public List<NewMenberInfo> getByClass(int num) {
         List<NewMenberInfo> list = new ArrayList<>();
         if (hasRecruitment()){
@@ -142,6 +147,7 @@ public class RecruitmentServiceImpl implements RecruitmentService {
      * @return
      */
     @Override
+    @Cacheable
     public List<Integer> getClassNumbers() {
         Set<Integer> classNumbers = new HashSet<>();
         if (hasRecruitment()) {
@@ -185,6 +191,7 @@ public class RecruitmentServiceImpl implements RecruitmentService {
      * @return
      */
     @Override
+    @Cacheable
     public NewMenberInfo getByEmail(String email) {
         if (!hasRecruitment()){
             return null;
@@ -511,7 +518,5 @@ public class RecruitmentServiceImpl implements RecruitmentService {
     public boolean hasRecruitment() {
         return redisUtil.hasKey(RecruitmentService.RECRUIT);
     }
-
-
 
 }

@@ -9,6 +9,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -22,6 +24,7 @@ import java.util.*;
  * @Date 2019/06/22 16:12
  */
 @Service
+@CacheConfig(cacheNames = "lable")
 public class LabelServiceImpl extends ServiceImpl<LabelMapper, Label> implements LabelService{
 
 
@@ -114,6 +117,7 @@ public class LabelServiceImpl extends ServiceImpl<LabelMapper, Label> implements
      * @return
      */
     @Override
+    @Cacheable
     public List<Label> getByUid(int uid) {
         QueryWrapper<Label> wrapper = new QueryWrapper<>();
 
@@ -131,6 +135,7 @@ public class LabelServiceImpl extends ServiceImpl<LabelMapper, Label> implements
      * @return
      */
     @Override
+    @Cacheable
     public Map<Integer, List<Label>> getLabelList() {
         List<Label> labels = labelMapper.selectList(null);
         Map<Integer, List<Label>> labelMap = new HashMap<>();

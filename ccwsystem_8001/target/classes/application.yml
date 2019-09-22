@@ -24,7 +24,7 @@ spring:
         max-wait: -1ms  # 最大等待时间
         max-idle: 8
         min-idle: 0
-    timeout: 1000ms # 超时时间
+    timeout: 3000ms # 超时时间
   data:
     elasticsearch:
       cluster-name: school_system

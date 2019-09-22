@@ -21,7 +21,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping(value = "category")
-@Api(value = "category",description = "分类操作")
+@Api(value = "AnnouncementCategory",description = "分类操作")
 public class CategoryController {
 
     @Autowired

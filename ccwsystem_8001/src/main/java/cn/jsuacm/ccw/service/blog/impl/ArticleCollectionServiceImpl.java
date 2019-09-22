@@ -13,6 +13,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 /**
@@ -22,6 +24,7 @@ import org.springframework.stereotype.Service;
  * @Date 2019/07/29 11:00
  */
 @Service
+@CacheConfig(cacheNames = "article_collection")
 public class ArticleCollectionServiceImpl extends ServiceImpl<ArticleCollectionMapper, ArticleCollection> implements ArticleCollectionService {
 
 
@@ -122,6 +125,7 @@ public class ArticleCollectionServiceImpl extends ServiceImpl<ArticleCollectionM
      * @return
      */
     @Override
+    @Cacheable
     public PageResult<ArticleCollection> getByUid(int uid, int current, int pageSize) {
 
         Page<ArticleCollection> articleCollectionPage = new Page<>();
@@ -148,6 +152,7 @@ public class ArticleCollectionServiceImpl extends ServiceImpl<ArticleCollectionM
      * @return
      */
     @Override
+    @Cacheable
     public PageResult<ArticleCollection> getByAid(int aid, int uid, int current, int pageSize) {
         // 确认这篇文章是这个用户的
         // 确认这个文章是属于这个用户的

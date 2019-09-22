@@ -13,6 +13,8 @@ import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +28,7 @@ import java.util.Date;
  * @Date 2019/07/30 10:58
  */
 @Service
+@CacheConfig(cacheNames = "es_book")
 public class EsBookServiceImpl extends EsBasic<BookEsEmpty> implements EsBookService {
 
     @Autowired
@@ -113,6 +116,7 @@ public class EsBookServiceImpl extends EsBasic<BookEsEmpty> implements EsBookSer
      * @return
      */
     @Override
+    @Cacheable
     public PageResult<BookEsEmpty> searchByName(String keyWord, int current, int pageSize){
         MatchQueryBuilder titleQuery = QueryBuilders.matchQuery("title", keyWord);
         ArrayList<String> keys = new ArrayList<>();
@@ -129,6 +133,7 @@ public class EsBookServiceImpl extends EsBasic<BookEsEmpty> implements EsBookSer
      * @return
      */
     @Override
+    @Cacheable
     public PageResult<BookEsEmpty> searchByMore(String keyWord, int current, int pageSize) {
         QueryBuilder queryBuilder = QueryBuilders.boolQuery().
                 must(QueryBuilders.boolQuery()

@@ -13,6 +13,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
@@ -31,6 +33,7 @@ import java.util.Map;
  * @Date 2019/07/29 17:03
  */
 @Service
+@CacheConfig(cacheNames = "book")
 public class BookServiceImpl extends ServiceImpl<BookMapper, Book> implements BookService{
 
     @Autowired
@@ -241,6 +244,7 @@ public class BookServiceImpl extends ServiceImpl<BookMapper, Book> implements Bo
      * @return
      */
     @Override
+    @Cacheable
     public PageResult<Book> getPages(int current, int pageSize) {
         IPage<Book> iPage = new Page<>();
         iPage.setSize(pageSize);

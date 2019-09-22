@@ -9,6 +9,8 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -22,6 +24,7 @@ import java.util.List;
  * @Date 2019/07/28 21:08
  */
 @Service
+@CacheConfig(cacheNames = "user_focus")
 public class UserFocusServiceImpl extends ServiceImpl<UserFocusMapper, UserFocus> implements UserFocusService {
 
     @Autowired
@@ -129,6 +132,7 @@ public class UserFocusServiceImpl extends ServiceImpl<UserFocusMapper, UserFocus
      * @return
      */
     @Override
+    @Cacheable
     public List<UserFocus> getFocusList(int uid) {
         QueryWrapper<UserFocus> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("from_uid", uid);
@@ -142,6 +146,7 @@ public class UserFocusServiceImpl extends ServiceImpl<UserFocusMapper, UserFocus
      * @return
      */
     @Override
+    @Cacheable
     public List<UserFocus> getFansList(int uid) {
         QueryWrapper<UserFocus> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("to_uid", uid);
@@ -168,6 +173,7 @@ public class UserFocusServiceImpl extends ServiceImpl<UserFocusMapper, UserFocus
      * @return
      */
     @Override
+    @Cacheable
     public MessageResult getFansCount(int uid) {
         QueryWrapper<UserFocus> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("to_uid", uid);
