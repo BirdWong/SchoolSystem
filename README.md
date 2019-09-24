@@ -288,6 +288,11 @@ git clone https://github.com/BirdWong/schoolsystem.git
 # 进入路由项目启动
 cd schoolsystem/ccwsystem_8001
 
+vim src/main/resources/application.yml
+
+填写 spring.email.password 密码
+
+# 启动项目
 nohup mvn spring-boot:run &
 
 

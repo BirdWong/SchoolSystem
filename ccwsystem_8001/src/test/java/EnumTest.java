@@ -1,3 +1,4 @@
+import cn.jsuacm.ccw.pojo.announcement.Announcement;
 import cn.jsuacm.ccw.pojo.announcement.AnnouncementCategory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -96,4 +97,13 @@ public class EnumTest {
 
         return roleList;
     }
+
+
+
+
+
+
+
+
+
 }

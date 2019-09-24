@@ -28,7 +28,7 @@ spring:
   mail:
       host: smtp.mxhichina.com
       username: admin@jsuacm.cn
-      password: Ccw2110.
+      password:
       default-encoding: UTF-8
   thymeleaf:
       cache: true

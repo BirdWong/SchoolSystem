@@ -1,6 +1,8 @@
 package cn.jsuacm.ccw.pojo.enity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.List;
@@ -12,6 +14,8 @@ import java.util.List;
  * @Date 2019/06/19 21:12
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class PageResult<T> implements Serializable{
     //总记录数
     private Long tatolSize;

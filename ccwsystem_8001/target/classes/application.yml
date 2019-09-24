@@ -32,9 +32,9 @@ spring:
       repositories:
         enabled: true
   mail:
-    host: smtp.163.com
-    username: God_4795@163.com
-    password: hp980501
+    host: smtp.mxhichina.com
+    username: admin@jsuacm.cn
+    password:
     default-encoding: UTF-8
   thymeleaf:
     cache: true

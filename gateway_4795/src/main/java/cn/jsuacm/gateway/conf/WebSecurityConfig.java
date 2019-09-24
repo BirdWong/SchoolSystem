@@ -321,6 +321,27 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 
 
 
+                /*
+                 * ************公告分类接口****************
+                 *        前缀标识：annoucementCategory
+                 */
+                .antMatchers("/ccw/annoucementCategory/admin/**").hasAnyAuthority(new String[]{AuthenticationService.ADMINISTRATOR, AuthenticationService.ADMIN})
+                .antMatchers("/ccw/annoucementCategory/getById/*").permitAll()
+                .antMatchers("/ccw/annoucementCategory/getOfAll").permitAll()
+                .antMatchers("/ccw/annoucementCategory/getOfAdmin/*").hasAnyAuthority(new String[]{AuthenticationService.ADMINISTRATOR, AuthenticationService.ADMIN})
+                .antMatchers("/ccw/annoucementCategory/getOfAdministrator/*").hasAuthority(AuthenticationService.ADMINISTRATOR)
+
+
+                /*
+                 * ************公告文章接口*************
+                 *        前缀标识：announcement
+                 */
+                .antMatchers("/ccw/announcement/admin/**").hasAnyAuthority(new String[]{AuthenticationService.ADMINISTRATOR, AuthenticationService.ADMIN})
+                .antMatchers("/ccw/announcement/getById/**").permitAll()
+                .antMatchers("/ccw/announcement/getPages").permitAll()
+
+
+
                 .antMatchers("/ccw/**").hasAnyAuthority(new String[]{AuthenticationService.MENBER, AuthenticationService.ADMIN, AuthenticationService.ADMINISTRATOR})
 
                 // 除上面外的所有请求全部需要鉴权认证

@@ -4,8 +4,10 @@ import cn.jsuacm.ccw.mapper.announcement.AnnouncementCategoryMapper;
 import cn.jsuacm.ccw.pojo.announcement.AnnouncementCategory;
 import cn.jsuacm.ccw.pojo.enity.MessageResult;
 import cn.jsuacm.ccw.service.announcement.AnnouncementCategoryService;
+import cn.jsuacm.ccw.service.announcement.AnnouncementService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.netflix.discovery.converters.Auto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.annotation.CacheConfig;
@@ -35,6 +37,9 @@ public class AnnouncementCategoryServiceImpl extends ServiceImpl<AnnouncementCat
 
     @Autowired
     private AnnouncementCategoryMapper announcementCategoryMapper;
+
+    @Autowired
+    private AnnouncementService announcementService;
 
 
     @Autowired
@@ -81,7 +86,7 @@ public class AnnouncementCategoryServiceImpl extends ServiceImpl<AnnouncementCat
      */
     @Override
     @Cacheable
-    public AnnouncementCategory getById(int id) {
+    public AnnouncementCategory getForId(int id) {
         if (id < 1){
             return null;
         }
@@ -148,7 +153,7 @@ public class AnnouncementCategoryServiceImpl extends ServiceImpl<AnnouncementCat
         if (compareToRole(uid, category.getRole())){
 
             // 确认这个分类下是否还有公告信息
-            if (true){
+            if (!announcementService.hasOfCid(id)){
                 boolean isOk = removeById(id);
                 // 确认是否删除成功
                 if (isOk){
@@ -276,13 +281,17 @@ public class AnnouncementCategoryServiceImpl extends ServiceImpl<AnnouncementCat
      * @param role 查看的权限大小
      * @return
      */
-    private boolean compareToRole(int uid, AnnouncementCategory.Role role){
+    @Override
+    public boolean compareToRole(int uid, AnnouncementCategory.Role role){
 
         // 如果权限的大小是最低级权限不用通过校验
         if (role.compareTo(AnnouncementCategory.Role.ALL) == 0){
             return true;
         }
 
+        if (uid < 1){
+            return  false;
+        }
         // 获取这个用户的所有权限
         List<String> roleList = getRole(uid);
         // 遍历权限确认用户的权限高于等于设定查阅的权限

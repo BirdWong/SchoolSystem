@@ -28,7 +28,7 @@ public interface AnnouncementCategoryService extends IService<AnnouncementCatego
      * @param id 分类的id
      * @return
      */
-    public AnnouncementCategory getById(int id);
+    public AnnouncementCategory getForId(int id);
 
 
     /**
@@ -78,4 +78,14 @@ public interface AnnouncementCategoryService extends IService<AnnouncementCatego
      * @return
      */
     public List<AnnouncementCategory> getOfAdministrator(int uid);
+
+
+
+    /**
+     * 比较用户权限信息
+     * @param uid 用户的id
+     * @param role 查看的权限大小
+     * @return
+     */
+    public boolean compareToRole(int uid, AnnouncementCategory.Role role);
 }

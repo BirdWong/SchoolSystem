@@ -1,3 +1,4 @@
+import cn.jsuacm.ccw.pojo.announcement.Announcement;
 import org.junit.Test;
 
 import java.math.BigDecimal;
@@ -78,4 +79,29 @@ public class StringTest {
     public void test3(){
         System.out.println((Double.compare(99, 10)));
     }
+
+
+
+
+
+    @Test
+    public void test4(){
+        Announcement announcement = new Announcement();
+        announcement.setViews(100);
+        String dd = dd(announcement);
+        System.out.println(announcement.getViews());
+    }
+
+    private String dd(Announcement announcement){
+        modify(announcement);
+        return "he";
+
+    }
+
+
+    public String modify(Announcement announcement){
+        announcement.setViews(1001);
+        return null;
+    }
+
 }

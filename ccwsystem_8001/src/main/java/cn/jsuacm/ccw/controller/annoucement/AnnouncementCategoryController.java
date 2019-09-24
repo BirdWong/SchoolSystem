@@ -23,9 +23,9 @@ import java.util.Map;
  * @Date 2019/09/22 19:01
  */
 @RestController
-@RequestMapping(value = "annoucement")
+@RequestMapping(value = "announcementCategory")
 @Api(value = "公告分类设置")
-public class AnnoucementCategoryController {
+public class AnnouncementCategoryController {
 
     @Autowired
     private AnnouncementCategoryService service;
@@ -78,7 +78,7 @@ public class AnnoucementCategoryController {
             @ApiImplicitParam(name = "id", required = true, value = "分类的id", dataType = "int", paramType = "path")
     })
     public AnnouncementCategory getById(@PathVariable(value = "id") int id){
-        return service.getById(id);
+        return service.getForId(id);
     }
 
 
@@ -157,10 +157,10 @@ public class AnnoucementCategoryController {
      * @param req
      * @return
      */
-    @GetMapping(value = "getOfIng")
+    @GetMapping(value = "getOfIng/{uid}")
     @ApiOperation(value = "正在实验室用户权限能够看到的分类", notes = "获取正在实验室用户能够看到的， 说明ING权限和ALL权限的分类都能够看到", httpMethod = "GET")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", required = true, value = "用户的id,用于校验权限，如果权限不够是不会返回内容的", dataType = "int", paramType = "path")
+            @ApiImplicitParam(name = "uid", required = true, value = "用户的id,用于校验权限，如果权限不够是不会返回内容的", dataType = "int", paramType = "path")
     })
     public List<AnnouncementCategory> getOfIng(@PathVariable(value = "uid") int uid, HttpServletRequest req){
         // 验证是本人操作
@@ -181,10 +181,10 @@ public class AnnoucementCategoryController {
      * @param req
      * @return
      */
-    @GetMapping(value = "getOfAdmin")
+    @GetMapping(value = "getOfAdmin/{uid}")
     @ApiOperation(value = "管理员用户权限能够看到的分类", notes = "说明ADMIN权限和ING权限和ALL权限的分类都能够看到", httpMethod = "GET")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", required = true, value = "用户的id,用于校验权限，如果权限不够是不会返回内容的", dataType = "int", paramType = "path")
+            @ApiImplicitParam(name = "uid", required = true, value = "用户的id,用于校验权限，如果权限不够是不会返回内容的", dataType = "int", paramType = "path")
     })
     public List<AnnouncementCategory> getOfAdmin(@PathVariable(value = "uid") int uid, HttpServletRequest req){
         // 验证是本人操作
@@ -205,10 +205,10 @@ public class AnnoucementCategoryController {
      * @param req
      * @return
      */
-    @GetMapping(value = "getOfAdministrator")
+    @GetMapping(value = "getOfAdministrator/{uid}")
     @ApiOperation(value = "超级管理员用户权限能够看到的分类", notes = "获取超级管理员用户能够看到的， 说明Administrator权限和Admin权限和ING权限和ALL权限的分类都能够看到，相当是全部的分类信息都会返回", httpMethod = "GET")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "id", required = true, value = "用户的id,用于校验权限，如果权限不够是不会返回内容的", dataType = "int", paramType = "path")
+            @ApiImplicitParam(name = "uid", required = true, value = "用户的id,用于校验权限，如果权限不够是不会返回内容的", dataType = "int", paramType = "path")
     })
     public List<AnnouncementCategory> getOfAdministrator(@PathVariable(value = "uid") int uid, HttpServletRequest req){
         // 验证是本人操作
