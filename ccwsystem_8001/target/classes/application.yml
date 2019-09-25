@@ -54,6 +54,6 @@ eureka:
       instance-id: ccwsystem_8001.com
       prefer-ip-address: true
 
-mybatis-plus:
-  configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#mybatis-plus:
+#  configuration:
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

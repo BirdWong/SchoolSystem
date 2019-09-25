@@ -1,10 +1,16 @@
+import cn.jsuacm.ccw.mapper.announcement.AnnouncementCategoryMapper;
 import cn.jsuacm.ccw.mapper.blog.ArticleMapper;
+import cn.jsuacm.ccw.pojo.announcement.AnnouncementCategory;
 import cn.jsuacm.ccw.pojo.blog.Article;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Mapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.stereotype.Component;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.*;
@@ -21,6 +27,9 @@ public class MyBatisPlusTest {
 
     @Autowired
     private ArticleMapper articleMapper;
+
+    @Autowired
+    AnnouncementCategoryMapper mapper ;
 
     @Test
     public void insertTest() {
@@ -114,6 +123,18 @@ public class MyBatisPlusTest {
             System.out.println(article);
         }
     }
+
+
+
+
+
+    @Test
+    public void testDeleteAll(){
+        mapper.deletell();
+    }
+
+
+
 
 
 }

@@ -2,9 +2,7 @@ package cn.jsuacm.ccw.mapper.announcement;
 
 import cn.jsuacm.ccw.pojo.announcement.AnnouncementCategory;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Component;
 
 /**
@@ -34,4 +32,6 @@ public interface AnnouncementCategoryMapper extends BaseMapper<AnnouncementCateg
      */
     @Select("select count(1) from announcement_category where id=#{id}")
     public int hasCategory(@Param(value = "id") int id);
+
+
 }

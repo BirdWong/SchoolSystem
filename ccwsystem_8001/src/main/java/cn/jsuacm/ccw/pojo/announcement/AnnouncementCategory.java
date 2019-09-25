@@ -1,6 +1,7 @@
 package cn.jsuacm.ccw.pojo.announcement;
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.core.enums.IEnum;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -41,9 +42,18 @@ public class AnnouncementCategory implements Serializable{
     /**
      * 权限分类的枚举类
      */
-    public enum Role {
+    public enum Role implements IEnum<Integer>{
         // 任何人、正在实验室的成员、管理员、超级管理员
         ALL, ROLE_ING, ROLE_ADMIN, ROLE_ADMINISTRATOR;
+
+        private int value;
+        private String desc;
+
+
+        @Override
+        public Integer getValue() {
+            return this.value;
+        }
 
 
         public static boolean hasRole(String role){
