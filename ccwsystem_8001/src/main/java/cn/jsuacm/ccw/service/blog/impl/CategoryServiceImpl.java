@@ -24,7 +24,7 @@ import java.util.Map;
  */
 
 @Service
-@CacheConfig(cacheNames = "AnnouncementCategory")
+
 public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> implements CategoryService{
 
     /**
@@ -46,7 +46,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
      * @return
      */
     @Override
-    @Cacheable
+
     public Map<Category, List<Category>> getAllCategory() {
         // 获取所有的一级分类
         QueryWrapper<Category> wrapper = new QueryWrapper<>();
@@ -186,7 +186,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
      * @return
      */
     @Override
-    @Cacheable
+
     public List<Category> findFirstCategories() {
         QueryWrapper<Category> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("parent_id", 0);
@@ -200,7 +200,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
      * @return
      */
     @Override
-    @Cacheable
+
     public List<Category> findSecondCategories(int cid) {
 
         QueryWrapper<Category> queryWrapper = new QueryWrapper<>();

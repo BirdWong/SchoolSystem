@@ -42,7 +42,7 @@ import java.util.regex.Pattern;
  * @Date 2019/08/04 20:49
  */
 @Service
-@CacheConfig(cacheNames = "recruitment")
+
 public class RecruitmentServiceImpl implements RecruitmentService {
 
 
@@ -99,7 +99,7 @@ public class RecruitmentServiceImpl implements RecruitmentService {
      * @return
      */
     @Override
-    @Cacheable
+
     public TreeMap<Integer, List<NewMenberInfo>> getToClass() {
         TreeMap<Integer, List<NewMenberInfo>> newMenberInfoMap = new TreeMap<>(Comparator.comparingInt(integer -> integer));
         if (hasRecruitment()){
@@ -125,7 +125,7 @@ public class RecruitmentServiceImpl implements RecruitmentService {
      * @return
      */
     @Override
-    @Cacheable
+
     public List<NewMenberInfo> getByClass(int num) {
         List<NewMenberInfo> list = new ArrayList<>();
         if (hasRecruitment()){
@@ -147,7 +147,7 @@ public class RecruitmentServiceImpl implements RecruitmentService {
      * @return
      */
     @Override
-    @Cacheable
+
     public List<Integer> getClassNumbers() {
         Set<Integer> classNumbers = new HashSet<>();
         if (hasRecruitment()) {
@@ -191,7 +191,7 @@ public class RecruitmentServiceImpl implements RecruitmentService {
      * @return
      */
     @Override
-    @Cacheable
+
     public NewMenberInfo getByEmail(String email) {
         if (!hasRecruitment()){
             return null;

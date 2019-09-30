@@ -25,7 +25,7 @@ import java.util.*;
  * @Date 2019/08/01 21:56
  */
 @Service
-@CacheConfig(cacheNames = "collaborator")
+
 public class CollaboratorsServiceImpl extends ServiceImpl<CollaboratorsMapper, Collaborators> implements CollaboratorsService {
 
 
@@ -96,7 +96,7 @@ public class CollaboratorsServiceImpl extends ServiceImpl<CollaboratorsMapper, C
      * @return
      */
     @Override
-    @Cacheable
+
     public List<Collaborators> getByPid(int pid) {
         QueryWrapper<Collaborators> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("pid", pid);
@@ -111,7 +111,7 @@ public class CollaboratorsServiceImpl extends ServiceImpl<CollaboratorsMapper, C
      * @return
      */
     @Override
-    @Cacheable
+
     public List<Collaborators> getByUid(int uid) {
         QueryWrapper<Collaborators> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("uid", uid);

@@ -16,6 +16,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -30,7 +31,7 @@ import java.util.*;
  * @Date 2019/06/18 22:21
  */
 @Service
-@CacheConfig(cacheNames = "article")
+
 public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> implements ArticleService{
 
     @Autowired
@@ -190,7 +191,6 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
      * @return
      */
     @Override
-    @Cacheable
     public MessageResult getView(int aid) {
         Article article = getById(aid);
         return article == null ? new MessageResult(false, "没有这篇文章") : new MessageResult(true, article.getViews()+"");
@@ -203,7 +203,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
      * @return
      */
     @Override
-    @Cacheable
+
     public MessageResult getViews(int uid) {
         QueryWrapper<Article> wrapper = new QueryWrapper<>();
         wrapper.eq("uid", uid);
@@ -226,7 +226,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
      * @return
      */
     @Override
-    @Cacheable
+
     public Article getUserArticle(int aid) {
         Article article = getById(aid);
 
@@ -294,7 +294,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
      * @return
      */
     @Override
-    @Cacheable
+
     public PageResult<Article> getUserArticleList(int uid, int row, int pageSize) {
 
         QueryWrapper<Article> wrapper = new QueryWrapper<>();
@@ -311,7 +311,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
      * @return
      */
     @Override
-    @Cacheable
+
     public PageResult<Article> getUserPublicArticleList(int uid, int row, int pageSize) {
         QueryWrapper<Article> wrapper = new QueryWrapper<>();
         wrapper.eq("uid", uid)
@@ -330,7 +330,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
      * @return
      */
     @Override
-    @Cacheable
+
     public PageResult<Article> getUserPrivateArticleList(int uid, int row, int pageSize) {
         QueryWrapper<Article> wrapper = new QueryWrapper<>();
         wrapper.eq("uid", uid)
@@ -349,7 +349,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
      * @return
      */
     @Override
-    @Cacheable
+
     public PageResult<Article> getUserDraftArticleList(int uid, int row, int pageSize) {
         QueryWrapper<Article> wrapper = new QueryWrapper<>();
         wrapper.eq("uid", uid)
@@ -387,7 +387,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
      * @return
      */
     @Override
-    @Cacheable
+
     public TreeMap<String, LinkedList<Article>> getUserPublicArchive(int uid) {
         // 查询出所有的信息并按照时间排序
         QueryWrapper<Article> queryWrapper = new QueryWrapper<>();
@@ -408,7 +408,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
      * @return
      */
     @Override
-    @Cacheable
+
     public TreeMap<String, LinkedList<Article>> getUserPrivateArchive(int uid) {
         QueryWrapper<Article> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("uid",uid)
@@ -425,7 +425,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
      * @return
      */
     @Override
-    @Cacheable
+
     public TreeMap<String, LinkedList<Article>> getUserDraftArchive(int uid) {
         QueryWrapper<Article> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("uid",uid)
@@ -496,7 +496,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
      * @return
      */
     @Override
-    @Cacheable
+
     public List<Article> getNewArticle(int uid, int size) {
 
         QueryWrapper<Article> wrapper = new QueryWrapper<>();
@@ -514,7 +514,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
      * @return
      */
     @Override
-    @Cacheable
+
     public PageResult getHotsArticles(int current, int pageSize) {
         PageResult<Article> articlePageResult = new PageResult<>();
         articlePageResult.setRow((long)current);

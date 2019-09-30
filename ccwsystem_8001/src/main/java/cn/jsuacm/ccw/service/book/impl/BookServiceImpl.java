@@ -33,7 +33,7 @@ import java.util.Map;
  * @Date 2019/07/29 17:03
  */
 @Service
-@CacheConfig(cacheNames = "book")
+
 public class BookServiceImpl extends ServiceImpl<BookMapper, Book> implements BookService{
 
     @Autowired
@@ -244,7 +244,7 @@ public class BookServiceImpl extends ServiceImpl<BookMapper, Book> implements Bo
      * @return
      */
     @Override
-    @Cacheable
+
     public PageResult<Book> getPages(int current, int pageSize) {
         IPage<Book> iPage = new Page<>();
         iPage.setSize(pageSize);

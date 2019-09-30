@@ -11,6 +11,8 @@ import com.netflix.discovery.converters.Auto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cglib.beans.BeanMap;
 import org.springframework.http.HttpEntity;
@@ -32,7 +34,7 @@ import java.util.Map;
  * @Date 2019/09/21 22:18
  */
 @Service
-@CacheConfig(cacheNames = "announcement_category")
+
 public class AnnouncementCategoryServiceImpl extends ServiceImpl<AnnouncementCategoryMapper, AnnouncementCategory> implements AnnouncementCategoryService {
 
     @Autowired
@@ -85,7 +87,7 @@ public class AnnouncementCategoryServiceImpl extends ServiceImpl<AnnouncementCat
      * @return
      */
     @Override
-    @Cacheable
+
     public AnnouncementCategory getForId(int id) {
         if (id < 1){
             return null;
@@ -100,6 +102,7 @@ public class AnnouncementCategoryServiceImpl extends ServiceImpl<AnnouncementCat
      * @return
      */
     @Override
+
     public MessageResult update(int uid, AnnouncementCategory announcementCategory) {
 
         // 确认这个用户是否有这个权限
@@ -142,6 +145,7 @@ public class AnnouncementCategoryServiceImpl extends ServiceImpl<AnnouncementCat
      * @return
      */
     @Override
+
     public MessageResult delete(int uid, int id) {
 
         // 确认这个分类是否真的存在
@@ -177,6 +181,7 @@ public class AnnouncementCategoryServiceImpl extends ServiceImpl<AnnouncementCat
      * @return
      */
     @Override
+
     public List<AnnouncementCategory> getOfAll() {
         QueryWrapper<AnnouncementCategory> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("role", AnnouncementCategory.Role.ALL);
@@ -193,6 +198,7 @@ public class AnnouncementCategoryServiceImpl extends ServiceImpl<AnnouncementCat
      * @return
      */
     @Override
+
     public List<AnnouncementCategory> getOfIng(int uid) {
         if (compareToRole(uid, AnnouncementCategory.Role.ROLE_ING)) {
             QueryWrapper<AnnouncementCategory> queryWrapper = new QueryWrapper<>();
@@ -210,6 +216,7 @@ public class AnnouncementCategoryServiceImpl extends ServiceImpl<AnnouncementCat
      * @return
      */
     @Override
+
     public List<AnnouncementCategory> getOfAdmin(int uid) {
         if (compareToRole(uid, AnnouncementCategory.Role.ROLE_ADMIN)) {
             QueryWrapper<AnnouncementCategory> queryWrapper = new QueryWrapper<>();
@@ -230,6 +237,7 @@ public class AnnouncementCategoryServiceImpl extends ServiceImpl<AnnouncementCat
      * @return
      */
     @Override
+
     public List<AnnouncementCategory> getOfAdministrator(int uid) {
         if (compareToRole(uid, AnnouncementCategory.Role.ROLE_ADMINISTRATOR)) {
             QueryWrapper<AnnouncementCategory> queryWrapper = new QueryWrapper<>();

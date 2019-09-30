@@ -19,7 +19,7 @@ import java.util.Date;
  */
 
 @Service
-@CacheConfig(cacheNames = "limit_timer")
+
 public class LimitTimerServiceImpl implements LimitTimerService {
 
     @Autowired
@@ -82,7 +82,7 @@ public class LimitTimerServiceImpl implements LimitTimerService {
      * @return
      */
     @Override
-    @Cacheable
+
     public MessageResult get() {
         if (hasTime()){
             Date date = (Date) redisUtil.get(BEGIN_TIME);

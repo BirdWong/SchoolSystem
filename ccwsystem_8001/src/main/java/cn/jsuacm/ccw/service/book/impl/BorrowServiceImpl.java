@@ -33,7 +33,7 @@ import java.util.*;
  * @Date 2019/07/30 17:48
  */
 @Service
-@CacheConfig(cacheNames = "borrow")
+
 public class BorrowServiceImpl extends ServiceImpl<BorrowMapper, Borrow> implements BorrowService{
 
     @Autowired
@@ -186,7 +186,7 @@ public class BorrowServiceImpl extends ServiceImpl<BorrowMapper, Borrow> impleme
      * @return
      */
     @Override
-    @Cacheable
+
     public List<Borrow> getByUid(int uid) {
         List<Borrow> borrows = borrowMapper.findByUid(uid, false);
         for (Borrow borrow : borrows){
@@ -204,7 +204,7 @@ public class BorrowServiceImpl extends ServiceImpl<BorrowMapper, Borrow> impleme
      * @return
      */
     @Override
-    @Cacheable
+
     public List<Borrow> getBorrowingByUid(int uid) {
         List<Borrow> borrows = borrowMapper.findByUid(uid, true);
         for (Borrow borrow : borrows){
@@ -222,7 +222,7 @@ public class BorrowServiceImpl extends ServiceImpl<BorrowMapper, Borrow> impleme
      * @return
      */
     @Override
-    @Cacheable
+
     public List<Borrow> getByAccountNumber(String accountNumber) {
         MessageResult messageResult = getUid(accountNumber);
         if (messageResult.isStatus()){
@@ -239,7 +239,7 @@ public class BorrowServiceImpl extends ServiceImpl<BorrowMapper, Borrow> impleme
      * @return
      */
     @Override
-    @Cacheable
+
     public List<Borrow> getBorrowingByAccountNumber(String accountNumber) {
         MessageResult messageResult = getUid(accountNumber);
         if (messageResult.isStatus()){
@@ -256,7 +256,7 @@ public class BorrowServiceImpl extends ServiceImpl<BorrowMapper, Borrow> impleme
      * @return
      */
     @Override
-    @Cacheable
+
     public List<Borrow> getByBid(int bid) {
         List<Borrow> borrows = borrowMapper.findByBid(bid, false);
         for (Borrow borrow : borrows){
@@ -274,7 +274,7 @@ public class BorrowServiceImpl extends ServiceImpl<BorrowMapper, Borrow> impleme
      * @return
      */
     @Override
-    @Cacheable
+
     public List<Borrow> getBorrowingByBid(int bid) {
         List<Borrow> borrows = borrowMapper.findByBid(bid, true);
         for (Borrow borrow : borrows){
@@ -293,7 +293,7 @@ public class BorrowServiceImpl extends ServiceImpl<BorrowMapper, Borrow> impleme
      * @return
      */
     @Override
-    @Cacheable
+
     public PageResult<Borrow> getPages(int current, int pageSize) {
         IPage<Borrow> page = new Page<>();
 
@@ -322,7 +322,7 @@ public class BorrowServiceImpl extends ServiceImpl<BorrowMapper, Borrow> impleme
      * @return
      */
     @Override
-    @Cacheable
+
     public PageResult<Borrow> getBorrowingPages(int current, int pageSize) {
         IPage<Borrow> page = new Page<>();
 

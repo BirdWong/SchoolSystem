@@ -24,7 +24,7 @@ import java.util.*;
  * @Date 2019/06/22 16:12
  */
 @Service
-@CacheConfig(cacheNames = "lable")
+
 public class LabelServiceImpl extends ServiceImpl<LabelMapper, Label> implements LabelService{
 
 
@@ -117,7 +117,7 @@ public class LabelServiceImpl extends ServiceImpl<LabelMapper, Label> implements
      * @return
      */
     @Override
-    @Cacheable
+
     public List<Label> getByUid(int uid) {
         QueryWrapper<Label> wrapper = new QueryWrapper<>();
 
@@ -135,7 +135,7 @@ public class LabelServiceImpl extends ServiceImpl<LabelMapper, Label> implements
      * @return
      */
     @Override
-    @Cacheable
+
     public Map<Integer, List<Label>> getLabelList() {
         List<Label> labels = labelMapper.selectList(null);
         Map<Integer, List<Label>> labelMap = new HashMap<>();

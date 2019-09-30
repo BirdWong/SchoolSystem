@@ -33,7 +33,7 @@ import java.util.concurrent.*;
  */
 
 @Service
-@CacheConfig(cacheNames = "project")
+
 public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> implements ProjectService {
 
     @Autowired
@@ -119,7 +119,7 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> impl
      * @return
      */
     @Override
-    @Cacheable
+
     public PageResult<Project> getPages(int status, int current, int pageSize) {
         IPage<Project> iPage = getIPage(current, pageSize);
         IPage<Project> projectIPage = null;

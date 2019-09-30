@@ -19,6 +19,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -34,7 +36,7 @@ import java.util.*;
  * @Date 2019/06/23 17:24
  */
 @Service
-@CacheConfig(cacheNames = "article_info")
+
 public class ArticleInfomationServiceImpl extends ServiceImpl<ArticleInfomationMapper, ArticleInfomation> implements ArticleInfomationService {
 
     @Autowired
@@ -116,6 +118,7 @@ public class ArticleInfomationServiceImpl extends ServiceImpl<ArticleInfomationM
      * @return
      */
     @Override
+
     public MessageResult deleteById(int uid, int id) {
         ArticleInfomation articleInfomation = getById(id);
         if (articleInfomation.getUid() == uid){
@@ -135,6 +138,7 @@ public class ArticleInfomationServiceImpl extends ServiceImpl<ArticleInfomationM
      * @return
      */
     @Override
+
     public MessageResult deleteByAid(int aid, int uid) {
 
         QueryWrapper<ArticleInfomation> queryWrapper = new QueryWrapper<>();
@@ -160,6 +164,7 @@ public class ArticleInfomationServiceImpl extends ServiceImpl<ArticleInfomationM
      * @return
      */
     @Override
+
     public MessageResult adminDeleteByAid(int aid) {
         QueryWrapper<ArticleInfomation> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("aid", aid);
@@ -186,6 +191,7 @@ public class ArticleInfomationServiceImpl extends ServiceImpl<ArticleInfomationM
      * @return
      */
     @Override
+
     public MessageResult deleteAllByUid(int uid) {
         // 删除文章信息表中的信息
         QueryWrapper<ArticleInfomation> articleInfomationQueryWrapper = new QueryWrapper<>();
@@ -258,6 +264,7 @@ public class ArticleInfomationServiceImpl extends ServiceImpl<ArticleInfomationM
      * @return
      */
     @Override
+
     public MessageResult deleteAllBySencondCid( int cid) {
         // 1. 查询出所有符合条件的文章信息，查询内容 aid， id
         QueryWrapper<ArticleInfomation> articleInfomationQueryWrapper = new QueryWrapper<>();
@@ -289,7 +296,7 @@ public class ArticleInfomationServiceImpl extends ServiceImpl<ArticleInfomationM
      * @return
      */
     @Override
-    @Cacheable
+
     public PageResult<ArticleInfomation> getByUid(int uid, int status, int current, int pageSize) {
         QueryWrapper<ArticleInfomation> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("uid", uid).eq("status", status);
@@ -305,7 +312,7 @@ public class ArticleInfomationServiceImpl extends ServiceImpl<ArticleInfomationM
      * @return
      */
     @Override
-    @Cacheable
+
     public ArticleInfomation getByAid(int aid, int status) {
         ArticleInfomation articleInfomation = articleInfomationMapper.getByAid(aid, status);
         articleInfomation.setLids(articleLabelMapper.queryByAid(aid));
@@ -322,7 +329,7 @@ public class ArticleInfomationServiceImpl extends ServiceImpl<ArticleInfomationM
      * @return
      */
     @Override
-    @Cacheable
+
     public PageResult<ArticleInfomation> getByLid(int lid, int status, int current, int pageSize) {
         // 查询与这个标签相关的所有文章信息
         List<ArticleLabel> articleLabels = articleLabelMapper.queryByLid(lid);
@@ -353,7 +360,7 @@ public class ArticleInfomationServiceImpl extends ServiceImpl<ArticleInfomationM
      * @return
      */
     @Override
-    @Cacheable
+
     public PageResult<ArticleInfomation> getByCid(int cid, int status,int current, int pageSize) {
         QueryWrapper<ArticleInfomation> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("cid",cid).eq("status", status);
@@ -367,6 +374,7 @@ public class ArticleInfomationServiceImpl extends ServiceImpl<ArticleInfomationM
      * @return
      */
     @Override
+
     public MessageResult update(ArticleInfomation articleInfomation) {
 
         boolean appertaining = checkAppertaining(articleInfomation.getUid(), articleInfomation.getAid(), articleInfomation.getCid(), articleInfomation.getLids());
@@ -421,7 +429,7 @@ public class ArticleInfomationServiceImpl extends ServiceImpl<ArticleInfomationM
      * @return
      */
     @Override
-    @Cacheable
+
     public ArticleInfomation getUpdateInfo(int aid, int uid) {
 
         QueryWrapper<ArticleInfomation> queryWrapper = new QueryWrapper<>();

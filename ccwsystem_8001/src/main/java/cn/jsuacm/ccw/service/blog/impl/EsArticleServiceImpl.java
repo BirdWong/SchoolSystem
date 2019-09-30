@@ -50,7 +50,7 @@ import java.util.regex.Pattern;
  * @Date 2019/07/24 17:13
  */
 @Service
-@CacheConfig(cacheNames = "es_article")
+
 public class EsArticleServiceImpl extends EsBasic<ArticleEsEmpty> implements EsArticleService{
 
     @Autowired
@@ -89,7 +89,7 @@ public class EsArticleServiceImpl extends EsBasic<ArticleEsEmpty> implements EsA
      * @return
      */
     @Override
-    @Cacheable
+
     public PageResult<ArticleEsEmpty> findArticle(String keyWord, int current, int pageSize){
 
         // 组合查询，boost即为权重，数值越大，权重越大
@@ -115,7 +115,7 @@ public class EsArticleServiceImpl extends EsBasic<ArticleEsEmpty> implements EsA
      * @return
      */
     @Override
-    @Cacheable
+
     public PageResult<ArticleEsEmpty> findByUsername(String keyWord, int current, int pageSize) {
         QueryBuilder queryBuilder = QueryBuilders.boolQuery().
                 must(QueryBuilders.matchQuery("username", keyWord)).

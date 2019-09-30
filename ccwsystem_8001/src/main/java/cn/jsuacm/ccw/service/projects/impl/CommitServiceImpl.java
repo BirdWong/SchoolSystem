@@ -34,7 +34,7 @@ import java.util.*;
  * @Date 2019/08/01 10:56
  */
 @Service
-@CacheConfig(cacheNames = "commit")
+
 public class CommitServiceImpl extends ServiceImpl<CommitMapper, Commit> implements CommitService{
 
 
@@ -137,7 +137,7 @@ public class CommitServiceImpl extends ServiceImpl<CommitMapper, Commit> impleme
      * @return
      */
     @Override
-    @Cacheable
+
     public List<Commit> findByCid(int cid) {
         QueryWrapper<Commit> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("cid", cid);

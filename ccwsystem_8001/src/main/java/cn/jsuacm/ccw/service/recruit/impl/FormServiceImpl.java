@@ -21,7 +21,7 @@ import java.util.List;
  * @Date 2019/08/07 15:00
  */
 @Service
-@CacheConfig(cacheNames = "form")
+
 public class FormServiceImpl implements FormService {
 
 
@@ -80,7 +80,7 @@ public class FormServiceImpl implements FormService {
      * @return
      */
     @Override
-    @Cacheable
+
     public List<FormItemOption> getForm() {
         if (hasForm()){
             return (List<FormItemOption>) redisUtil.get(FormService.FORM_KEY);

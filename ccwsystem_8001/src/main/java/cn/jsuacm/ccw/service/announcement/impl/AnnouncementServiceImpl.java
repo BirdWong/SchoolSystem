@@ -13,6 +13,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +29,7 @@ import java.util.List;
  * @Date 2019/09/23 20:59
  */
 @Service
-@CacheConfig(cacheNames = "announcement")
+
 public class AnnouncementServiceImpl extends ServiceImpl<AnnouncementMapper, Announcement> implements AnnouncementService {
 
     @Autowired
@@ -65,6 +67,7 @@ public class AnnouncementServiceImpl extends ServiceImpl<AnnouncementMapper, Ann
      * @return
      */
     @Override
+
     public MessageResult delete(int uid, int id) {
         QueryWrapper<Announcement> queryWrapper = new QueryWrapper<>();
         queryWrapper.select("cid");
@@ -93,6 +96,7 @@ public class AnnouncementServiceImpl extends ServiceImpl<AnnouncementMapper, Ann
      * @return
      */
     @Override
+
     public MessageResult update(int uid, Announcement announcement) {
         String msg = checkInfo(uid, announcement, false);
         if (msg == null){
@@ -115,7 +119,7 @@ public class AnnouncementServiceImpl extends ServiceImpl<AnnouncementMapper, Ann
      * @return
      */
     @Override
-    @Cacheable
+
     public Announcement getForId(int uid, int id) {
         Announcement announcement = getById(id);
         if (announcement != null){
@@ -137,7 +141,7 @@ public class AnnouncementServiceImpl extends ServiceImpl<AnnouncementMapper, Ann
      * @return
      */
     @Override
-    @Cacheable
+
     public PageResult<Announcement> getPages(int uid, int cid, long row, long pageSize) {
 
         AnnouncementCategory category = service.getForId(cid);
